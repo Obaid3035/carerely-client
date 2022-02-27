@@ -1,0 +1,92 @@
+@import "../../../color";
+
+.create_post {
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+  img {
+    border-radius: 50%;
+  }
+
+  .create_post_form {
+    width: 100%;
+    padding-left: 30px;
+    input {
+      float: left;
+      width: 90%;
+      padding: 0 90px 0 30px;
+    }
+
+    button {
+      width: 20%;
+      position: absolute;
+      right: 0;
+      height: 50px;
+    }
+  }
+}
+
+.activity_feed {
+  h4 {
+    color: $primary;
+    text-transform: uppercase;
+    font-size: $main_heading;
+    font-weight: bold;
+  }
+  .activity_feed_post {
+    .post_img {
+      img {
+        border-radius: 17px;
+      }
+    }
+    .activity_feed_user {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      img {
+        cursor: pointer;
+        border-radius: 50%;
+      }
+      .activity_feed_user_info {
+        cursor: pointer;
+      }
+      div {
+        margin-left: 25px;
+        h5 {
+          font-size: $sub_heading;
+          font-weight: 500;
+          margin: 0;
+          padding:0;
+        }
+        p {
+          text-align: start;
+          font-size: $content;
+          svg {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+
+    .post_stats{
+      svg{
+        :hover{
+          color: $hover;
+          cursor: pointer;
+        }
+      }
+
+    }
+
+    .activity_feed_description {
+      p {
+        margin-top: 25px;
+        font-size: $post_content;
+      }
+      .img_lazy {
+        height: 50vh;
+      }
+    }
+  }
+
+}

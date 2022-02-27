@@ -1,0 +1,95 @@
+@import "../../color";
+
+.setting {
+  .setting_tabs {
+    height: 100vh;
+    .profile_change {
+      margin-top: 20px;
+      img {
+        border-radius: 50%;
+      }
+      h4 {
+        margin-top: 14px;
+        font-size: $main_heading;
+        font-weight: bold;
+      }
+      p {
+        font-size: $sub_heading;
+        color: $primary;
+        cursor: pointer;
+      }
+    }
+
+    .tabs {
+      margin-top: 50px;
+      p {
+        margin: 30px 0 0 0;
+        font-size: $sub_heading;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      p:hover {
+        color: $primary;
+      }
+
+      .active_tab {
+        color: $primary;
+      }
+    }
+  }
+
+
+
+  .personal_information {
+    padding: 40px 50px!important;
+    height: 100%;
+    h4 {
+      font-size: $main_heading;
+      font-weight: bold;
+    }
+    .setting_form {
+      .setting_btn {
+        button {
+          width: 150px;
+        }
+
+      }
+      label {
+        font-size: $sub_heading;
+
+      }
+      input {
+        border-radius: 12px;
+        height: 50px;
+        background-color: rgba(243, 243, 243, 0.57);
+      }
+      input:focus {
+        outline: none !important;
+        border: none;
+      }
+
+      .setting_date {
+        margin-top: 50px;
+
+        input {
+          background-color: white;
+          height: 20px;
+          border-radius: 12px;
+        }
+      }
+
+      .css-1s2u09g-control {
+        height: 50px;
+      }
+
+      .css-6j8wv5-Input {
+        margin: 0;
+        padding: 0;
+      }
+
+
+    }
+
+  }
+}
+

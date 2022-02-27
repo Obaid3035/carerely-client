@@ -1,0 +1,63 @@
+@import "../../color";
+
+.comment_form {
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  .create_post_form {
+    width: 100%;
+    padding-left: 30px;
+
+    input {
+      float: left;
+      width: 100%;
+      padding: 0 60px 0 30px;
+    }
+
+    button {
+      width: 10%;
+      position: absolute;
+      right: -15px;
+      height: 50px;
+    }
+  }
+}
+
+.post_comment {
+  .view_all_btn {
+    width: 20%;
+    border-bottom-right-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+  }
+  .comment_show{
+    display: flex;
+
+    img{
+      width: 50px;
+      height: 50px;
+      border-radius: 100px;
+      margin-right: 10px;
+    }
+
+    .comment_detail{
+      margin-top: 8px;
+      h5{
+        font-size: $sub_heading;
+        color: #4D4F5C;
+
+        span{
+          font-size: 10px;
+          margin-left: 5px;
+          font-weight: lighter;
+        }
+      }
+      p{
+        font-size: $content;
+      }
+    }
+
+  }
+}

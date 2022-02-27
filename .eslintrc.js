@@ -1,0 +1,32 @@
+module.exports = {
+   env: {
+      node: true,
+      commonjs: true,
+      es6: true,
+   },
+   extends: ['eslint:recommended', 'google'],
+   parser: '@typescript-eslint/parser',
+   parserOptions: {
+      ecmaVersion: 13,
+      sourceType: 'module',
+   },
+   plugins: ['prettier'],
+   rules: {
+      'require-jsdoc': 0,
+      semi: 0,
+      'no-trailing-spaces': 0,
+      'prefer-promise-reject-errors': 0,
+      'no-prototype-builtins': 0,
+      'new-cap': 0,
+      'no-tabs': 1,
+      'padded-blocks': 0,
+      'max-len': ['error', { code: 150 }],
+      'no-undef': 0,
+      'no-console': 0,
+      camelcase: 0,
+      quotes: 0,
+      'object-curly-spacing': 0,
+      indent: 0,
+      'no-unused-vars': 1,
+   },
+};
