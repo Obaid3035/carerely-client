@@ -3,9 +3,13 @@ import PostImg from '../../../../../assets/img/most_liked_post.png';
 import * as AiIcon from 'react-icons/ai';
 import * as MdIcon from 'react-icons/md';
 
-const TrendingPost = () => {
+interface ITrendingPost {
+   onModalChange: () => void;
+}
+
+const TrendingPost: React.FC<ITrendingPost> = ({ onModalChange }) => {
    return (
-      <div className={'carousel_item px-3'}>
+      <div className={'carousel_item px-3'} onClick={onModalChange}>
          <span className={'carousel_image_wrapper'}>
             <img alt={'img'} src={PostImg} />
          </span>
