@@ -46,7 +46,7 @@ const Post = (props: IPostPropsInterface) => {
          >
 
             {props.mockData.map((data: IPost, index: any) => (
-                <div className={'activity_feed_post rounded_white_box'} key={index}>
+                <div className={'activity_feed_post rounded_white_box mb-4'} key={index}>
                     <div className={'activity_feed_user'} onClick={() => onPostClickHandler(data.id)}>
                         <img alt={'avatar'} width={50} src={data.user.avatar} />
                         <div className={'activity_feed_user_info'}>

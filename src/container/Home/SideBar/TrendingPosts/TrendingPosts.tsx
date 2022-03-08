@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import TrendingPost from './TrendingPost/TrendingPost';
 import TrendingPostModal from './TrendingPostModal/TrendingPostModal';
+import './TrendingPosts.scss'
 
 const TrendingPosts = () => {
   const [show, setShow] = React.useState(false);

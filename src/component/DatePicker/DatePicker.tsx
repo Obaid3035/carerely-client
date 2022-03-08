@@ -19,7 +19,7 @@ const DateSelect = () => {
 
    function generateArrayOfYears() {
       const max = new Date().getFullYear();
-      const min = max - 30;
+      const min = max - 92;
       const years = [];
 
       for (let i = max; i >= min; i--) {
