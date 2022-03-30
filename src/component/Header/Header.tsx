@@ -10,9 +10,11 @@ import MessageBox from './MessageBox/MessageBox';
 import NavProfileBox from './NavProfileBox/NavProfileBox';
 import SearchBar from './SearchBar/SearchBar';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../services/hook';
 import NotificationBox from './NotificationBox/NotificationBox';
+import Avatar from "../../assets/img/avatar.jpg";
 import './Header.scss';
+import { getCurrentUser } from "../../helper";
+import { IUser } from "../../services/slices/post";
 
 interface INavItem {
    path: string;
@@ -35,8 +37,12 @@ enum ProfileDropDownToggle {
    DROPDOWN_SHOW = 'profile_dropdown_show',
 }
 
+
 const Header = () => {
-   const currUser = useAppSelector((state) => state.auth.currentUser)!;
+   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+   useEffect(() => {
+      setCurrentUser(getCurrentUser())
+   }, [])
 
    const navItems: INavItem[] = [
       {
@@ -183,12 +189,12 @@ const Header = () => {
                   </Nav.Link>
                   <div className={'nav_link'} onClick={onDropdownClickHandler}>
                      <div className={'nav_profile'}>
-                        <p>Obaid Aqeel</p>
+                        <p>{ currentUser?.user_name }</p>
                         <RiIcon.RiArrowDropDownLine />
                         <img
                            width={50}
                            alt={'avatar'}
-                           src={currUser.avatar}
+                           src={currentUser?.avatar ? currentUser?.avatar : Avatar}
                            className={'ml-2'}
                         />
                      </div>

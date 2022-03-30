@@ -23,6 +23,8 @@
     padding: 30px;
     .blog_detail{
       padding: 20px;
+      overflow: hidden;
+      cursor: pointer;
       .hr_tag{
         border-top: 1px solid #36413e;
       }
@@ -30,6 +32,10 @@
       img{
         margin: auto;
         cursor: pointer;
+        max-width: 300px !important;
+        height: 200px;
+        object-fit: cover;
+        width: auto;
       }
 
       h5{
@@ -52,7 +58,9 @@
 .popular_blogs{
   padding: 40px;
   margin-top: 20px;
-
+  .popular_blog_wrapper {
+    cursor: pointer;
+  }
   h5{
     font-weight: bold;
     font-size: $main_heading;
@@ -60,6 +68,11 @@
     text-transform: uppercase;
     color: #2c6182;
     padding: 20px 0;
+  }
+  img {
+    max-width: 250px !important;
+    height: 200px;
+    width: auto;
   }
 
   .popular_blogs_row{
@@ -71,7 +84,6 @@
     box-shadow: 0 0 99px rgba(47, 98, 129, 0.09);
 
     .popular_blogs_text{
-      margin-left: 20px;
       h5{
         font-weight: bold;
         text-transform: uppercase;
@@ -83,7 +95,7 @@
       }
 
       p{
-        font-size: 20px;
+        font-size: 18px;
         color: #06011F
       }
     }

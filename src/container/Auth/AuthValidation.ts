@@ -1,5 +1,5 @@
 export const AuthValidation = {
-   name: {
+   user_name: {
       required: {
          value: true,
          message: 'Name cannot be empty',

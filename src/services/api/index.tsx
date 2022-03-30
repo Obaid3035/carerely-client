@@ -1,32 +1,24 @@
 import { seedPosts, seedUser } from '../../data';
-import { IUserInput } from '../slices/auth';
+import { IAuthInput } from '../../container/Auth/Auth';
+import axios from 'axios';
+import { getTokenFormat } from "../../helper";
 
-
-export function userLoginApi(userInput: IUserInput) {
-   return new Promise((resolve, reject) => {
-      setTimeout(() => {
-         const user = seedUser.find((user) => user.email === userInput.email && user.password === userInput.password);
-         if (user) {
-            console.log('DAMN');
-            resolve({
-               data: user,
-            });
-         } else {
-            reject({
-               response: {
-                  error: 'Invalid username or password',
-               },
-            });
-         }
-      }, 4000);
-   });
+export function register(userInput: IAuthInput) {
+   return axios.post('/auth/register', userInput);
 }
 
+export function login(userInput: IAuthInput) {
+   return axios.post('/auth/login', userInput);
+}
+
+export function mostFollowedUser() {
+   return axios.get('/auth/top', getTokenFormat());
+}
 
 export function getPostsApi(pageNo: number, limit: number) {
    return new Promise((resolve) => {
       setTimeout(() => {
-         const startIndex = (pageNo * limit) - limit;
+         const startIndex = pageNo * limit - limit;
          const endIndex = startIndex + limit;
          const posts = seedPosts.slice(startIndex, endIndex);
          resolve({

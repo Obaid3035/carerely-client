@@ -34,7 +34,7 @@
   .activity_feed .activity_feed_post .activity_feed_user .activity_feed_user_info {
     cursor: pointer; }
   .activity_feed .activity_feed_post .activity_feed_user div {
-    margin-left: 25px; }
+    margin-left: 10px; }
     .activity_feed .activity_feed_post .activity_feed_user div h5 {
       font-size: 15px;
       font-weight: 500;

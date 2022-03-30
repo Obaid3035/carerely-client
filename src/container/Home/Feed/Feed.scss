@@ -11,7 +11,33 @@
   .create_post_form {
     width: 100%;
     padding-left: 30px;
-    input {
+
+    .file_input {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    .file_label {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #000;
+      padding: 10px 12px;
+
+      svg {
+        height: 16px;
+        margin-right: 4px;
+      }
+    }
+
+
+    input[type="text"] {
       float: left;
       width: 90%;
       padding: 0 90px 0 30px;
@@ -27,6 +53,7 @@
 }
 
 .activity_feed {
+  width: 100%;
   h4 {
     color: $primary;
     text-transform: uppercase;
@@ -51,7 +78,7 @@
         cursor: pointer;
       }
       div {
-        margin-left: 25px;
+        margin-left: 10px;
         h5 {
           font-size: $sub_heading;
           font-weight: 500;
@@ -75,7 +102,6 @@
           cursor: pointer;
         }
       }
-
     }
 
     .activity_feed_description {

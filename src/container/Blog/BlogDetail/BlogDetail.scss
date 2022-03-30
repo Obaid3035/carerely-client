@@ -52,6 +52,7 @@
 
 
     .blog_detail_right_details{
+        cursor: pointer;
         display: flex;
         background: #fff;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
@@ -62,11 +63,11 @@
         }
 
         .blog_detail_description{
-            padding: 20px;
+            padding: 10px 10px;
 
             h5{
                 font-weight: bold;
-                font-size: 18px;
+                font-size: 14px;
                 line-height: 25px;
                 text-align: left;
                 color: #2c6182;

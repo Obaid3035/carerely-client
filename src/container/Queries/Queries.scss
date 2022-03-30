@@ -28,6 +28,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    button {
+      background-color: white;
+      border: none
+    }
+
 
     .question_input{
       border: none;
@@ -63,7 +68,8 @@
 
     .question_details{
       display: flex;
-      justify-content: center;
+      justify-content: left;
+
 
       .answer_counter{
         display: flex;

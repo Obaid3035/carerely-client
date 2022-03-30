@@ -68,6 +68,18 @@
   }
 
   .form_answer {
+    display: flex;
+    align-items: center;
+    svg {
+      font-size: 55px;
+      color: #3F8AB8;
+      cursor: pointer;
+      border-radius: 25px;
+    }
+    button {
+      background: white;
+      border: none;
+    }
     .give_answer {
       border-radius: 20px;
       background: #fff;

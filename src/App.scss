@@ -19,6 +19,11 @@ body {
   background-color: #E6F4FF !important;
 }
 
+.like_post_stats {
+  color: $hover!important;
+  cursor: pointer;
+}
+
 .rounded_white_box {
   background-color: white;
   padding: 30px 20px!important;
@@ -26,9 +31,11 @@ body {
 }
 
 
+
+
 .create_post_form {
   position: relative;
-  input {
+  input[type="text"] {
     box-shadow: 3px 6px 12px 3px rgba(0,0,0,0.06);
     -webkit-box-shadow: 3px 6px 12px 3px rgba(0,0,0,0.06);
     -moz-box-shadow: 3px 6px 12px 3px rgba(0,0,0,0.06);
@@ -38,14 +45,18 @@ body {
     background: #F6FAFB;
     height: 50px;
   }
-  input:focus {
+  input[type="text"]:focus {
     border-color: #EBF0F1;
     box-shadow: 3px 6px 12px 3px rgba(0,0,0,0.10);
     -webkit-box-shadow: 3px 6px 12px 3px rgba(0,0,0,0.10);
     -moz-box-shadow: 3px 6px 12px 3px rgba(0,0,0,0.10);
   }
-  input::placeholder {
+  input[type="text"]::placeholder {
     font-size: 12px;
+  }
+  input.form-control[type="file"] {
+    display: none;
+    margin: 0 auto;
   }
 
   button {
@@ -60,5 +71,34 @@ body {
 }
 .lazyload-wrapper  {
   margin: 0!important;
+}
+
+
+.page_responsive {
+  position: absolute;
+  top: 16px;
+  padding-left: 7%;
+  padding-right: 7%;
+  padding-top: 3%;
+  height: 100%;
+  width: calc(100% - 74px);
+  left: 74px;
+  transition: all 0.2s ease;
+}
+
+
+.page_responsive h5 {
+  margin-bottom: 25px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+@media (max-width: 767px) {
+  .active ~ .page_responsive {
+    width: calc(100% - 240px);
+    left: 240px;
+    transition: all 0.2s ease;
+    filter: blur(12px);
+  }
 }
 

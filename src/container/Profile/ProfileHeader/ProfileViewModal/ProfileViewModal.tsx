@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import ProfileImg from '../../../../assets/img/profile_img.png';
 import { AiFillHeart } from 'react-icons/ai';
@@ -12,6 +12,7 @@ interface IProfileViewModal {
 }
 
 const ProfileViewModal: React.FC<IProfileViewModal> = ({ show, onClose }) => {
+
    return (
       <Modal show={show} size={'lg'} className={'view_profile_image_modal'}>
          <Modal.Body>

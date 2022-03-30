@@ -10,7 +10,7 @@
     width: 100%;
     padding-left: 30px;
 
-    input {
+    input[type="text"] {
       float: left;
       width: 100%;
       padding: 0 60px 0 30px;
@@ -45,6 +45,7 @@
     .comment_detail{
       margin-top: 8px;
       h5{
+        cursor: pointer;
         font-size: $sub_heading;
         color: #4D4F5C;
 

@@ -11,6 +11,7 @@
       .queries_main .queries_left li svg {
         color: #3F8AB8;
         margin-right: 10px; }
+
   .queries_main .ask_question {
     width: 100%;
     height: 60px;
@@ -18,7 +19,9 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
     display: flex;
     justify-content: center;
-    align-items: center; }
+    align-items: center;
+  }
+
     .queries_main .ask_question .question_input {
       border: none;
       display: flex;

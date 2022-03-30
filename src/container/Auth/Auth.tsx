@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import './Auth.scss';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -9,14 +9,15 @@ import Divider from '../../assets/img/auth-divider.png';
 import Logo from '../../assets/img/Combined_Logo.png';
 import { AuthValidation } from './AuthValidation';
 import { useNavigate } from 'react-router-dom';
-import { disableError, userLogin } from '../../services/slices/auth';
-import { useAppDispatch, useAppSelector } from '../../services/hook';
 import Button from '../../component/Button/Button';
 import Loader from '../../component/Loader/Loader';
-import { IResponseStatus } from '../../services/store';
+import { login, register } from "../../services/api";
+import { getToken, setToken } from "../../helper";
+import { USER_ROLE } from "../../App";
 
-interface IAuthInput {
-   name?: string;
+
+export interface IAuthInput {
+   user_name?: string;
    email: string;
    password: string;
 }
@@ -28,8 +29,16 @@ enum AUTH_TOGGLE {
 
 const Auth = () => {
    const navigation = useNavigate();
-   const dispatch = useAppDispatch();
-   const authState = useAppSelector((state) => state.auth);
+
+   const [isLoading, setIsLoading] = useState(false);
+   const [isError, setIsError] = useState(false);
+   const [error, setError] = useState("");
+
+   useEffect(() => {
+      if (getToken()){
+         navigation("/home")
+      }
+   }, []);
 
 
    const {
@@ -49,17 +58,35 @@ const Auth = () => {
 
    const [authToggle, setAuthToggle] = useState(AUTH_TOGGLE.LOGIN);
 
-   const onSignUpSubmit = signUpSubmit((data) => {
-      console.log(data);
+   const onSignUpSubmit =  signUpSubmit(async (data) => {
+      try {
+         setIsLoading(true)
+         const auth = await register(data);
+         setToken(auth.data.token)
+         setIsLoading(false)
+      } catch (e: any) {
+         setIsLoading(false)
+         setIsError(true)
+         setError(e.response.data.message)
+      }
    });
 
-   const onLoginSubmit = loginSubmit((data) => {
-      dispatch(userLogin(data))
-         .then((res) => {
-            if (res.meta.requestStatus === IResponseStatus.FULFILLED) {
-               navigation('/home');
-            }
-         });
+   const onLoginSubmit = loginSubmit(async (data) => {
+      try {
+         setIsLoading(true)
+         const auth = await login(data);
+         setToken(auth.data.token)
+         if (auth.data.role === USER_ROLE.USER) {
+            navigation("/home");
+         } else if (auth.data.role === USER_ROLE.ADMIN) {
+            navigation("/admin/blogs")
+         }
+         setIsLoading(false)
+      } catch (e: any) {
+         setIsLoading(false)
+         setIsError(true)
+         setError(e.response.data.message)
+      }
    });
 
    const getErrorInputClass = (field: string) => {
@@ -75,18 +102,18 @@ const Auth = () => {
       if (authToggle === AUTH_TOGGLE.LOGIN) {
          loginReset({
             email: '',
-            name: '',
+            user_name: '',
             password: '',
          });
-         dispatch(disableError(null));
+
          setAuthToggle(AUTH_TOGGLE.REGISTER);
       } else if (authToggle === AUTH_TOGGLE.REGISTER) {
          signUpReset({
             email: '',
-            name: '',
+            user_name: '',
             password: '',
          });
-         dispatch(disableError(null));
+
          setAuthToggle(AUTH_TOGGLE.LOGIN);
       }
    };
@@ -101,9 +128,9 @@ const Auth = () => {
                   type='text'
                   placeholder={'Enter Username'}
                   className={getErrorInputClass('name')}
-                  {...signUpRegister('name', AuthValidation.name)}
+                  {...signUpRegister('user_name', AuthValidation.user_name)}
                />
-               <p className={'error_input_message'}>{signUpErrors.name?.message}</p>
+               <p className={'error_input_message'}>{signUpErrors.user_name?.message}</p>
             </Form.Group>
             <Form.Group className={'input_container'}>
                <RiIcon.RiMailSendLine className={getErrorInputClass('email')} />
@@ -130,7 +157,7 @@ const Auth = () => {
             <div className={'text-center'}>
                <img alt={'divider'} src={Divider} />
             </div>
-            {authState.isLoading ? (
+            {isLoading ? (
                <Loader />
             ) : (
                <Button className={'mt-3'}>CREATE AN ACCOUNT</Button>
@@ -174,7 +201,7 @@ const Auth = () => {
             <div className={'text-center'}>
                <img alt={'divider'} src={Divider} />
             </div>
-            {authState.isLoading ? (
+            {isLoading ? (
                <Loader />
             ) : (
                <Button className={'mt-3'}>Sign In</Button>
@@ -212,8 +239,8 @@ const Auth = () => {
                   </div>
                </Col>
                <Col md={6} className={'right_section'}>
-                  {authState.isError ? (
-                     <p className={'network_error text-center'}>{authState.error}</p>
+                  {isError ? (
+                     <p className={'network_error text-center'}>{error}</p>
                   ) : null}
                   {authForm()}
                </Col>
