@@ -61,7 +61,7 @@ const Feed = () => {
    }
 
    if (!isLoading) {
-      if (posts.length > 0) {
+      if (posts && posts.length > 0) {
          renderPost = (
             <Post
               setPost={setPosts}
@@ -71,7 +71,7 @@ const Feed = () => {
             />
          );
       } else {
-         renderPost = <h4 className={"text-center"}>No Post Found</h4>;
+
       }
    }
 
