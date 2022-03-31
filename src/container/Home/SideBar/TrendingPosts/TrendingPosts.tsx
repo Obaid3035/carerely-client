@@ -32,7 +32,6 @@ const TrendingPosts = () => {
       try {
          const post = trendingPost.concat();
          const likedPost = post.findIndex((post) => post.id === postId);
-         console.log(post[likedPost])
          post[likedPost].liked = !post[likedPost].liked;
          if (post[likedPost].liked) {
             post[likedPost].like_count += 1;

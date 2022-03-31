@@ -63,6 +63,11 @@ const Auth = () => {
          setIsLoading(true)
          const auth = await register(data);
          setToken(auth.data.token)
+         if (auth.data.role === USER_ROLE.USER) {
+            navigation("/home");
+         } else if (auth.data.role === USER_ROLE.ADMIN) {
+            navigation("/admin/blogs")
+         }
          setIsLoading(false)
       } catch (e: any) {
          setIsLoading(false)
@@ -100,19 +105,11 @@ const Auth = () => {
 
    const authToggleHandler = () => {
       if (authToggle === AUTH_TOGGLE.LOGIN) {
-         loginReset({
-            email: '',
-            user_name: '',
-            password: '',
-         });
+         loginReset();
 
          setAuthToggle(AUTH_TOGGLE.REGISTER);
       } else if (authToggle === AUTH_TOGGLE.REGISTER) {
-         signUpReset({
-            email: '',
-            user_name: '',
-            password: '',
-         });
+         signUpReset();
 
          setAuthToggle(AUTH_TOGGLE.LOGIN);
       }

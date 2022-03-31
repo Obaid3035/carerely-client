@@ -15,12 +15,16 @@ const ProfilePost: React.FC<IProfilePost> = ({ fetchMoreData, posts, setPost, ha
    return (
       <div className={'activity_feed'}>
          <h4 className={'mb-4'}>Activity Feed</h4>
-         <Post
-           setPost={setPost}
-            hasMore={hasMore}
-            mockData={posts}
-            fetchMoreData={fetchMoreData}
-         />
+        {
+          posts.length > 0 ? (
+            <Post
+              setPost={setPost}
+              hasMore={hasMore}
+              mockData={posts}
+              fetchMoreData={fetchMoreData}
+            />
+          ) : <h4 className={"text-center"}>No Post Found</h4>
+        }
       </div>
    );
 };

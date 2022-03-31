@@ -118,46 +118,48 @@ const onModalChangeHandler = (query: IQueries) => {
                {
                   !isLoading ?
                     (
-                      queries.map((query) => (
-                        <div className='question' key={query.id}>
-                           <div className={'question_details'}>
+                      queries.length > 0 ? (
+                        queries.map((query) => (
+                          <div className='question' key={query.id}>
+                            <div className={'question_details'}>
                               <div className={'answer_counter'}>{query.answerCount}</div>
                               <div className={'ml-3'}>
-                                 <h5>
-                                    {query.text}
-                                 </h5>
-                                 <ReadMore>
-                                    {query.text}
-                                 </ReadMore>
+                                <h5>
+                                  {query.text}
+                                </h5>
+                                <ReadMore>
+                                  {query.text}
+                                </ReadMore>
                               </div>
-                           </div>
-                           <div>
+                            </div>
+                            <div>
                               <Container>
-                                 <hr className={'question_divider'} />
-                                 <Row>
-                                    <Col md={4}>
-                                       <div className={'user_details'}>
-                                          <img src={query.user.avatar ? query.user.avatar : Avatar} alt='Avatar' />
-                                          <p>
-                                             Posted By:
-                                             <NavLink to={'/other-profile/1'}> { query.user.user_name} </NavLink>
-                                          </p>
-                                       </div>
-                                    </Col>
-                                    <Col md={2} className={'user_details'}>
-                                       <FiClock />
-                                       <p> 10 mins ago</p>
-                                    </Col>
-                                    <Col md={2} />
+                                <hr className={'question_divider'} />
+                                <Row>
+                                  <Col md={4}>
+                                    <div className={'user_details'}>
+                                      <img src={query.user.avatar ? query.user.avatar : Avatar} alt='Avatar' />
+                                      <p>
+                                        Posted By:
+                                        <NavLink to={'/other-profile/1'}> { query.user.user_name} </NavLink>
+                                      </p>
+                                    </div>
+                                  </Col>
+                                  <Col md={2} className={'user_details'}>
+                                    <FiClock />
+                                    <p> 10 mins ago</p>
+                                  </Col>
+                                  <Col md={2} />
 
-                                    <Col md={4} className={'user_details'}>
-                                       <Button onClick={() => onModalChangeHandler(query)} className='see_btn'>Answers</Button>
-                                    </Col>
-                                 </Row>
+                                  <Col md={4} className={'user_details'}>
+                                    <Button onClick={() => onModalChangeHandler(query)} className='see_btn'>Answers</Button>
+                                  </Col>
+                                </Row>
                               </Container>
-                           </div>
-                        </div>
-                      ))
+                            </div>
+                          </div>
+                        ))
+                      ): <p className={"text-center mt-4"}>No Queries Found</p>
                     ) : (
                       <div className={"text-center mt-4"}>
                          <Loader />

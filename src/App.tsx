@@ -51,7 +51,7 @@ function App() {
             <Routes>
                { userLayout }
               { adminLayout }
-              <Route path={"/"} element={<Auth/>}/>
+              <Route path={"/auth"} element={<Auth/>}/>
             </Routes>
          </Router>
       </div>

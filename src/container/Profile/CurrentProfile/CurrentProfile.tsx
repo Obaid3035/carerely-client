@@ -114,12 +114,16 @@ const CurrentProfile = () => {
                         />
                      </Form>
                   </div>
-                  <ProfilePost
-                     setPost={setPosts}
-                     posts={posts}
-                     hasMore={hasMore}
-                     fetchMoreData={fetchMoreData}
-                  />
+                  {
+                     posts ? (
+                       <ProfilePost
+                         setPost={setPosts}
+                         posts={posts}
+                         hasMore={hasMore}
+                         fetchMoreData={fetchMoreData}
+                       />
+                     ) : null
+                  }
                </React.Fragment>
             </Row>
          ) : (

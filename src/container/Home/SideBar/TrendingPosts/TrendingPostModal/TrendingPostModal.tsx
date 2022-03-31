@@ -50,7 +50,6 @@ const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
   const fetchMoreData = () => {
     if (mockData.length >= 2) {
       setHasMore(false);
-      console.log(mockData.length);
       return;
     }
 

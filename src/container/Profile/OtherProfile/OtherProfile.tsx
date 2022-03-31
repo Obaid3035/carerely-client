@@ -146,14 +146,6 @@ const OtherProfile = () => {
    }
 
    if (friendShipStatus === FriendShipStatus.view && posts) {
-      data = (
-         <ProfilePost
-            posts={posts}
-            fetchMoreData={fetchMoreData}
-            setPost={setPosts}
-            hasMore={hasMore}
-         />
-      );
       unFollowBtn = (
          <div className={'mt-3 unfollow_btn'}>
             <Button className={'mr-2'}>
@@ -164,6 +156,15 @@ const OtherProfile = () => {
                <span>UnFollow</span>
             </Button>
          </div>
+      );
+
+      data = (
+        <ProfilePost
+          posts={posts}
+          fetchMoreData={fetchMoreData}
+          setPost={setPosts}
+          hasMore={hasMore}
+        />
       );
    }
 

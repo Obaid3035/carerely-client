@@ -17,7 +17,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({children, role}) => {
 
     if (!token) {
         errorNotify("You are not authorize")
-        return <Navigate to={'/'}/>
+        return <Navigate to={'/auth'}/>
     }
 
     const decode: { user: any } = jwt(token);
@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({children, role}) => {
     if (!decode.user) {
         removeToken();
         errorNotify("You are not authorize")
-        return <Navigate to={'/'}/>
+        return <Navigate to={'/auth'}/>
     }
 
     if (decode.user && decode.user.role !== role) {
@@ -42,8 +42,9 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({children, role}) => {
     axios.get(`/auth/authorize/${token}`)
         .catch((err) => {
             if (err) {
+                removeToken();
                 errorNotify("You are not authorize")
-                navigate("/")
+                navigate("/auth")
             }
         })
     return children

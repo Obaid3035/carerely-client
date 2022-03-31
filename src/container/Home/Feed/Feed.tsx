@@ -20,7 +20,7 @@ const Feed = () => {
    const [isLoading, setIsLoading] = useState(false);
    const [hasMore, setHasMore] = useState(true);
    const [posts, setPosts] = useState<any>([]);
-   const [postCount, setPostCount] = useState(0);
+   const [postCount, setPostCount] = useState<number>(0);
 
    const {register, handleSubmit, reset} = useForm<IPostInput>();
 
@@ -71,7 +71,7 @@ const Feed = () => {
             />
          );
       } else {
-
+         renderPost = <h4 className={"text-center"}>No Post Found</h4>;
       }
    }
 
@@ -82,11 +82,26 @@ const Feed = () => {
          formData.append("text", data.text)
          formData.append("image", data.image[0])
          const post = await createPost(formData);
-         setPosts([
-            post.data,
-            ...posts
-         ])
+
          setPostCount(postCount + 1)
+         console.log(postCount)
+         if (postCount === 0) {
+            console.log("A")
+            setPosts([
+               {
+                  ...post.data
+               },
+            ])
+         } else {
+            console.log("B")
+            setPosts([
+               {
+                  ...post.data
+               },
+              ...posts
+            ])
+         }
+
          reset()
          setIsLoading(false)
       } catch (e) {

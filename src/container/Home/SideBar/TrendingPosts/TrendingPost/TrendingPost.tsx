@@ -13,8 +13,7 @@ interface ITrendingPost {
 }
 
 const TrendingPost: React.FC<ITrendingPost> = ({ onModalChange, post, onLikeHandler }) => {
-
-
+console.log(post)
 
 
    return (
