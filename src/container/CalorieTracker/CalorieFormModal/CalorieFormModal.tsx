@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import SiteModal, {ISiteModal} from '../../../component/SiteModal/SiteModal';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import DateSelect from '../../../component/DatePicker/DatePicker';
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
 import './CalorieFormModal.scss';
+import { useForm } from "react-hook-form";
+import { errorNotify, successNotify } from "../../../utils/toast";
+import moment from "moment";
+import { createProfile } from "../../../services/api";
+import { setToken } from "../../../helper";
+import Loader from "../../../component/Loader/Loader";
 
 
 enum GENDER {
@@ -13,26 +18,145 @@ enum GENDER {
    OTHER = 'other',
 }
 
+export interface IProfileInput {
+   height: number,
+   height_unit: string,
+   weight: number,
+   weight_unit: string,
+   gender: string
+}
+
 const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
    const navigation = useNavigate();
-
-   const [selectGender, setSelectGender] = useState(GENDER.MALE);
-
+   const [isLoading, setIsLoading] = useState(false);
    const weightOptions = [
       { value: 'lb', label: 'Lbs' },
       { value: 'kg', label: 'Kg' },
    ];
-
    const heightOptions = [{ value: 'ft', label: 'Ft' }];
+   const [formInput, setFormInput] = useState({
+      height: 0,
+      height_unit: heightOptions[0].value,
+      weight: 0,
+      weight_unit: weightOptions[0].value,
+      gender: GENDER.MALE
+   })
+
+
+
+
+
+   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+   const [selectedDate, setSelectedDate] = useState({
+      month: {
+         value: 1,
+         label: months[1],
+      },
+      year: {
+         value: 1997,
+         label: '1997',
+      },
+   });
+
+   const [day, setDay] = useState(daysInMonth(selectedDate.month.value, selectedDate.year.value)[0]);
+
+   function generateArrayOfYears() {
+      const max = new Date().getFullYear();
+      const min = max - 92;
+      const years = [];
+
+      for (let i = max; i >= min; i--) {
+         years.push({
+            label: i.toString(),
+            value: i,
+         });
+      }
+      return years;
+   }
+
+   function convertMonth() {
+      return months.map((month, index) => {
+         return {
+            value: index,
+            label: month,
+         };
+      });
+   }
+
+   function daysInMonth(month: number, year: number) {
+      const arrSelect = [];
+      const noOfDays = new Date(year, month + 1, 0).getDate();
+      for (let i = 1; i <= noOfDays; i++) {
+         arrSelect.push({
+            value: i,
+            label: i.toString(),
+         });
+      }
+      return arrSelect;
+   }
+
+   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormInput({
+         ...formInput,
+         [name]: value
+      })
+   }
+
+
+   const onFormSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsLoading(true)
+      try {
+         if (formInput.height <= 0 || formInput.weight <= 0) {
+            setIsLoading(false)
+            errorNotify("Height and weight must be greater than zero")
+         }  else  {
+            const formData = {
+               ...formInput,
+               dob: moment(`${selectedDate.month.value + 1}/${day.value}/${selectedDate.year.value}`).toDate()
+            }
+
+            const calorie = await createProfile(formData);
+            if (calorie.data.saved) {
+               setIsLoading(false)
+               successNotify("Profile saved successfully")
+               setToken(calorie.data.token)
+               navigation("/food-detail")
+            }
+
+         }
+      } catch (e) {
+         setIsLoading(false)
+      }
+
+   }
+
 
    return (
       <SiteModal show={show} onModalChange={onModalChange}>
-         <Form className={'tracker__modal'}>
+         <Form className={'tracker__modal'} onSubmit={onFormSubmit}>
             <Container fluid>
                <Row>
                   <Col md={12}>
                      <Form.Label>Birthday</Form.Label>
-                     <DateSelect />
+                     <div className={'d-flex justify-content-between'}>
+                        <Select options={convertMonth()} onChange={(option) => setSelectedDate({
+                           ...selectedDate,
+                           month: option!,
+                        })} value={selectedDate.month} placeholder={'Month'} className={'w-75'} />
+                        <Select options={daysInMonth(selectedDate.month.value, selectedDate.year.value)}
+                                value={day}
+                                onChange={(value) => setDay(value!)}
+                                placeholder={'Date'} className={'w-75 mx-3'} />
+                        <Select options={generateArrayOfYears()}
+                                onChange={(option) => setSelectedDate({
+                                   ...selectedDate,
+                                   year: option!,
+                                })}
+                                value={selectedDate.year} placeholder={'Year'} className={'w-75'} />
+                     </div>
                   </Col>
                   <Col md={8} className={'modal_col'}>
                      <Form.Group
@@ -40,13 +164,18 @@ const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
                         controlId="exampleForm.ControlInput1"
                      >
                         <Form.Label>Enter Your Height</Form.Label>
-                        <Form.Control type="text" placeholder="5" />
+                        <Form.Control value={formInput.height} name={"height"} onChange={onChangeHandler} type="number" placeholder="5" />
                      </Form.Group>
                   </Col>
                   <Col md={4} className={'unit'}>
                      <Select
+                       name={"height_unit"}
                         defaultValue={heightOptions[0]}
                         options={heightOptions}
+                        onChange={(option) => setFormInput({
+                           ...formInput,
+                           height_unit: option!.value
+                        })}
                      />
                   </Col>
                   <Col md={8} className={'modal_col'}>
@@ -55,13 +184,18 @@ const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
                         controlId="exampleForm.ControlInput1"
                      >
                         <Form.Label>Enter Your Weight</Form.Label>
-                        <Form.Control type="text" placeholder="65" />
+                        <Form.Control    name={"weight"} value={formInput.weight} onChange={onChangeHandler} type="text" placeholder="65" />
                      </Form.Group>
                   </Col>
                   <Col md={4} className={'unit'}>
                      <Select
+                       name={"weight_unit"}
                         defaultValue={weightOptions[0]}
                         options={weightOptions}
+                        onChange={(option) => setFormInput({
+                           ...formInput,
+                           weight_unit: option!.value
+                        })}
                      />
                   </Col>
                   <Col md={12} className={'modal_col'}>
@@ -69,29 +203,46 @@ const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
                      <Form.Check
                         type={'radio'}
                         value={GENDER.MALE}
-                        checked={selectGender === GENDER.MALE}
-                        onChange={() => setSelectGender(GENDER.MALE)}
+                        checked={formInput.gender === GENDER.MALE}
+                        onChange={() => setFormInput({
+                           ...formInput,
+                           gender: GENDER.MALE
+                        })}
                         label={`Male`}
                      />
                      <Form.Check
                         type={'radio'}
                         value={GENDER.FEMALE}
-                        checked={selectGender === GENDER.FEMALE}
-                        onChange={() => setSelectGender(GENDER.FEMALE)}
+                        checked={formInput.gender === GENDER.FEMALE}
+                        onChange={() => setFormInput({
+                           ...formInput,
+                           gender: GENDER.FEMALE
+                        })}
                         label={`Female`}
                      />
                      <Form.Check
                         type={'radio'}
-                        checked={selectGender === GENDER.OTHER}
-                        onChange={() => setSelectGender(GENDER.OTHER)}
+                        checked={formInput.gender === GENDER.OTHER}
+                        onChange={() => setFormInput({
+                           ...formInput,
+                           gender: GENDER.OTHER
+                        })}
                         value={GENDER.OTHER}
                         label={`Others`}
                      />
                   </Col>
                   <Col md={12} className={'tracker__btn'}>
-                     <Button onClick={() => navigation('/food-detail')}>
-                        Submit
-                     </Button>
+                     {
+                        !isLoading ? (
+                          <Button type={"submit"}>
+                             Submit
+                          </Button>
+                        ) : (
+                          <div className={"text-center"}>
+                             <Loader/>
+                          </div>
+                        )
+                     }
                   </Col>
                </Row>
             </Container>

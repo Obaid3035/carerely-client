@@ -2,6 +2,7 @@ import { seedPosts, seedUser } from '../../data';
 import { IAuthInput } from '../../container/Auth/Auth';
 import axios from 'axios';
 import { getTokenFormat } from "../../helper";
+import { IProfileInput } from "../../container/CalorieTracker/CalorieFormModal/CalorieFormModal";
 
 export function register(userInput: IAuthInput) {
    return axios.post('/auth/register', userInput);
@@ -9,6 +10,14 @@ export function register(userInput: IAuthInput) {
 
 export function login(userInput: IAuthInput) {
    return axios.post('/auth/login', userInput);
+}
+
+export function getProfile() {
+   return axios.get('/profiles', getTokenFormat());
+}
+
+export function createProfile(userInput: IProfileInput) {
+   return axios.post('/profiles', userInput, getTokenFormat())
 }
 
 export function mostFollowedUser() {

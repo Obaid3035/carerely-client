@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import * as BiIcon from 'react-icons/bi';
-import Avatar from '../../../assets/img/avatar.png';
+import Avatar from '../../../assets/img/avatar.jpg';
 import './SearchBar.scss';
 import Button from '../../Button/Button';
 import Loader from '../../Loader/Loader';

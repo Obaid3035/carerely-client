@@ -4,6 +4,8 @@ import {
    Routes,
    Route,
 } from 'react-router-dom';
+import {Slide, ToastContainer} from "react-toastify";
+
 import Auth from './container/Auth/Auth';
 import './App.scss';
 import Header from './component/Header/Header';
@@ -47,6 +49,18 @@ function App() {
 
    return (
       <div className='App'>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          transition={Slide}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
          <Router>
             <Routes>
                { userLayout }
