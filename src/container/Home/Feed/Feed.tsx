@@ -124,7 +124,7 @@ const Feed = () => {
       }
    }
 
-   // @ts-ignore
+
    return (
       <Col md={7} className={'pl-5'}>
          <div className={'create_post rounded_white_box mb-5'}>
@@ -132,6 +132,7 @@ const Feed = () => {
             <Form className={'create_post_form'} onSubmit={onPostCreate}>
                <Form.Control
                   type="text"
+                  value={formInput.text}
                   onChange={onChangeHandler}
                   placeholder={'Write something in your mind……'}
                />

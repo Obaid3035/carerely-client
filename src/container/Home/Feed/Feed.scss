@@ -80,10 +80,13 @@
     .activity_feed_user {
       display: flex;
       align-items: center;
-      justify-content: start;
+      justify-content: space-between;
       img {
         cursor: pointer;
         border-radius: 50%;
+      }
+      .delete {
+        cursor: pointer;
       }
       .activity_feed_user_info {
         cursor: pointer;

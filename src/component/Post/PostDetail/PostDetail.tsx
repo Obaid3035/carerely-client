@@ -6,14 +6,16 @@ import Avatar from '../../../assets/img/avatar.jpg';
 import { useParams } from 'react-router-dom';
 import './PostDetail.scss';
 import {
-   createComment,
+   createComment, deleteComment,
    getPostById,
-   likePost,
-} from '../../../services/api/post';
+   likePost
+} from "../../../services/api/post";
 import Loader from '../../Loader/Loader';
 import { IPost } from '../../../services/slices/post';
 import Comment from '../../Comment/Comment';
 import { errorNotify } from '../../../utils/toast';
+import { getCurrentUser } from "../../../helper";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const PostDetail = () => {
    const { id } = useParams();
@@ -70,24 +72,48 @@ const PostDetail = () => {
       }
    };
 
+   const onCommentDeleteHandler = async (commentId: number) => {
+      if (post) {
+         const postClone = {
+            ...post
+         }
+         await deleteComment(commentId)
+         const comment = postClone.comment.findIndex(
+           (comment) => comment.id === commentId
+         );
+         post.comment.splice(comment, 1);
+         setPost(post)
+         // await deleteComment(commentId)
+      }
+   };
+
    return (
       <Container>
          {isLoading && post ? (
             <div className={'activity_feed'}>
                <div className={'activity_feed_post rounded_white_box'}>
                   <div className={'activity_feed_user'}>
-                     <img
-                        alt={'avatar'}
-                        width={50}
-                        src={post.user.avatar ? post.user.avatar : Avatar}
-                     />
-                     <div className={'activity_feed_user_info'}>
-                        <h5>{post.user.user_name}</h5>
-                        {/*<p className={'text-muted'}>*/}
-                        {/*   <MdIcon.MdLocationOn />*/}
-                        {/*   New York*/}
-                        {/*</p>*/}
+                     <div className="d-flex align-items-center">
+                        <img
+                          alt={'avatar'}
+                          width={50}
+                          src={post.user.avatar ? post.user.avatar : Avatar}
+                        />
+                        <div className={'activity_feed_user_info'}>
+                           <h5>{post.user.user_name}</h5>
+                           {/*<p className={'text-muted'}>*/}
+                           {/*   <MdIcon.MdLocationOn />*/}
+                           {/*   New York*/}
+                           {/*</p>*/}
+                        </div>
                      </div>
+                     {
+                        getCurrentUser().id == post.user.id ? (
+                          <RiDeleteBin6Line
+                            className={'delete'}
+                          />
+                        ) : null
+                     }
                   </div>
 
                   <div className={'activity_feed_description'}>
@@ -135,7 +161,13 @@ const PostDetail = () => {
                      </div>
                      {post.comment.length > 0 ? (
                         post.comment.map((comment) => (
-                           <Comment created_at={comment.created_at} text={comment.text} user={comment.user} />
+                           <Comment
+                             id={comment.id}
+                             onCommentDeleteHandler={onCommentDeleteHandler}
+                             postId={parseInt(id!)}
+                             created_at={comment.created_at}
+                             text={comment.text}
+                             user={comment.user} />
                         ))
                      ) : (
                         <h4 className={'text-center'}>No Comment Found</h4>

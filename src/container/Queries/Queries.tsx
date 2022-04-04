@@ -67,6 +67,7 @@ const onModalChangeHandler = (query: IQueries) => {
           queriesClone.push(res.data)
           setQueries(queriesClone);
          setIsLoading(false)
+         setQueryInput("")
        })
    }
 
@@ -124,9 +125,9 @@ const onModalChangeHandler = (query: IQueries) => {
                             <div className={'question_details'}>
                               <div className={'answer_counter'}>{query.answerCount}</div>
                               <div className={'ml-3'}>
-                                <h5>
-                                  {query.text}
-                                </h5>
+                                {/*<h5>*/}
+                                {/*  {query.text}*/}
+                                {/*</h5>*/}
                                 <ReadMore>
                                   {query.text}
                                 </ReadMore>

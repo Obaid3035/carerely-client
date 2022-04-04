@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import * as MdIcon from 'react-icons/md';
 import * as AiIcon from 'react-icons/ai';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import Button from '../Button/Button';
 import './Post.scss';
-import post, { IPost, IUser } from "../../services/slices/post";
+import post, { IPost, IUser } from '../../services/slices/post';
 import Loader from '../Loader/Loader';
 import ReadMore from '../ReadMore/ReadMore';
 import Avatar from '../../assets/img/avatar.jpg';
-import { createComment, likePost } from '../../services/api/post';
+import { createComment, deleteComment, deletePost, likePost } from "../../services/api/post";
 import { errorNotify } from '../../utils/toast';
-import Comment from "../Comment/Comment";
-import { getCurrentUser } from "../../helper";
+import Comment from '../Comment/Comment';
+import { getCurrentUser } from '../../helper';
 
 interface IPostPropsInterface {
    hasMore: boolean;
@@ -27,15 +28,13 @@ const Post = (props: IPostPropsInterface) => {
    const [text, setText] = useState('');
 
    const onPostClickHandler = (id: number, user_id: number) => {
-      const currUser: IUser = getCurrentUser()
+      const currUser: IUser = getCurrentUser();
       if (currUser.id === user_id) {
          navigation(`/profile`);
       } else {
          navigation(`/other-profile/${user_id}`);
       }
-
    };
-
 
    const onLikeHandler = async (postId: number) => {
       try {
@@ -54,6 +53,18 @@ const Post = (props: IPostPropsInterface) => {
       }
    };
 
+   const onCommentDeleteHandler = async (commentId: number, postId: number) => {
+      console.log(commentId)
+      const post = props.mockData.concat();
+      await deleteComment(commentId)
+      const commentedPost = post.findIndex((post) => post.id === postId);
+      const comment = post[commentedPost].comment.findIndex(
+         (comment) => comment.id === commentId
+      );
+      post[commentedPost].comment.splice(comment, 1);
+      props.setPost(post);
+   };
+
    const onCommentCreate = async (e: React.FormEvent, postId: number) => {
       e.preventDefault();
       try {
@@ -63,16 +74,24 @@ const Post = (props: IPostPropsInterface) => {
             (post: any) => post.id === postId
          );
          if (post[commentedPost].comment.length >= 2) {
-            post[commentedPost].comment.pop()
+            post[commentedPost].comment.pop();
          }
-         post[commentedPost].comment.unshift(comment.data)
+         post[commentedPost].comment.unshift(comment.data);
          post[commentedPost].comment_count += 1;
 
          props.setPost(post);
-         setText("")
+         setText('');
       } catch (e) {
          errorNotify('Something went wrong');
       }
+   };
+
+   const onPostDeleteHandler = async (postId: number) => {
+      const post: any = props.mockData.concat();
+      await deletePost(postId);
+      const foundIndex = post.findIndex((post: any) => post.id === postId);
+      post.splice(foundIndex, 1);
+      props.setPost(post);
    };
 
    return (
@@ -94,22 +113,32 @@ const Post = (props: IPostPropsInterface) => {
                className={'activity_feed_post rounded_white_box mb-4'}
                key={index}
             >
-               <div
-                  className={'activity_feed_user'}
-                  onClick={() => onPostClickHandler(data.id, data.user.id)}
-               >
-                  <img
-                     alt={'avatar'}
-                     width={50}
-                     src={data.user.avatar ? data.user.avatar : Avatar}
-                  />
-                  <div className={'activity_feed_user_info'}>
-                     <h5>{data.user.user_name}</h5>
-                     {/*<p className={'text-muted d-flex align-items-center'}>*/}
-                     {/*    <MdIcon.MdLocationOn />*/}
-                     {/*    {data.user.city}*/}
-                     {/*</p>*/}
+               <div className={'activity_feed_user'}>
+                  <div
+                     className={'d-flex align-items-center'}
+                     onClick={() => onPostClickHandler(data.id, data.user.id)}
+                  >
+                     <img
+                        alt={'avatar'}
+                        width={50}
+                        src={data.user.avatar ? data.user.avatar : Avatar}
+                     />
+                     <div className={'activity_feed_user_info'}>
+                        <h5>{data.user.user_name}</h5>
+                        {/*<p className={'text-muted d-flex align-items-center'}>*/}
+                        {/*    <MdIcon.MdLocationOn />*/}
+                        {/*    {data.user.city}*/}
+                        {/*</p>*/}
+                     </div>
                   </div>
+                  {
+                     getCurrentUser().id == data.user.id ? (
+                       <RiDeleteBin6Line
+                         onClick={() => onPostDeleteHandler(data.id)}
+                         className={'delete'}
+                       />
+                     ) : null
+                  }
                </div>
 
                <div className={'activity_feed_description my-3'}>
@@ -148,6 +177,7 @@ const Post = (props: IPostPropsInterface) => {
                         <Form.Control
                            type="text"
                            name={`"text${data.id}`}
+                           value={text}
                            onChange={(e) => {
                               setText(e.target.value);
                            }}
@@ -158,7 +188,14 @@ const Post = (props: IPostPropsInterface) => {
                   </div>
                   {data.comment.length > 0 ? (
                      data.comment.map((comment) => (
-                       <Comment created_at={comment.created_at} text={comment.text} user={comment.user}/>
+                        <Comment
+                           onCommentDeleteHandler={onCommentDeleteHandler}
+                           postId={data.id}
+                           id={comment.id}
+                           created_at={comment.created_at}
+                           text={comment.text}
+                           user={comment.user}
+                        />
                      ))
                   ) : (
                      <h4 className={'text-center'}>No Comment Found</h4>
@@ -166,7 +203,7 @@ const Post = (props: IPostPropsInterface) => {
                   <div className="text-center">
                      <Button
                         className={'view_all_btn'}
-                        onClick={() =>  navigation(`/post-detail/${data.id}`)}
+                        onClick={() => navigation(`/post-detail/${data.id}`)}
                      >
                         View All <AiIcon.AiOutlineArrowDown />
                      </Button>

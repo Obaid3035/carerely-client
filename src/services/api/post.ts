@@ -23,6 +23,10 @@ export function createComment(userInput: {text: string}, postId: number) {
    return axios.post(`/comments/${postId}`, userInput, getTokenFormat());
 }
 
+export function deleteComment(commentId: number) {
+   return axios.delete(`/comments/${commentId}`, getTokenFormat());
+}
+
 export function currentUserPost(page: number, size: number) {
    return axios.get(`/posts/current-user?page=${page}&size=${size}`, getTokenFormat())
 }
@@ -41,4 +45,8 @@ export function otherProfilePost(userId: string, page: number, size: number) {
 
 export function getTrendingPosts() {
    return axios.get(`/posts/trending/few`, getTokenFormat())
+}
+
+export function deletePost(postId:  number) {
+   return axios.delete(`/posts/${postId}`, getTokenFormat());
 }
