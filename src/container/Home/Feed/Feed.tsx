@@ -11,7 +11,8 @@ import {FiUpload} from "react-icons/fi";
 
 export interface IPostInput {
    text: string,
-   image: [File]
+   image: File | null,
+   imageUrl: string | null
 }
 
 const Feed = () => {
@@ -22,7 +23,19 @@ const Feed = () => {
    const [posts, setPosts] = useState<any>([]);
    const [postCount, setPostCount] = useState<number>(0);
 
-   const {register, handleSubmit, reset} = useForm<IPostInput>();
+
+   const [formInput, setFormInput] = useState<IPostInput>({
+      text: "",
+      image: null,
+      imageUrl: null
+   })
+
+   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormInput({
+         ...formInput,
+         text: e.target.value,
+      })
+   }
 
    useEffect(() => {
       setIsLoading(true);
@@ -75,25 +88,24 @@ const Feed = () => {
       }
    }
 
-   const onPostCreate = handleSubmit(async (data) => {
+   const onPostCreate = async (e: React.FormEvent) => {
+      e.preventDefault();
       setIsLoading(true)
       try {
          const formData = new FormData();
-         formData.append("text", data.text)
-         formData.append("image", data.image[0])
+         formData.append("text", formInput.text)
+         formData.append("image", formInput.image!)
          const post = await createPost(formData);
 
          setPostCount(postCount + 1)
-         console.log(postCount)
+
          if (postCount === 0) {
-            console.log("A")
             setPosts([
                {
                   ...post.data
                },
             ])
          } else {
-            console.log("B")
             setPosts([
                {
                   ...post.data
@@ -101,14 +113,18 @@ const Feed = () => {
               ...posts
             ])
          }
-
-         reset()
+         setFormInput({
+            text: "",
+            image: null,
+            imageUrl: null
+         })
          setIsLoading(false)
       } catch (e) {
          setIsLoading(false)
       }
-   })
+   }
 
+   // @ts-ignore
    return (
       <Col md={7} className={'pl-5'}>
          <div className={'create_post rounded_white_box mb-5'}>
@@ -116,7 +132,7 @@ const Feed = () => {
             <Form className={'create_post_form'} onSubmit={onPostCreate}>
                <Form.Control
                   type="text"
-                  {...register("text")}
+                  onChange={onChangeHandler}
                   placeholder={'Write something in your mind……'}
                />
                <Button>Post</Button>
@@ -125,7 +141,13 @@ const Feed = () => {
                     type="file"
                     id="file-input"
                     className="file_input"
-                    {...register("image")}
+                    onChange={(e) => {
+                       setFormInput({
+                          ...formInput,
+                          image: e.target.files![0],
+                          imageUrl: URL.createObjectURL(e.target.files![0])
+                       })
+                    }}
                   />
                   <label className="file_label" htmlFor="file-input">
                      <FiUpload />
@@ -133,6 +155,14 @@ const Feed = () => {
                   </label
                   >
                </div>
+               {
+                  formInput.imageUrl ?
+                    (
+                      <ul className={"image_preview"}>
+                         <li><img alt="post__img" src={formInput.imageUrl}/></li>
+                      </ul>
+                    ) : null
+               }
             </Form>
          </div>
          <div className={'activity_feed'}>

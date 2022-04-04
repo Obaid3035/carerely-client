@@ -18,6 +18,10 @@ enum GENDER {
    OTHER = 'other',
 }
 
+export interface ICalorieFormModal extends ISiteModal{
+   mealType: string
+}
+
 export interface IProfileInput {
    height: number,
    height_unit: string,
@@ -26,7 +30,7 @@ export interface IProfileInput {
    gender: string
 }
 
-const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
+const CalorieFormModal: React.FC<ICalorieFormModal> = ({ show, onModalChange, mealType }) => {
    const navigation = useNavigate();
    const [isLoading, setIsLoading] = useState(false);
    const weightOptions = [
@@ -41,10 +45,6 @@ const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
       weight_unit: weightOptions[0].value,
       gender: GENDER.MALE
    })
-
-
-
-
 
    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -123,7 +123,7 @@ const CalorieFormModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
                setIsLoading(false)
                successNotify("Profile saved successfully")
                setToken(calorie.data.token)
-               navigation("/food-detail")
+               navigation(`/food-detail/${mealType}`)
             }
 
          }

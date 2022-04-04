@@ -1,48 +1,62 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import React, {  useState } from 'react';
+import { Col, Container, Form, Row } from 'react-bootstrap';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import Lemon from '../../assets/img/lemon.png';
 import './FoodDetail.scss';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { getFoodProduct } from '../../services/api/calorie';
+import Loader from '../../component/Loader/Loader';
+import Button from "../../component/Button/Button";
+import { useParams } from "react-router-dom";
+const _ = require('lodash');
 
 interface IFood {
-   id: number,
-   itemName: string,
-   calorie: string
+   fdcId : number;
+   name: string;
+   calorie: {
+      value: number
+   },
+   protein: {
+      value: number
+   },
+   fat: {
+      value: number
+   },
+   carb: {
+      value: number
+   },
+   sugar: {
+      value: number
+   }
 }
 
 const FoodDetail = () => {
-   const foodItems = [
-      {
-         id: 1,
-         itemName: 'Food Item',
-         calorie: '20',
-      },
-      {
-         id: 2,
-         itemName: 'Food Item',
-         calorie: '30',
-      },
-      {
-         id: 3,
-         itemName: 'Food Item',
-         calorie: '40',
-      },
-      {
-         id: 4,
-         itemName: 'Food Item',
-         calorie: '10',
-      },
-      {
-         id: 5,
-         itemName: 'Food Item',
-         calorie: '20',
-      },
-      {
-         id: 6,
-         itemName: 'Food Item',
-         calorie: '70',
-      },
-   ];
+   const { id } = useParams();
+   const [query, setQuery] = React.useState('');
+   const [pageNumber, setPageNumber] = React.useState(1);
+   const [totalPages, setTotalPages] = React.useState(null);
+   const [food, setFood] = React.useState<any>([]);
+   const [isLoading, setIsLoading] = useState(false);
+   const [hasMore, setHasMore] = React.useState(true);
+
+
+   const fetchMoreData = () => {
+      if (pageNumber === totalPages) {
+         setHasMore(false);
+         return;
+      }
+
+      getFoodProduct(query, pageNumber + 1)
+         .then((res) => {
+            setTotalPages(res.data.totalPages);
+            setFood([...food, ...res.data.foods]);
+            setPageNumber(pageNumber + 1);
+            setIsLoading(false);
+         })
+         .catch(() => {
+            setIsLoading(false);
+         });
+
+   };
 
    const [selectedItem, setSelectedItem] = useState<IFood[]>([]);
 
@@ -52,53 +66,166 @@ const FoodDetail = () => {
       setSelectedItem(selectedItemClone);
    };
 
+   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.target.value)
+   }
+
+   const onFormSubmit = (e: React.FormEvent) => {
+     e.preventDefault();
+     setIsLoading(true)
+      getFoodProduct(query, pageNumber).then((res) => {
+         setFood(res.data.foods);
+         setTotalPages(res.data.totalPages);
+         setIsLoading(false)
+      });
+   }
+
+   const onCalculateHandler = () => {
+
+      const allSelectedFoods = selectedItem.concat();
+      // @ts-ignore
+      const sum = allSelectedFoods.reduce((prevVal, curVal) => {
+         return {
+            calorie: {
+               value: prevVal.calorie.value + curVal.calorie.value,
+            },
+            protein: {
+               value: prevVal.protein.value + curVal.protein.value,
+            },
+            fat: {
+               value: prevVal.fat.value + curVal.fat.value
+            },
+            carb: {
+               value: prevVal.carb.value + curVal.carb.value
+            },
+            sugar: {
+               value: prevVal.sugar.value + curVal.sugar.value
+            }
+         }
+      }, {
+         calorie: {
+            value: 0
+         },
+         protein: {
+            value: 0
+         },
+         fat: {
+            value: 0
+         },
+         carb: {
+            value: 0
+         },
+         sugar: {
+            value: 0
+         }
+      })
+      const foodAnalysis = {
+         foodDetail: {
+            ...sum
+         },
+         mealType: id
+      }
+
+      console.log(foodAnalysis)
+   }
+
    return (
       <Container fluid>
          <Row className={'justify-content-center'}>
-            <Col md={8} className='breakfast_details'>
+            <Col md={8} className="breakfast_details">
                <h5>Breakfast Details</h5>
-               <Form>
-                  <Form.Group>
-                     <Form.Control className='search_input' type='text' placeholder='Search Items' />
+               <Form onSubmit={onFormSubmit}>
+                  <Form.Group className={"form-row"}>
+                     <Form.Control
+                        onChange={onChangeHandler}
+                        className="search_input col-md-10 pl-3"
+                        type="text"
+                        placeholder="Search Items"
+                     />
+                     <Button className={"col-md-2"}>
+                        Search
+                     </Button>
                   </Form.Group>
                </Form>
 
-               <Row className={'mt-4'}>
-                  {
-                     foodItems.map((item, index) => (
-                        <Col md={4} className={'mb-4'} key={index}>
-                           <div className='food_items'>
-                              <div className={'food_items_stats'}>
-                                 <h4>{item.itemName}</h4>
-                                 <p>Calorie: {item.calorie}</p>
-                              </div>
-                              <AiFillPlusCircle onClick={() => onAddFoodItem(item)} />
-                           </div>
-                        </Col>
-                     ))
-                  }
-               </Row>
+               {
+                  !isLoading ?
+                    food.length > 0 ?
+                      (
+                        (
+                          <InfiniteScroll
+                            className={'col-md-12'}
+                            next={fetchMoreData}
+                            hasMore={hasMore}
+                            loader={
+                               <div className="text-center">
+                                  <Loader />
+                               </div>
+                            }
+                            dataLength={food.length}
+                            endMessage={
+                               <h5 className={'text-center my-3'}>
+                                  Yay! You have seen it all
+                               </h5>
+                            }
+                          >
+                             <Row className={'mt-4'}>
+                                {food.map((item: any) => (
+                                  <Col md={4} className={'mb-4'} key={item.fdcId}>
+                                     <div className="food_items">
+                                        <div className={'food_items_stats'}>
+                                           <h4>{item.name}</h4>
+                                           <p>Calorie: {item.calorie.value}</p>
+                                        </div>
+                                        <AiFillPlusCircle
+                                          onClick={() => onAddFoodItem(item)}
+                                        />
+                                     </div>
+                                  </Col>
+                                ))}
+                             </Row>
+                          </InfiniteScroll>
+                        )
+                      ): (
+                        <div className="text-center mt-4">
+                           <h5 className="mt-5">No Food Found</h5>
+                        </div>
+                      )
+                      :  (
+                      <div className="text-center">
+                         <Loader />
+                      </div>
+                    )
+               }
             </Col>
             <Col md={3} className={'quick_details'}>
                <h5>Quick Details</h5>
                <hr />
-               {
-                  selectedItem.length > 0 ?
-                     selectedItem.map((item) => (
-                        <React.Fragment>
-                           <div className={'d-flex justify-content-between align-items-center mt-3'} key={item.id}>
-                              <div className={'d-flex align-items-center justify-content-center quick_img'}>
-                                 <img src={Lemon} alt={'lemon'} />
-                                 <p className={'p-0 m-0 ml-3'}>{item.itemName}</p>
-                              </div>
-                              <p className={'p-0 m-0'}>{item.calorie} Calories</p>
+               {selectedItem.length > 0 ? (
+                  selectedItem.map((item) => (
+                     <React.Fragment key={item.fdcId}>
+                        <div
+                           className={
+                              'd-flex justify-content-between align-items-center mt-3'
+                           }
+                           key={item.fdcId}
+                        >
+                           <div
+                              className={
+                                 'd-flex align-items-center justify-content-center'
+                              }
+                           >
+                              <p className={'p-0 m-0 ml-3'}>{item.name}</p>
                            </div>
-                           <hr />
-                        </React.Fragment>
-                     )) :
-                     <p className={'text-center'}>Please select food item</p>
-               }
-               <Button className={'w-100'}>Calculate</Button>
+                           <p className={'p-0 m-0'}><span>{item.calorie.value}</span> Calories</p>
+                        </div>
+                        <hr />
+                     </React.Fragment>
+                  ))
+               ) : (
+                  <p className={'text-center'}>Please select food item</p>
+               )}
+               <Button onClick={onCalculateHandler}  className={'w-100'}>Calculate</Button>
             </Col>
          </Row>
       </Container>

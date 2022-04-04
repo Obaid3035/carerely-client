@@ -11,7 +11,6 @@ export interface IProfilePost {
 }
 
 const ProfilePost: React.FC<IProfilePost> = ({ fetchMoreData, posts, setPost, hasMore }) => {
-
    return (
       <div className={'activity_feed'}>
          <h4 className={'mb-4'}>Activity Feed</h4>

@@ -8,6 +8,7 @@ import Loader from '../../../component/Loader/Loader';
 import { useForm } from "react-hook-form";
 import { IPostInput } from "../../Home/Feed/Feed";
 import FollowerModal from "../FollowerModal/FollowerModal";
+import { FiUpload } from "react-icons/fi";
 
 const CurrentProfile = () => {
    const [page, setPage] = useState(0);
@@ -58,15 +59,19 @@ const CurrentProfile = () => {
          })
    };
 
-   const {register, handleSubmit, reset} = useForm<IPostInput>();
+   const [formInput, setFormInput] = useState<IPostInput>({
+      text: "",
+      image: null,
+      imageUrl: null
+   })
 
-
-   const onPostCreate = handleSubmit(async (data) => {
+   const onPostCreate = async (e: React.FormEvent) => {
+      e.preventDefault();
       setIsLoading(true)
       try {
          const formData = new FormData();
-         formData.append("text", data.text)
-         formData.append("image", data.image[0])
+         formData.append("text", formInput.text)
+         formData.append("image", formInput.image!)
          const post = await createPost(formData);
          setPosts([
             post.data,
@@ -77,14 +82,23 @@ const CurrentProfile = () => {
             currentUserPostCount: userStats.currentUserPostCount + 1,
          });
          setPostCount(postCount + 1)
-         reset()
+         setFormInput({
+            text: "",
+            image: null,
+            imageUrl: null
+         })
          setIsLoading(false)
       } catch (e) {
          setIsLoading(false)
       }
-   })
+   }
 
-
+   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormInput({
+         ...formInput,
+         text: e.target.value,
+      })
+   }
    return (
       <Container>
          {!isLoading && userStats.user ? (
@@ -101,17 +115,39 @@ const CurrentProfile = () => {
                         <div className="col-md-12">
                            <Form.Control
                              type="text"
-                             {...register("text")}
-
+                             onChange={onChangeHandler}
                              placeholder={'Write something in your mind……'}
                            />
                            <Button>Post</Button>
                         </div>
-                        <Form.Control
-                          type={"file"}
-                          className={"col-md-6"}
-                          {...register("image")}
-                        />
+
+                        <div className={'input_file mt-4'}>
+                           <input
+                             type="file"
+                             id="file-input"
+                             className="file_input"
+                             onChange={(e) => {
+                                setFormInput({
+                                   ...formInput,
+                                   image: e.target.files![0],
+                                   imageUrl: URL.createObjectURL(e.target.files![0])
+                                })
+                             }}
+                           />
+                           <label className="file_label" htmlFor="file-input">
+                              <FiUpload />
+                              <span className={"mx-2"}>Add Photo</span>
+                           </label
+                           >
+                        </div>
+                        {
+                           formInput.imageUrl ?
+                             (
+                               <ul className={"image_preview"}>
+                                  <li><img alt="post__img" src={formInput.imageUrl}/></li>
+                               </ul>
+                             ) : null
+                        }
                      </Form>
                   </div>
                   {

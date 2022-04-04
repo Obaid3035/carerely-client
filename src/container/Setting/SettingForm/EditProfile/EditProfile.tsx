@@ -4,7 +4,7 @@ import Select from 'react-select';
 import Button from '../../../../component/Button/Button';
 import * as FaIcon from 'react-icons/fa';
 import { getCurrentUser } from '../../../../helper';
-import { getProfile } from '../../../../services/api';
+import { getProfile, updateProfile } from "../../../../services/api";
 import Loader from '../../../../component/Loader/Loader';
 
 const EditProfile = () => {
@@ -44,7 +44,14 @@ const EditProfile = () => {
 
    const onFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      console.log(profile);
+      setIsLoading(true)
+      updateProfile(profile)
+        .then(() => {
+           setIsLoading(false)
+        })
+        .catch(() => {
+           setIsLoading(false)
+        })
    };
 
    return (
@@ -60,7 +67,7 @@ const EditProfile = () => {
                         <Form.Control
                            onChange={onChangeHandler}
                            name={'weight'}
-                           type={'text'}
+                           type={'number'}
                            value={profile.weight}
                            placeholder={'Enter your weight'}
                         />
@@ -84,7 +91,7 @@ const EditProfile = () => {
                         <Form.Control
                            name={'height'}
                            onChange={onChangeHandler}
-                           type={'text'}
+                           type={'number'}
                            value={profile.height}
                            placeholder={'Enter your weight'}
                         />

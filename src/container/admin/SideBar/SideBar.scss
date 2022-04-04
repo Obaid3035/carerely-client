@@ -103,6 +103,7 @@
 
 .sidebar_active {
   width: 240px;
+  z-index: 999;
   .profile {
     opacity: 1;
   }

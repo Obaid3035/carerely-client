@@ -20,6 +20,10 @@ export function createProfile(userInput: IProfileInput) {
    return axios.post('/profiles', userInput, getTokenFormat())
 }
 
+export function updateProfile(userInput: IProfileInput) {
+   return axios.put('/profiles', userInput, getTokenFormat())
+}
+
 export function mostFollowedUser() {
    return axios.get('/auth/top', getTokenFormat());
 }

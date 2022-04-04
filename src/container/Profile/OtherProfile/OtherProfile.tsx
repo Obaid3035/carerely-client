@@ -9,8 +9,6 @@ import './OtherProfile.scss';
 import NotFriend from '../NotFriend/NotFriend';
 import { otherProfile, otherProfilePost } from '../../../services/api/post';
 import {
-   acceptRequest,
-   rejectRequest,
    sendFollowRequest,
    unFollowRequest,
 } from '../../../services/api/friendShip';
@@ -44,9 +42,6 @@ const OtherProfile = () => {
    const [postCount, setPostCount] = useState(0);
    const [isLoading, setIsLoading] = useState(false);
    const [friendShip, setFriendShip] = useState(false);
-   const [friendShipStatus, setFriendShipStatus] = useState<FriendShipStatus>(
-      FriendShipStatus.send
-   );
    useEffect(() => {
       setIsLoading(true);
       otherProfile(id!).then((res) => {
@@ -62,9 +57,8 @@ const OtherProfile = () => {
 
    useEffect(() => {
       otherProfilePost(id!, page, size).then((res) => {
-         setFriendShipStatus(res.data.status);
+         setFriendShip(res.data.friendship);
          if (res.data.friendship) {
-            setFriendShip(true);
             setPosts(res.data.posts);
             setPostCount(res.data.count);
          }
@@ -73,25 +67,20 @@ const OtherProfile = () => {
 
    const unfollowHandler = () => {
       unFollowRequest(id!).then((res) => {
-         if (res.data.deleted) {
-            setFriendShipStatus(res.data.status);
-            setUserStats({
-               ...userStats,
-               currentUserFollowers: userStats.currentUserFollowers - 1,
-            });
-         }
+         setFriendShip(res.data.friendship);
+         setUserStats({
+            ...userStats,
+            currentUserFollowers: userStats.currentUserFollowers - 1,
+         });
       });
    };
    const followHandler = () => {
       sendFollowRequest(id!).then((res) => {
-         if (res.data.saved) {
-            setFriendShipStatus(res.data.status);
-            setFriendShip(true);
-            setUserStats({
-               ...userStats,
-               currentUserFollowers: userStats.currentUserFollowers + 1,
-            });
-         }
+         setFriendShip(res.data.friendShip);
+         setUserStats({
+            ...userStats,
+            currentUserFollowers: userStats.currentUserFollowers + 1,
+         });
       });
    };
 
@@ -105,47 +94,18 @@ const OtherProfile = () => {
          setPage(page + 1);
          setPosts([...posts, ...res.data.posts]);
          setPostCount(res.data.count);
-      });
-   };
-
-   const onAcceptRequestHandler = () => {
-      acceptRequest(id!).then((res) => {
-         if (res.data.updated) {
-            setUserStats({
-               ...userStats,
-               currentUserFollowers: userStats.currentUserFollowers + 1,
-            });
-            otherProfilePost(id!, page, size).then((res) => {
-               setFriendShipStatus(res.data.status);
-               if (res.data.friendship) {
-                  setFriendShip(true);
-                  setPosts(res.data.posts);
-                  setPostCount(res.data.count);
-               }
-            });
-         }
-      });
-   };
-
-   const onRejectRequestHandler = () => {
-      rejectRequest(id!).then((res) => {
-         setFriendShipStatus(res.data.status);
-         setUserStats({
-            ...userStats,
-            currentUserFollowings: userStats.currentUserFollowings - 1,
-         });
-      });
+      })
    };
 
    let data;
    let unFollowBtn: any;
 
-   if (friendShipStatus === FriendShipStatus.send) {
+   if (!friendShip) {
       data = <NotFriend onClick={followHandler} />;
       unFollowBtn = null;
    }
 
-   if (friendShipStatus === FriendShipStatus.view && posts) {
+   if (friendShip && posts) {
       unFollowBtn = (
          <div className={'mt-3 unfollow_btn'}>
             <Button className={'mr-2'}>
@@ -166,24 +126,6 @@ const OtherProfile = () => {
           hasMore={hasMore}
         />
       );
-   }
-
-   if (friendShipStatus === FriendShipStatus.accept) {
-      data = (
-         <Col md={12} className={'not_friend text-center p-4'}>
-            <h5>To see post</h5>
-            <p className={'text-muted mt-3'}>you have to follow Him / Her</p>
-            <div className="d-flex justify-content-center">
-               <Button className={'mt-3 mx-2'} onClick={onAcceptRequestHandler}>
-                  Accept
-               </Button>
-               <Button className={'mt-3'} onClick={onRejectRequestHandler}>
-                  Reject
-               </Button>
-            </div>
-         </Col>
-      );
-      unFollowBtn = null;
    }
 
    return (

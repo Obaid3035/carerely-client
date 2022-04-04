@@ -10,11 +10,13 @@ const CalorieTracker = () => {
    const navigation = useNavigate();
    const [show, setShow] = useState(false);
    const [profileSetup, setProfileSetup] = useState(false);
-   const onModalChangeHandler = () => {
+   const [mealType, setMealType] = useState("");
+   const onModalChangeHandler = (mealType: string) => {
       if (!profileSetup) {
          setShow(!show);
+         setMealType(mealType)
       } else {
-        navigation("/food-detail")
+        navigation(`/food-detail/${mealType}`)
       }
    };
    useEffect(() => {
@@ -26,6 +28,7 @@ const CalorieTracker = () => {
          {show ? (
             <CalorieFormModal
                show={show}
+               mealType={mealType}
                onModalChange={() => setShow(!show)}
             />
          ) : null}
@@ -50,9 +53,9 @@ const CalorieTracker = () => {
          </Row>
 
          <div className="calorie_tracker_button">
-            <Button onClick={onModalChangeHandler}>Breakfast</Button>
-            <Button onClick={onModalChangeHandler}>Lunch</Button>
-            <Button onClick={onModalChangeHandler}> Dinner</Button>
+            <Button onClick={() => onModalChangeHandler("breakfast")}>Breakfast</Button>
+            <Button onClick={() => onModalChangeHandler("lunch")}>Lunch</Button>
+            <Button onClick={() => onModalChangeHandler("dinner")}> Dinner</Button>
          </div>
       </Container>
    );

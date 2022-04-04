@@ -11,6 +11,7 @@ import Setting from '../../container/Setting/Setting';
 import Home from "../../container/Home/Home";
 import AdminBlog from "../../container/admin/pages/Blog/Blog";
 import CreateBlog from "../../container/admin/pages/CreateBlog/CreateBlog";
+import Chat from "../../container/Chat/Chat";
 
 export interface RoutesLink {
    component: JSX.Element;
@@ -54,7 +55,7 @@ export const mainRoutes: RoutesLink[] = [
       component: <CalorieTracker />,
    },
    {
-      path: '/food-detail',
+      path: '/food-detail/:id',
       component: <FoodDetail />,
    },
    {
@@ -72,5 +73,5 @@ export const mainRoutes: RoutesLink[] = [
    {
       path: '/setting',
       component: <Setting />,
-   },
+   }
 ];

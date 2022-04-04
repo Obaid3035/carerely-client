@@ -14,6 +14,7 @@ import PrivateRoute from "./component/PrivateRoute/PrivateRoute";
 import Blog from "./container/admin/pages/Blog/Blog";
 import SideBar from "./container/admin/SideBar/SideBar";
 import CreateBlog from "./container/admin/pages/CreateBlog/CreateBlog";
+import Chat from "./container/Chat/Chat";
 
 export enum USER_ROLE {
    USER = "user",
@@ -65,6 +66,12 @@ function App() {
             <Routes>
                { userLayout }
               { adminLayout }
+              <Route path={"/chat"} element={
+                <React.Fragment>
+                  <Header/>
+                  <Chat/>
+                </React.Fragment>
+              }/>
               <Route path={"/auth"} element={<Auth/>}/>
             </Routes>
          </Router>

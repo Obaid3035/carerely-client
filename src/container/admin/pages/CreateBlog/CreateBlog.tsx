@@ -65,6 +65,7 @@ const CreateBlog = () => {
 
    const onFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
+      setIsLoading(true)
       const formDate = new FormData();
       if (!isAddMode) {
          if (formInput.feature_image) {
@@ -75,12 +76,14 @@ const CreateBlog = () => {
            updateBlogById(id, formDate)
              .then((res) => {
                successNotify(res.data.message);
+               setIsLoading(false)
                navigate("/admin/blogs")
              })
          } else {
            updateBlogById(id, formInput)
              .then((res) => {
                successNotify(res.data.message);
+               setIsLoading(false)
                navigate("/admin/blogs")
              })
          }
@@ -93,6 +96,7 @@ const CreateBlog = () => {
         createBlog(formDate)
           .then((res) => {
             successNotify(res.data.message);
+            setIsLoading(false)
             navigate("/admin/blogs")
           })
       }

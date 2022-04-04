@@ -4,6 +4,17 @@
   justify-content: space-around;
   display: flex;
   align-items: center;
+
+  .image_preview {
+    display: flex;
+    list-style-type: none;
+    li {
+      max-width: 100px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #e6f4ff;
+    }
+  }
   img {
     border-radius: 50%;
   }
