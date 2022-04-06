@@ -93,8 +93,14 @@ body {
   font-weight: 400;
 }
 
+.sidebar_active ~ .page_responsive {
+  width: calc(100% - 240px);
+  left: 240px;
+  transition: all 0.2s ease;
+}
+
 @media (max-width: 767px) {
-  .active ~ .page_responsive {
+  .sidebar_active ~ .page_responsive {
     width: calc(100% - 240px);
     left: 240px;
     transition: all 0.2s ease;

@@ -8,7 +8,7 @@ const PopularBlog: React.FC<BlogItem> = ({ blog }) => {
   const navigation = useNavigate();
    return (
       <React.Fragment>
-         <h5>Popular Blogs</h5>
+         <h5>Recent Blogs</h5>
          {
             blog.length > 0 ?
               (

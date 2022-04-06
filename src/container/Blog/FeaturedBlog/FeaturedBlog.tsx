@@ -58,7 +58,7 @@ const FeaturedBlog: React.FC<BlogItem> = ({blog}) => {
    return (
       <React.Fragment>
          <div className={'blogs_heading'}>
-            <h5>Featured Blogs</h5>
+            <h5>Popular Blogs</h5>
          </div>
         {
           blog.length > 0 ?

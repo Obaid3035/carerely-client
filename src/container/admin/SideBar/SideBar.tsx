@@ -3,6 +3,7 @@ import {Link, useLocation} from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import * as FiIcons from "react-icons/fi";
 import { BsFillBookmarkFill } from "react-icons/bs"
+import Logo from "../../../assets/img/logo.png"
 import './SideBar.scss'
 
 const SideBar = () => {
@@ -27,8 +28,8 @@ const SideBar = () => {
     <div className={sideBar ? 'sidebar sidebar_active' : 'sidebar'}>
       <div className={'logo_content'}>
         <div className={'profile'}>
-          <img alt={'profile'} src={`${process.env.PUBLIC_URL}/img/icon.png`}/>
-          <p className={'mb-0'}>Auto Cars</p>
+          <img alt={'profile'} src={Logo}/>
+          <p className={'mb-0'}>Carerely</p>
         </div>
         <FaIcons.FaBars className={'fa-bars'} onClick={showSideBar} />
       </div>
