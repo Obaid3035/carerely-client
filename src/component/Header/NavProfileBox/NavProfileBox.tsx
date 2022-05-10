@@ -4,6 +4,7 @@ import * as CgIcon from 'react-icons/cg';
 import { useNavigate } from 'react-router-dom';
 import './NavProfileBox.scss';
 import { removeToken } from "../../../helper";
+import { AiOutlineHistory } from "react-icons/ai"
 
 
 const NavProfileBox = (props: { extraClasses: string }) => {
@@ -24,6 +25,10 @@ const NavProfileBox = (props: { extraClasses: string }) => {
             <div className={'profile_dropdown_item'} onClick={() => navigation('/setting')}>
                <FiIcon.FiSettings />
                <p>Settings</p>
+            </div>
+            <div className={'profile_dropdown_item'} onClick={() => navigation('/history')}>
+               <AiOutlineHistory />
+               <p>History Log</p>
             </div>
             <div className={'profile_dropdown_item'} onClick={onLogOutHandler}>
                <FiIcon.FiLogOut />

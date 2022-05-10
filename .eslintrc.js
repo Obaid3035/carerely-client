@@ -15,6 +15,7 @@ module.exports = {
       'require-jsdoc': 0,
       semi: 0,
       'guard-for-in': 0,
+      'comma-spacing': 0,
       'no-multiple-empty-lines': 0,
       'no-trailing-spaces': 0,
       'prefer-promise-reject-errors': 0,

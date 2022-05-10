@@ -63,6 +63,16 @@
   overflow: scroll;
   height: 500px;
 
+  .selected_item {
+    p {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    svg {
+      cursor: pointer;
+    }
+  }
+
   h5{
     color: #2C6182;
     text-transform: uppercase;

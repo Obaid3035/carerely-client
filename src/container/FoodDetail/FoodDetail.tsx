@@ -3,10 +3,12 @@ import { Col, Container, Form, Row } from 'react-bootstrap';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import './FoodDetail.scss';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getFoodProduct } from '../../services/api/calorie';
+import { createFoodProduct, getFoodProduct } from "../../services/api/calorie";
 import Loader from '../../component/Loader/Loader';
 import Button from "../../component/Button/Button";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { AiFillDelete } from "react-icons/ai"
+import { successNotify } from "../../utils/toast";
 const _ = require('lodash');
 
 interface IFood {
@@ -31,13 +33,14 @@ interface IFood {
 
 const FoodDetail = () => {
    const { id } = useParams();
+   const navigation = useNavigate();
    const [query, setQuery] = React.useState('');
    const [pageNumber, setPageNumber] = React.useState(1);
    const [totalPages, setTotalPages] = React.useState(null);
    const [food, setFood] = React.useState<any>([]);
    const [isLoading, setIsLoading] = useState(false);
    const [hasMore, setHasMore] = React.useState(true);
-
+   const [submitLoader, setSubmitLoader] = useState(false)
 
    const fetchMoreData = () => {
       if (pageNumber === totalPages) {
@@ -81,7 +84,7 @@ const FoodDetail = () => {
    }
 
    const onCalculateHandler = () => {
-
+      setSubmitLoader(true)
       const allSelectedFoods = selectedItem.concat();
       // @ts-ignore
       const sum = allSelectedFoods.reduce((prevVal, curVal) => {
@@ -119,14 +122,26 @@ const FoodDetail = () => {
             value: 0
          }
       })
+
+
       const foodAnalysis = {
-         foodDetail: {
-            ...sum
-         },
-         mealType: id
+         ...sum,
+         mealType: id,
       }
 
-      console.log(foodAnalysis)
+      createFoodProduct(foodAnalysis)
+        .then((res) => {
+           setSubmitLoader(false)
+           successNotify(res.data.message);
+           navigation(`/food-stats/${res.data.id}`)
+        })
+   }
+
+
+   const onItemRemoveHandler = (fdcId: number) => {
+      const selectedItemClone = selectedItem.filter((item: IFood) => item.fdcId !== fdcId);
+
+      setSelectedItem(selectedItemClone)
    }
 
    return (
@@ -206,7 +221,7 @@ const FoodDetail = () => {
                      <React.Fragment key={item.fdcId}>
                         <div
                            className={
-                              'd-flex justify-content-between align-items-center mt-3'
+                              'd-flex justify-content-between align-items-center mt-3 selected_item'
                            }
                            key={item.fdcId}
                         >
@@ -218,6 +233,7 @@ const FoodDetail = () => {
                               <p className={'p-0 m-0 ml-3'}>{item.name}</p>
                            </div>
                            <p className={'p-0 m-0'}><span>{item.calorie.value}</span> Calories</p>
+                           <AiFillDelete onClick={() => onItemRemoveHandler(item.fdcId)}/>
                         </div>
                         <hr />
                      </React.Fragment>
@@ -225,7 +241,17 @@ const FoodDetail = () => {
                ) : (
                   <p className={'text-center'}>Please select food item</p>
                )}
-               <Button onClick={onCalculateHandler}  className={'w-100'}>Calculate</Button>
+               {
+                  !submitLoader ? (
+                    <div className={"text-center"}>
+                       <Button onClick={onCalculateHandler}  className={'w-100'}>Calculate</Button>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                       <Loader />
+                    </div>
+                  )
+               }
             </Col>
          </Row>
       </Container>

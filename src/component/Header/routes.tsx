@@ -1,4 +1,3 @@
-import Auth from '../../container/Auth/Auth';
 import PostDetail from '../Post/PostDetail/PostDetail';
 import Blog from '../../container/Blog/Blog';
 import BlogDetail from '../../container/Blog/BlogDetail/BlogDetail';
@@ -11,7 +10,8 @@ import Setting from '../../container/Setting/Setting';
 import Home from "../../container/Home/Home";
 import AdminBlog from "../../container/admin/pages/Blog/Blog";
 import CreateBlog from "../../container/admin/pages/CreateBlog/CreateBlog";
-import Chat from "../../container/Chat/Chat";
+import FoodStats from "../../container/FoodStats/FoodStats";
+import HistoryLog from "../../container/HistoryLog/HistoryLog";
 
 export interface RoutesLink {
    component: JSX.Element;
@@ -49,6 +49,14 @@ export const mainRoutes: RoutesLink[] = [
    {
       path: '/blog/:id',
       component: <BlogDetail />,
+   },
+   {
+      path: '/food-stats/:id',
+      component: <FoodStats/>
+   },
+   {
+      path: '/history',
+      component: <HistoryLog/>
    },
    {
       path: '/calorie-tracker',
