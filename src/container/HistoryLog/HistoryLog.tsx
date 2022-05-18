@@ -49,7 +49,7 @@ const HistoryLog = () => {
                                     <li>
                                       <div className={'history_desc'}>
                                         <p>{m.mealType}</p>
-                                        <button onClick={() => navigation(`/food-stats/${m.id}`)}>View More</button>
+                                        <button onClick={() => navigation(`/food-stats/${m.id}/stat`)}>View More</button>
                                       </div>
                                     </li>
                                     <hr />

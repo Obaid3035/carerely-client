@@ -133,7 +133,7 @@ const FoodDetail = () => {
         .then((res) => {
            setSubmitLoader(false)
            successNotify(res.data.message);
-           navigation(`/food-stats/${res.data.id}`)
+           navigation(`/food-stats/${res.data.id}/SUM`)
         })
    }
 

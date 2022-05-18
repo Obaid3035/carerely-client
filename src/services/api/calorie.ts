@@ -10,8 +10,8 @@ export function createFoodProduct(userInput: any) {
   return axios.post(`/calorie`, userInput, getTokenFormat())
 }
 
-export function getFoodProductStats(calorieId: string) {
-  return axios.get(`/calorie/stats/${calorieId}`, getTokenFormat())
+export function getFoodProductStats(calorieId: string, type: string) {
+  return axios.get(`/calorie/stats/${calorieId}?type=${type}`, getTokenFormat())
 }
 
 

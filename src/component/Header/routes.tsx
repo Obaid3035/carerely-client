@@ -51,7 +51,7 @@ export const mainRoutes: RoutesLink[] = [
       component: <BlogDetail />,
    },
    {
-      path: '/food-stats/:id',
+      path: '/food-stats/:id/:type',
       component: <FoodStats/>
    },
    {

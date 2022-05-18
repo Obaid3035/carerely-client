@@ -12,12 +12,12 @@ import { useParams } from "react-router-dom";
 import Loader from "../../component/Loader/Loader";
 
 const FoodStats = () => {
-  const { id } = useParams()
+  const { id, type } = useParams()
   const [isLoading, setIsLoading] = useState(false);
   const [foodStats, setFoodStats] = useState<any>(null)
   useEffect(() => {
     setIsLoading(true);
-    getFoodProductStats(id!)
+    getFoodProductStats(id!, type!)
       .then((res) => {
         setIsLoading(false)
         setFoodStats(res.data)
@@ -37,7 +37,7 @@ const FoodStats = () => {
                    <ProgressProvider interval={1000} values={[0, foodStats.calorie]}>
                      {
                        (percentage: number) => (
-                         <CircularProgressbar value={percentage} text={`${percentage}%`}
+                         <CircularProgressbar value={percentage} text={`${percentage}g`}
                                               styles={buildStyles({
                                                 pathColor: `#4AADEC`,
                                               })}
@@ -55,7 +55,7 @@ const FoodStats = () => {
                    <ProgressProvider interval={1000} values={[0, foodStats.carb]}>
                      {
                        (percentage: number) => (
-                         <CircularProgressbar value={percentage} text={`${percentage}%`}
+                         <CircularProgressbar value={percentage} text={`${percentage}g`}
                                               styles={buildStyles({
                                                 pathColor: `#FFA172`,
                                               })}
@@ -71,7 +71,7 @@ const FoodStats = () => {
                    <ProgressProvider interval={1000} values={[0, foodStats.fat]}>
                      {
                        (percentage: number) => (
-                         <CircularProgressbar value={percentage} text={`${percentage}%`}
+                         <CircularProgressbar value={percentage} text={`${percentage}g`}
                                               styles={buildStyles({
                                                 pathColor: `#00EAAE`,
                                               })}/>
@@ -86,7 +86,7 @@ const FoodStats = () => {
                    <ProgressProvider interval={1000} values={[0, foodStats.sugar]}>
                      {
                        (percentage: number) => (
-                         <CircularProgressbar value={percentage} text={`${percentage}%`}
+                         <CircularProgressbar value={percentage} text={`${percentage}g`}
                                               styles={buildStyles({
                                                 pathColor: `#FFDB7D`,
                                               })}/>
