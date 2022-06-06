@@ -15,6 +15,7 @@ import Avatar from "../../assets/img/avatar.jpg";
 import './Header.scss';
 import { getCurrentUser } from "../../helper";
 import { IUser } from "../../services/slices/post";
+import { useAppSelector } from "../../services/hook";
 
 interface INavItem {
    path: string;
@@ -43,6 +44,9 @@ const Header = () => {
    useEffect(() => {
       setCurrentUser(getCurrentUser())
    }, [])
+
+   const chatNotification = useAppSelector((state) => state.notification.chatNotification)
+
 
    const navItems: INavItem[] = [
       {
@@ -172,9 +176,12 @@ const Header = () => {
                         onClick={onMessageClickHandler}
                      >
                         <BsIcon.BsChat />
-                        <span className={'badge'}>3</span>
+                        <span className={'badge'}>{ chatNotification.length }</span>
                      </div>
-                     <MessageBox extraClasses={messageClasses} />
+                     {
+                        chatNotification.length > 0 ? <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
+                          : null
+                     }
                   </Nav.Link>
 
                   <Nav.Link className={'notify_item'}>

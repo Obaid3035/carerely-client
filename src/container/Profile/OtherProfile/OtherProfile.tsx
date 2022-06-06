@@ -13,6 +13,8 @@ import {
    unFollowRequest,
 } from '../../../services/api/friendShip';
 import { getCurrentUser } from "../../../helper";
+import { createConversation } from "../../../services/api/conversation";
+import { errorNotify, successNotify } from "../../../utils/toast";
 
 enum FriendShipStatus {
    view = 'VIEW',
@@ -105,10 +107,21 @@ const OtherProfile = () => {
       unFollowBtn = null;
    }
 
+   const onCreateConversation = async () => {
+      try {
+         const res = await createConversation(id!)
+         successNotify(res.data.message)
+         navigation("/chat")
+      } catch (e: any) {
+         errorNotify(e.response.data.message);
+      }
+
+   }
+
    if (friendShip && posts) {
       unFollowBtn = (
          <div className={'mt-3 unfollow_btn'}>
-            <Button className={'mr-2'}>
+            <Button className={'mr-2'} onClick={() => onCreateConversation()}>
                <BsFillChatFill />
                <span>Message</span>
             </Button>

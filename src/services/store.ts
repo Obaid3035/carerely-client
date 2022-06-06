@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import postReducer from './slices/post';
+import notificationReducer from './slices/notification';
 
 export enum IResponseStatus {
    FULFILLED = 'fulfilled',
@@ -10,6 +11,7 @@ export enum IResponseStatus {
 export const store = configureStore({
    reducer: {
       post: postReducer,
+      notification: notificationReducer
    },
 });
 

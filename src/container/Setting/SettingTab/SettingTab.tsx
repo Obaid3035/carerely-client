@@ -20,7 +20,14 @@ const SettingTab: React.FC<ISettingTabProps> = ({ onClick, selectedTab }) => {
          <div className={'text-center profile_change'}>
             <img alt={'avatar'} width={120} src={Avatar} />
             <h4>Jen Smith</h4>
-            <p>Change Avatar</p>
+            <input
+               type="file"
+               id="file-input"
+               accept="image/png, image/jpeg"
+               className="file_input" />
+            <label className="file_label" htmlFor="file-input">
+               <span>Change Avatar</span>
+            </label>
          </div>
          <hr />
          <div className={'tabs'}>
