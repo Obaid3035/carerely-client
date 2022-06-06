@@ -18,7 +18,7 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     setChatNotification: (state, { payload }) => {
-      state.chatNotification = payload
+      state = payload
     }
   }
 })

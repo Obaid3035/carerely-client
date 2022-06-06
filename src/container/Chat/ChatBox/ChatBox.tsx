@@ -46,7 +46,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    const [typingMsg, setTypingMsg] = useState('');
    const [typing, setTyping] = useState(false);
    const [isTyping, setIsTyping] = useState(false);
-   const [socket, setSocket] = useState(io(ENDPOINT));
+   const [socket, setSocket] = useState<any>(io(ENDPOINT));
 
 
    const defaultOptions = {
@@ -59,17 +59,13 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    };
 
    useEffect(() => {
-      console.log(isTyping)
       socket.emit('setup', getCurrentUser());
       socket.on('connected', () => console.log("Socket connected"));
+      socket.on("typing", () => setIsTyping(true));
+      socket.on("stop typing", () => setIsTyping(false));
    }, []);
 
 
-
-   useEffect(() => {
-      socket.on("typing", () => setIsTyping(true));
-      socket.on("stop typing", () => setIsTyping(false));
-   })
 
 
 
@@ -77,13 +73,12 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
 
    useEffect(() => {
       socket.on("message received", (newMessageReceived: IMessage) => {
-         console.log(newMessageReceived, "---------------")
          if (!selectedChat
            || selectedChat.id
            != newMessageReceived.conversation_id) {
-            if (!chatNotification.includes(newMessageReceived)) {
-               dispatch(setChatNotification([newMessageReceived, ...chatNotification]))
-            }
+            // if (!chatNotification.includes(newMessageReceived)) {
+            //    dispatch(setChatNotification([newMessageReceived, ...chatNotification]))
+            // }
          } else {
             console.log("Message received")
             setMessages([...messages, newMessageReceived])
@@ -126,10 +121,10 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
          content: typingMsg,
       };
       setMessages([...messages, msg]);
+      setTypingMsg('');
       const { data } = await createMessage(selectedChat?.id!, {
          content: typingMsg,
       });
-      setTypingMsg('');
       socket.emit("new message", data)
    };
 
