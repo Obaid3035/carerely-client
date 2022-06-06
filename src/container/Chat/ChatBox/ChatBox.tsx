@@ -37,7 +37,7 @@ const SendMsg: React.FC<any> = ({ msg }) => {
 };
 
 const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
-   const ENDPOINT = 'http://localhost:4000';
+   const ENDPOINT = 'https://careraly-server.herokuapp.com';
    const dispatch = useAppDispatch();
    const chatNotification = useAppSelector((state) => state.notification.chatNotification)
    const [messages, setMessages] = useState<IMessage[]>([]);
