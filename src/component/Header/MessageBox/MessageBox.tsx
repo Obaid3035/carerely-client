@@ -13,22 +13,18 @@ const MessageBox = (props: { extraClasses: string, chatNotification: IMessage[] 
             <div>
                <h4 onClick={() => navigation('/chat')}>
                   Chat
-                  <span className='badge'>{ props.chatNotification.length }</span>
+                  <span className='badge'>1</span>
                </h4>
             </div>
          </div>
-         {
-            props.chatNotification.map((notification) => (
-              <div className={'message_box_item'} key={notification.id}>
-                 <img width={60} alt={'avatar'} src={Avatar} className={'img-fluid'} />
-                 <div className={'message_box_message'}>
-                    <h5>John Mayers</h5>
-                    <p>{ notification.content }</p>
-                 </div>
-                 <p>3 min ago</p>
-              </div>
-            ))
-         }
+         <div className={'message_box_item'}>
+            <img width={60} alt={'avatar'} src={Avatar} className={'img-fluid'} />
+            <div className={'message_box_message'}>
+               <h5>John Mayers</h5>
+               <p>Lorem Ipsum</p>
+            </div>
+            <p>3 min ago</p>
+         </div>
       </div>
    );
 };

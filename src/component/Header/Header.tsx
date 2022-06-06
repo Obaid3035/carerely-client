@@ -176,12 +176,9 @@ const Header = () => {
                         onClick={onMessageClickHandler}
                      >
                         <BsIcon.BsChat />
-                        <span className={'badge'}>{ chatNotification.length }</span>
+                        <span className={'badge'}>1</span>
                      </div>
-                     {
-                        chatNotification.length > 0 ? <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
-                          : null
-                     }
+                     <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
                   </Nav.Link>
 
                   <Nav.Link className={'notify_item'}>

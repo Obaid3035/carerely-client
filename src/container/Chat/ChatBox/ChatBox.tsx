@@ -111,7 +111,8 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
       messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
    };
 
-   const sendMessage = async () => {
+   const sendMessage = async (event: any) => {
+      event.preventDefault();
       socket.emit("stop typing", selectedChat.id);
       const msg: IMessage = {
          id: 10,
@@ -182,16 +183,18 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
         ) : (
           <></>
         )}
-        <div className="typing-box">
+        <form className="typing-box" onSubmit={sendMessage}>
            <div className="typing-inp">
               <input
                 placeholder="Type your message here..."
                 value={typingMsg}
                 onChange={(e) => onChangeHandler(e)}
               />
-              <IoMdSend type="submit" onClick={sendMessage} />
+              <button>
+                 <IoMdSend type="submit" />
+              </button>
            </div>
-        </div>
+        </form>
      </div>
    )
 };
