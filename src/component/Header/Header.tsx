@@ -13,13 +13,12 @@ import { NavLink, useLocation } from 'react-router-dom';
 import NotificationBox from './NotificationBox/NotificationBox';
 import Avatar from "../../assets/img/avatar.jpg";
 import './Header.scss';
+import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../helper";
 import { IUser } from "../../services/slices/post";
 import { useAppSelector, useAppDispatch } from "../../services/hook";
-import conversation from "../../container/Chat/Conversation/Conversation";
-import { IConversation } from "../../container/Chat/Chat";
 import { setChatNotification } from "../../services/slices/notification";
-import { getAllConversations, getAllUnseenConversations } from "../../services/api/conversation";
+import { getAllUnseenConversations } from "../../services/api/conversation";
 
 interface INavItem {
    path: string;
@@ -45,6 +44,7 @@ enum ProfileDropDownToggle {
 
 
 const Header = () => {
+   const navigation = useNavigate();
    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
    const dispatch = useAppDispatch();
    useEffect(() => {
@@ -180,7 +180,7 @@ const Header = () => {
 
                   <SearchBar />
 
-                  <Nav.Link className={'notify_item'}>
+                  <Nav.Link className={'notify_item'} onClick={() => navigation("/chat")}>
                      <div
                         className={'notification_icon'}
                         onClick={onMessageClickHandler}
