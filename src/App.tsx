@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import {
    BrowserRouter as Router,
    Routes,
@@ -15,6 +15,8 @@ import Blog from "./container/admin/pages/Blog/Blog";
 import SideBar from "./container/admin/SideBar/SideBar";
 import CreateBlog from "./container/admin/pages/CreateBlog/CreateBlog";
 import Chat from "./container/Chat/Chat";
+import { getCurrentUser } from "./helper";
+
 
 export enum USER_ROLE {
    USER = "user",
@@ -66,12 +68,6 @@ function App() {
             <Routes>
                { userLayout }
               { adminLayout }
-              <Route path={"/chat"} element={
-                <React.Fragment>
-                  <Header/>
-                  <Chat/>
-                </React.Fragment>
-              }/>
               <Route path={"/auth"} element={<Auth/>}/>
             </Routes>
          </Router>

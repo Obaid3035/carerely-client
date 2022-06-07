@@ -4,13 +4,13 @@ import { IoMdSend } from "react-icons/io";
 import './ChatBox.scss'
 import { getCurrentUser } from '../../../helper';
 import { IConversation } from "../Chat";
-import { createMessage, getAllMessagesByConversationId } from "../../../services/api/conversation";
+import { createMessage, getAllMessagesByConversationId, updateMessage } from "../../../services/api/conversation";
 import { IUser } from "../../../services/slices/post";
 import animationData from "../../../animation/typing.json";
-import { useAppDispatch, useAppSelector } from "../../../services/hook";
+import { useAppSelector, useAppDispatch } from "../../../services/hook";
 import { setChatNotification } from "../../../services/slices/notification";
 import Lottie from "react-lottie";
-import io  from "socket.io-client";
+import Loader from "../../../component/Loader/Loader";
 
 export interface IChatBox {
    selectedChat: IConversation ;
@@ -19,6 +19,8 @@ export interface IChatBox {
 export interface IMessage {
    id: number;
    content: string;
+   conversation: IConversation,
+   sender: IUser,
    sender_id: number;
    created_at: string;
    conversation_id: number
@@ -37,8 +39,7 @@ const SendMsg: React.FC<any> = ({ msg }) => {
 };
 
 const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
-   const ENDPOINT = 'https://careraly-server.herokuapp.com';
-   const dispatch = useAppDispatch();
+   const socket = useAppSelector((state) => state.notification.socket)
    const chatNotification = useAppSelector((state) => state.notification.chatNotification)
    const [messages, setMessages] = useState<IMessage[]>([]);
    const [user, setUser] = useState<IUser | null>(null)
@@ -46,7 +47,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    const [typingMsg, setTypingMsg] = useState('');
    const [typing, setTyping] = useState(false);
    const [isTyping, setIsTyping] = useState(false);
-   const [socket, setSocket] = useState<any>(io(ENDPOINT));
+   const dispatch = useAppDispatch();
 
 
    const defaultOptions = {
@@ -59,29 +60,36 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    };
 
    useEffect(() => {
-      socket.emit('setup', getCurrentUser());
-      socket.on('connected', () => console.log("Socket connected"));
       socket.on("typing", () => setIsTyping(true));
       socket.on("stop typing", () => setIsTyping(false));
    }, []);
 
 
 
-
-
-
-
    useEffect(() => {
       socket.on("message received", (newMessageReceived: IMessage) => {
-         if (!selectedChat
-           || selectedChat.id
-           != newMessageReceived.conversation_id) {
-            // if (!chatNotification.includes(newMessageReceived)) {
-            //    dispatch(setChatNotification([newMessageReceived, ...chatNotification]))
-            // }
-         } else {
-            console.log("Message received")
+         if (selectedChat){
+            dispatch(setChatNotification(
+              {
+                 conversation: chatNotification.conversation.map((conversation) => {
+                    if (conversation.id == newMessageReceived.conversation_id) {
+                       return {
+                          ...conversation,
+                          updated_at: newMessageReceived.conversation.updated_at,
+                          latest_message: newMessageReceived.content,
+                          unseen_count: (conversation.unseen_count - 1) < 0 ? 0 : conversation.unseen_count - 1
+                       }
+                    }
+                    return conversation
+                 }),
+                 allUnseenMessages: (chatNotification.allUnseenMessages - 1) < 0 ? 0 : chatNotification.allUnseenMessages - 1
+              }
+            ))
             setMessages([...messages, newMessageReceived])
+            updateMessage(newMessageReceived.id)
+              .then((res) => {
+
+              })
          }
       })
    })
@@ -93,6 +101,21 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
            setMessages(res.data.message);
            setUser(res.data.user);
            setChatLoader(false)
+           dispatch(setChatNotification({
+              conversation: chatNotification.conversation.map((conversation) => {
+                if (conversation.id == selectedChat.id) {
+                   return {
+                      ...conversation,
+                      unseen_count: 0
+                   }
+                }
+                 return conversation
+              }),
+              //@ts-ignore
+              allUnseenMessages: chatNotification.allUnseenMessages - chatNotification.conversation.reduce((acc: any, curVal: any) => {
+                 return +curVal.unseen_count + +acc.unseen_count
+              }, { unseen_count: 0})
+           }))
            socket.emit("join chat", selectedChat.id);
         })
         .catch(() => {
@@ -114,8 +137,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    const sendMessage = async (event: any) => {
       event.preventDefault();
       socket.emit("stop typing", selectedChat.id);
-      const msg: IMessage = {
-         id: 10,
+      const msg: any = {
          sender_id: getCurrentUser().id,
          created_at: Date.now().toString(),
          conversation_id: selectedChat.id,
@@ -166,9 +188,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
               return msg.sender_id === getCurrentUser().id ? (
                 <SendMsg key={index} msg={msg.content} />
               ) : (
-                <React.Fragment>
-                   <ReceiveMsg key={index} msg={msg.content} />
-                </React.Fragment>
+                <ReceiveMsg key={index} msg={msg.content} />
               );
            })}
            <div ref={messagesEndRef} />

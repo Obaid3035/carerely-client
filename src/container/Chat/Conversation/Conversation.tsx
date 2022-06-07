@@ -1,4 +1,4 @@
-import React, { SetStateAction } from 'react';
+import React  from 'react';
 import './Conversation.scss'
 import ConversationCard from './ConversationCard/ConversationCard';
 import Search from './Search/Search';
@@ -7,14 +7,11 @@ import Loader from "../../../component/Loader/Loader";
 
 export interface IConversationProps {
    conversations: IConversation[]
-   setSelectedChat: React.Dispatch<SetStateAction<IConversation | null>>;
-   selectedChat: IConversation
    isLoading: boolean
 }
 
 
-const Conversation: React.FC<IConversationProps> = ({ conversations, selectedChat, setSelectedChat, isLoading }) => {
-
+const Conversation: React.FC<IConversationProps> = ({ conversations, isLoading }) => {
    let conversationBox
    if (isLoading) {
       conversationBox = (
@@ -37,8 +34,6 @@ const Conversation: React.FC<IConversationProps> = ({ conversations, selectedCha
         <ConversationCard
           key={index}
           info={item}
-          selectedChat={selectedChat}
-          setSelectedChat={setSelectedChat}
         />
       ))
    }

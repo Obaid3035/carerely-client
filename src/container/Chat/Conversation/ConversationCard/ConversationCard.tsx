@@ -3,14 +3,16 @@ import avatar from '../../../../assets/img/avatar.jpg';
 import { getCurrentUser, timeAgo } from '../../../../helper';
 import './ConversationCard.scss'
 import { IConversation } from "../../Chat";
+import { useAppDispatch, useAppSelector} from "../../../../services/hook";
+import { setSelectedChat } from "../../../../services/slices/notification";
 
 export interface IConversationCard {
    info: IConversation
-   setSelectedChat: React.Dispatch<SetStateAction<IConversation | null>>;
-   selectedChat: IConversation
 }
 
-const ConversationCard : React.FC<IConversationCard> = ({info, setSelectedChat, selectedChat}) => {
+const ConversationCard : React.FC<IConversationCard> = ({info}) => {
+   const selectedChat = useAppSelector((state) => state.notification.selectedChat)
+   const dispatch = useAppDispatch();
 
    const getSelectedChatClass = () => {
       if (selectedChat) {
@@ -24,7 +26,7 @@ const ConversationCard : React.FC<IConversationCard> = ({info, setSelectedChat, 
    return (
 
       <div className={`card-container ${getSelectedChatClass()}`} onClick={() => {
-         setSelectedChat(info)
+         dispatch(setSelectedChat(info))
       }}>
          <img className='profile-pic' src={avatar} alt={'avatar'}/>
          <div className="convo">

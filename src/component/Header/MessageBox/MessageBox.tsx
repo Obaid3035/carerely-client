@@ -1,11 +1,28 @@
 import React from 'react';
 import './MessageBox.scss';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import Avatar from '../../../assets/img/avatar.png';
-import { IMessage } from "../../../container/Chat/ChatBox/ChatBox";
+import { useAppDispatch } from '../../../services/hook';
+import { setSelectedChat } from "../../../services/slices/notification";
+import { getCurrentUser, timeAgo } from "../../../helper";
+import { IConversation } from '../../../container/Chat/Chat';
 
-const MessageBox = (props: { extraClasses: string, chatNotification: IMessage[] }) => {
+export interface IChatNotification {
+   conversation: IConversation[];
+   allUnseenMessages: number
+}
+
+const MessageBox = (props: {
+   extraClasses: string;
+   chatNotification: IChatNotification
+}) => {
+   const dispatch = useAppDispatch();
+
    const navigation = useNavigate();
+   const onConversationClickHandler = (conversation: IConversation) => {
+      dispatch(setSelectedChat(conversation));
+      navigation("/chat")
+   };
    return (
       <div className={`message_box ${props.extraClasses}`}>
          <div className={'message_box_top'}>
@@ -13,18 +30,42 @@ const MessageBox = (props: { extraClasses: string, chatNotification: IMessage[] 
             <div>
                <h4 onClick={() => navigation('/chat')}>
                   Chat
-                  <span className='badge'>1</span>
                </h4>
             </div>
          </div>
-         <div className={'message_box_item'}>
-            <img width={60} alt={'avatar'} src={Avatar} className={'img-fluid'} />
-            <div className={'message_box_message'}>
-               <h5>John Mayers</h5>
-               <p>Lorem Ipsum</p>
+         {props.chatNotification.conversation.map((conversation: any) => (
+            <div
+               className={'message_box_item'}
+               key={conversation.id}
+               onClick={() => onConversationClickHandler(conversation)}
+            >
+               <img
+                  width={60}
+                  alt={'avatar'}
+                  src={Avatar}
+                  className={'img-fluid'}
+               />
+               {
+                  conversation.sender_id == getCurrentUser().id ? (
+                    <div className={'message_box_message'}>
+                       <h5>{conversation.receiver.user_name}</h5>
+                       <div>
+                          <p>{conversation.latest_message}</p>
+
+                       </div>
+                    </div>
+                  ) : (
+                    <div className={'message_box_message'}>
+                       <h5>{conversation.sender.user_name}</h5>
+                       <p>{conversation.latest_message}</p>
+                    </div>
+                  )
+               }
+
+               <p>{timeAgo(conversation.updated_at)}</p>
+               <p className="badge" id={"unseen_badge"}>{conversation.unseen_count}</p>
             </div>
-            <p>3 min ago</p>
-         </div>
+         ))}
       </div>
    );
 };

@@ -3,9 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 import Conversation from './Conversation/Conversation';
 import ChatBox from './ChatBox/ChatBox';
 import { getAllConversations } from "../../services/api/conversation";
-import io from "socket.io-client"
-import { getCurrentUser } from "../../helper";
-
+import { useAppSelector } from "../../services/hook";
 
 
 export interface IConversation {
@@ -22,13 +20,14 @@ export interface IConversation {
   receiver: {
     id: number;
     user_name: string;
-  }
+  },
+  unseen_count: number
 }
 
 const Chat = () => {
   const [conversation, setConversation] = useState<IConversation[]>([])
   const [isConversationLoading, setIsConversationLoading] = useState(false)
-  const [selectedChat, setSelectedChat] = useState<IConversation | null>(null)
+  const selectedChat = useAppSelector((state) => state.notification.selectedChat);
 
   useEffect(() => {
     setIsConversationLoading(true)
@@ -47,14 +46,12 @@ const Chat = () => {
    return (
      <Row className='px-3'>
        <Col md={4}>
-         <Conversation isLoading={isConversationLoading} conversations={conversation} selectedChat={selectedChat!} setSelectedChat={setSelectedChat}/>
+         <Conversation isLoading={isConversationLoading} conversations={conversation}/>
        </Col>
        <Col md={8}>
          {
            selectedChat ? <ChatBox selectedChat={selectedChat}/> : (
-             <div
-               className={'d-flex justify-content-center align-items-center h-100'}
-             >
+             <div className={'d-flex justify-content-center align-items-center h-100'}>
                <p className={'text-muted'}>Please select a conversation</p>
              </div>
            )

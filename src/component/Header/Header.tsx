@@ -15,7 +15,11 @@ import Avatar from "../../assets/img/avatar.jpg";
 import './Header.scss';
 import { getCurrentUser } from "../../helper";
 import { IUser } from "../../services/slices/post";
-import { useAppSelector } from "../../services/hook";
+import { useAppSelector, useAppDispatch } from "../../services/hook";
+import conversation from "../../container/Chat/Conversation/Conversation";
+import { IConversation } from "../../container/Chat/Chat";
+import { setChatNotification } from "../../services/slices/notification";
+import { getAllConversations, getAllUnseenConversations } from "../../services/api/conversation";
 
 interface INavItem {
    path: string;
@@ -39,10 +43,16 @@ enum ProfileDropDownToggle {
 }
 
 
+
 const Header = () => {
    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+   const dispatch = useAppDispatch();
    useEffect(() => {
       setCurrentUser(getCurrentUser())
+      getAllUnseenConversations()
+        .then((res) => {
+           dispatch(setChatNotification(res.data))
+        })
    }, [])
 
    const chatNotification = useAppSelector((state) => state.notification.chatNotification)
@@ -176,9 +186,13 @@ const Header = () => {
                         onClick={onMessageClickHandler}
                      >
                         <BsIcon.BsChat />
-                        <span className={'badge'}>1</span>
+                        <span className={'badge'}>{ chatNotification.allUnseenMessages}</span>
                      </div>
-                     <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
+                     {
+                        chatNotification.conversation.length > 0 ?
+                          <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
+                          : null
+                     }
                   </Nav.Link>
 
                   <Nav.Link className={'notify_item'}>

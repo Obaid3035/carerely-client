@@ -12,6 +12,7 @@ import AdminBlog from "../../container/admin/pages/Blog/Blog";
 import CreateBlog from "../../container/admin/pages/CreateBlog/CreateBlog";
 import FoodStats from "../../container/FoodStats/FoodStats";
 import HistoryLog from "../../container/HistoryLog/HistoryLog";
+import Chat from "../../container/Chat/Chat";
 
 export interface RoutesLink {
    component: JSX.Element;
@@ -37,6 +38,10 @@ export const mainRoutes: RoutesLink[] = [
    {
       path: '/home',
       component: <Home />,
+   },
+   {
+     path: '/chat',
+     component: <Chat/>
    },
    {
       path: '/post-detail/:id',
