@@ -113,8 +113,10 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
               }),
               //@ts-ignore
               allUnseenMessages: chatNotification.allUnseenMessages - chatNotification.conversation.reduce((acc: any, curVal: any) => {
-                 return +curVal.unseen_count + +acc.unseen_count
-              }, { unseen_count: 0})
+                 return {
+                    unseen_count: +curVal.unseen_count + +acc.unseen_count
+                 }
+              }, { unseen_count: 0}).unseen_count
            }))
            socket.emit("join chat", selectedChat.id);
         })

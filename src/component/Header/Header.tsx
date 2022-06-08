@@ -13,7 +13,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 import NotificationBox from './NotificationBox/NotificationBox';
 import Avatar from "../../assets/img/avatar.jpg";
 import './Header.scss';
-import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../helper";
 import { IUser } from "../../services/slices/post";
 import { useAppSelector, useAppDispatch } from "../../services/hook";
@@ -44,7 +43,6 @@ enum ProfileDropDownToggle {
 
 
 const Header = () => {
-   const navigation = useNavigate();
    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
    const dispatch = useAppDispatch();
    useEffect(() => {
@@ -180,7 +178,7 @@ const Header = () => {
 
                   <SearchBar />
 
-                  <Nav.Link className={'notify_item'} onClick={() => navigation("/chat")}>
+                  <Nav.Link className={'notify_item'}>
                      <div
                         className={'notification_icon'}
                         onClick={onMessageClickHandler}
@@ -188,11 +186,7 @@ const Header = () => {
                         <BsIcon.BsChat />
                         <span className={'badge'}>{ chatNotification.allUnseenMessages}</span>
                      </div>
-                     {
-                        chatNotification.conversation.length > 0 ?
-                          <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
-                          : null
-                     }
+                     <MessageBox chatNotification={chatNotification} extraClasses={messageClasses} />
                   </Nav.Link>
 
                   <Nav.Link className={'notify_item'}>

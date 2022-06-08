@@ -33,39 +33,45 @@ const MessageBox = (props: {
                </h4>
             </div>
          </div>
-         {props.chatNotification.conversation.map((conversation: any) => (
-            <div
+         {props.chatNotification.conversation.length > 0 ? (
+           props.chatNotification.conversation.map((conversation: any) => (
+             <div
                className={'message_box_item'}
                key={conversation.id}
                onClick={() => onConversationClickHandler(conversation)}
-            >
-               <img
+             >
+                <img
                   width={60}
                   alt={'avatar'}
                   src={Avatar}
                   className={'img-fluid'}
-               />
-               {
-                  conversation.sender_id == getCurrentUser().id ? (
-                    <div className={'message_box_message'}>
-                       <h5>{conversation.receiver.user_name}</h5>
-                       <div>
-                          <p>{conversation.latest_message}</p>
+                />
+                {
+                   conversation.sender_id == getCurrentUser().id ? (
+                     <div className={'message_box_message'}>
+                        <h5>{conversation.receiver.user_name}</h5>
+                        <div>
+                           <p>{conversation.latest_message}</p>
 
-                       </div>
-                    </div>
-                  ) : (
-                    <div className={'message_box_message'}>
-                       <h5>{conversation.sender.user_name}</h5>
-                       <p>{conversation.latest_message}</p>
-                    </div>
-                  )
-               }
+                        </div>
+                     </div>
+                   ) : (
+                     <div className={'message_box_message'}>
+                        <h5>{conversation.sender.user_name}</h5>
+                        <p>{conversation.latest_message}</p>
+                     </div>
+                   )
+                }
 
-               <p>{timeAgo(conversation.updated_at)}</p>
-               <p className="badge" id={"unseen_badge"}>{conversation.unseen_count}</p>
-            </div>
-         ))}
+                <p>{timeAgo(conversation.updated_at)}</p>
+                <p className="badge" id={"unseen_badge"}>{conversation.unseen_count}</p>
+             </div>
+           ))
+         ) : (
+           <div className="text-center">
+              <p>No Conversation Found</p>
+           </div>
+         )}
       </div>
    );
 };
