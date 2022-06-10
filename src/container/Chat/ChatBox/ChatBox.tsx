@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import avatar from '../../../assets/img/avatar.jpg';
+import Avatar from '../../../assets/img/avatar.jpg';
 import { IoMdSend } from "react-icons/io";
 import './ChatBox.scss'
-import { getCurrentUser } from '../../../helper';
+import { getCurrentUser } from '../../../utils/helper';
 import { IConversation } from "../Chat";
 import { createMessage, getAllMessagesByConversationId, updateMessage } from "../../../services/api/conversation";
-import { IUser } from "../../../services/slices/post";
+import { IUser } from "../../../component/Header/Header";
 import animationData from "../../../animation/typing.json";
 import { useAppSelector, useAppDispatch } from "../../../services/hook";
 import { setChatNotification } from "../../../services/slices/notification";
 import Lottie from "react-lottie";
-import Loader from "../../../component/Loader/Loader";
+
 
 export interface IChatBox {
    selectedChat: IConversation ;
@@ -177,7 +177,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    return (
      <div className={"chat"}>
         <div className="chat-header">
-           <img className="chat-header-dp" src={avatar} alt="avatar" />
+           <img className="chat-header-dp" src={user && user.image ? user.image.avatar : Avatar} alt="avatar" />
            <div className="header-info">
               <h5 className="header-info-title">
                  {user && user.user_name}

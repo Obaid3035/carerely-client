@@ -11,8 +11,8 @@ import { AuthValidation } from './AuthValidation';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../component/Button/Button';
 import Loader from '../../component/Loader/Loader';
-import { login, register } from "../../services/api";
-import { getToken, setToken } from "../../helper";
+import { login, register } from "../../services/api/auth";
+import { getToken, setToken } from "../../utils/helper";
 import { USER_ROLE } from "../../App";
 
 

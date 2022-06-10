@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React  from "react";
 import { Col } from 'react-bootstrap';
-import { getCurrentUser } from "../../../helper";
 
 interface ISettingForm {
    form: JSX.Element;

@@ -3,21 +3,14 @@ import { Col, Form, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import Button from '../../../../component/Button/Button';
 import * as FaIcon from 'react-icons/fa';
-import { getCurrentUser } from '../../../../helper';
-import { getProfile, updateProfile } from "../../../../services/api";
+import { getCurrentUser } from '../../../../utils/helper';
+import { getProfile, updateProfile } from '../../../../services/api/auth';
 import Loader from '../../../../component/Loader/Loader';
 
 const EditProfile = () => {
-   const [value, setValue] = React.useState(new Date());
    const [isProfileSetup, setIsProfileSetup] = React.useState(false);
    const [isLoading, setIsLoading] = React.useState(false);
-   const [profile, setProfile] = React.useState({
-      height: 0,
-      height_unit: '',
-      weight: 0,
-      weight_unit: '',
-      gender: '',
-   });
+   const [profile, setProfile] = React.useState<any>(null);
    useEffect(() => {
       setIsProfileSetup(getCurrentUser().profile_setup);
       if (getCurrentUser().profile_setup) {
@@ -32,26 +25,34 @@ const EditProfile = () => {
       { value: 'lb', label: 'Lbs' },
       { value: 'kg', label: 'Kg' },
    ];
-   const heightOptions = [{ value: 'ft', label: 'Ft' }];
 
    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
-      setProfile({
-         ...profile,
-         [name]: value,
-      });
+      if (name === 'height_inches') {
+         if (parseInt(value) < 12) {
+            setProfile({
+               ...profile,
+               height_inches: value,
+            });
+         }
+      } else {
+         setProfile({
+            ...profile,
+            [name]: value,
+         });
+      }
    };
 
    const onFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      setIsLoading(true)
+      setIsLoading(true);
       updateProfile(profile)
-        .then(() => {
-           setIsLoading(false)
-        })
-        .catch(() => {
-           setIsLoading(false)
-        })
+         .then(() => {
+            setIsLoading(false);
+         })
+         .catch(() => {
+            setIsLoading(false);
+         });
    };
 
    return (
@@ -62,7 +63,7 @@ const EditProfile = () => {
             profile && !isLoading ? (
                <Form className={'setting_form'} onSubmit={onFormSubmit}>
                   <Row>
-                     <Col md={4} className={'mt-4'}>
+                     <Col md={8} className={'mt-4'}>
                         <Form.Label>Weight</Form.Label>
                         <Form.Control
                            onChange={onChangeHandler}
@@ -76,7 +77,7 @@ const EditProfile = () => {
                         <Form.Label>Unit</Form.Label>
                         <Select
                            isSearchable={false}
-                           defaultValue={weightOptions[0]}
+                           defaultValue={weightOptions.find((option) => profile.weight_unit == option.value)}
                            onChange={(option) =>
                               setProfile({
                                  ...profile,
@@ -87,27 +88,23 @@ const EditProfile = () => {
                         />
                      </Col>
                      <Col md={4} className={'mt-4'}>
-                        <Form.Label>Height</Form.Label>
+                        <Form.Label>Feet</Form.Label>
                         <Form.Control
-                           name={'height'}
+                           name={'height_feet'}
                            onChange={onChangeHandler}
                            type={'number'}
-                           value={profile.height}
+                           value={profile.height_feet}
                            placeholder={'Enter your weight'}
                         />
                      </Col>
-                     <Col md={2} className={'mt-4'}>
-                        <Form.Label>Unit</Form.Label>
-                        <Select
-                           isSearchable={false}
-                           defaultValue={heightOptions[0]}
-                           options={heightOptions}
-                           onChange={(option) =>
-                              setProfile({
-                                 ...profile,
-                                 weight_unit: option!.value,
-                              })
-                           }
+                     <Col md={4} className={'mt-4'}>
+                        <Form.Label>Inches</Form.Label>
+                        <Form.Control
+                           name={'height_inches'}
+                           onChange={onChangeHandler}
+                           type={'number'}
+                           value={profile.height_inches}
+                           placeholder={'Enter your weight'}
                         />
                      </Col>
                      <Col md={12} className={'mt-4 text-right setting_btn'}>

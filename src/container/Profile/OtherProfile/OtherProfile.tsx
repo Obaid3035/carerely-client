@@ -12,9 +12,10 @@ import {
    sendFollowRequest,
    unFollowRequest,
 } from '../../../services/api/friendShip';
-import { getCurrentUser } from "../../../helper";
+import { getCurrentUser } from "../../../utils/helper";
 import { createConversation } from "../../../services/api/conversation";
 import { errorNotify, successNotify } from "../../../utils/toast";
+import { useAppSelector } from "../../../services/hook";
 
 enum FriendShipStatus {
    view = 'VIEW',
@@ -24,6 +25,7 @@ enum FriendShipStatus {
 
 const OtherProfile = () => {
    const { id } = useParams();
+   const socket = useAppSelector((state) => state.notification.socket)
    const navigation = useNavigate();
    useEffect(() => {
       if (id == getCurrentUser().id) {
@@ -83,6 +85,7 @@ const OtherProfile = () => {
             ...userStats,
             currentUserFollowers: userStats.currentUserFollowers + 1,
          });
+         socket.emit("send notification", res.data.notification)
       });
    };
 

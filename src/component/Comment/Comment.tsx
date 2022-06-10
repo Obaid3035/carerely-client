@@ -1,8 +1,18 @@
 import React from "react";
 import Avatar from "../../assets/img/avatar.jpg";
-import post, { IComment } from "../../services/slices/post";
-import { getCurrentUser, timeAgo } from "../../helper";
+import { getCurrentUser, timeAgo } from "../../utils/helper";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { IUser } from "../Header/Header";
+
+
+export interface IComment {
+  id?: number,
+  text: string,
+  user: IUser,
+  created_at: string
+}
+
+
 
 
 export interface ICommentProps extends IComment{
@@ -17,7 +27,7 @@ const Comment: React.FC<ICommentProps> = (comment) => {
       <hr />
       <div className={'comment_show'}>
         <div className={"d-flex"}>
-          <img src={Avatar} alt={'comment_avatar'} />
+          <img src={comment.user.image ? comment.user.image.avatar : Avatar} alt={'comment_avatar'} />
           <div className={'comment_detail'}>
             <h5 onClick={() => window.location.href = `/other-profile/${comment.user.id}`}>
               {comment.user.user_name}

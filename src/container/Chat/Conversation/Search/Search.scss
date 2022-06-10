@@ -1,5 +1,5 @@
 @import "../../../../color";
-.search{
+.conversation_search{
   height: 80px;
   display: flex;
   align-items: center;
@@ -9,18 +9,12 @@
     color: rgb(165, 161, 161);
     font-size: 20px;
   }
-  input{
+  .search-inp {
     border: none;
     flex: 1;
     font-size: smaller;
     padding-left: 5px;
     text-shadow: .5px .5px rgb(138, 136, 136);
-    :focus{
-      border: none;
-    }
+    outline: none!important;
   }
 }
-
-// .search-inp{
-  
-// }

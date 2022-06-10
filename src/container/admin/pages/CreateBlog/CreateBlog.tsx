@@ -34,8 +34,6 @@ const CreateBlog = () => {
       if (!isAddMode) {
          setIsLoading(true);
          getBlogById(id!).then((res) => {
-
-            console.log(res.data.title)
             setFormInput({
                ...formInput,
                title: res.data.title,

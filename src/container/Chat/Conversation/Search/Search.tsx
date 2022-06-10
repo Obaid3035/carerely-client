@@ -2,10 +2,16 @@ import React from 'react'
 import { FiSearch } from 'react-icons/fi'
 import './Search.scss'
 
-const Search = () => {
+interface ISearch {
+  search: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const Search: React.FC<ISearch> = ({ search, onChange}) => {
   return (
-    <div className='search'>
-      <h5>Chat</h5>
+    <div className='conversation_search'>
+      <FiSearch/>
+      <input name='chat' value={search} onChange={onChange} placeholder='Search...' className='search-inp'/>
     </div>
   )
 }

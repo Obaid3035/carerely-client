@@ -4,9 +4,9 @@ import Button from '../../../component/Button/Button';
 import './FollowerModal.scss';
 import SiteModal from '../../../component/SiteModal/SiteModal';
 import axios from 'axios';
-import { getTokenFormat } from '../../../helper';
+import { getTokenFormat } from '../../../utils/helper';
 import Loader from '../../../component/Loader/Loader';
-import { IUser } from '../../../services/slices/post';
+import { IUser } from "../../../component/Header/Header";
 import { deleteFriendship } from '../../../services/api/friendShip';
 import { useNavigate } from "react-router-dom";
 import { ENDPOINT } from "../ProfileHeader/ProfileHeader";
@@ -76,8 +76,8 @@ const FollowerModal: React.FC<IFollowerModal> = ({
                               <img
                                  src={
                                     friendship.sender &&
-                                    friendship.sender.avatar
-                                       ? friendship.sender.avatar
+                                    friendship.sender.image
+                                       ?  friendship.sender.image.avatar
                                        : Avatar
                                  }
                                  alt="Avatar"

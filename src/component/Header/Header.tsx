@@ -13,17 +13,27 @@ import { NavLink, useLocation } from 'react-router-dom';
 import NotificationBox from './NotificationBox/NotificationBox';
 import Avatar from "../../assets/img/avatar.jpg";
 import './Header.scss';
-import { getCurrentUser } from "../../helper";
-import { IUser } from "../../services/slices/post";
+import { getCurrentUser } from "../../utils/helper";
 import { useAppSelector, useAppDispatch } from "../../services/hook";
-import { setChatNotification } from "../../services/slices/notification";
+import { setChatNotification, setNotification } from "../../services/slices/notification";
 import { getAllUnseenConversations } from "../../services/api/conversation";
+import { getNotification } from "../../services/api/notification";
 
 interface INavItem {
    path: string;
    title: string;
    icon: JSX.Element;
 }
+
+export interface IUser {
+   id: number
+   user_name: string,
+   image: {
+      avatar: string;
+      cloudinary_id: string;
+   }
+}
+
 
 enum MessageBoxClasses {
    MESSAGE_SHOW = 'message_show',
@@ -40,13 +50,41 @@ enum ProfileDropDownToggle {
    DROPDOWN_SHOW = 'profile_dropdown_show',
 }
 
+export enum NotificationStatus {
+   Like = "like",
+   Comment = "comment",
+   Follow = "follow"
+}
+
+export interface INotification {
+   id: number
+   sender: IUser,
+   receiver: IUser,
+   seen: boolean,
+   status: NotificationStatus
+   created_at: string
+   post_id: number
+}
 
 
 const Header = () => {
    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
    const dispatch = useAppDispatch();
+   const notification = useAppSelector((state) => state.notification.notification)
+
    useEffect(() => {
       setCurrentUser(getCurrentUser())
+      async function fetchMyAPI() {
+         const chatNotificationPromise = getAllUnseenConversations()
+         const notificationPromise = getNotification()
+
+         const [chatNotification, notification] = await Promise.all([chatNotificationPromise, notificationPromise])
+         dispatch(setChatNotification(chatNotification.data))
+         dispatch(setNotification(notification.data))
+      }
+
+      fetchMyAPI()
+
       getAllUnseenConversations()
         .then((res) => {
            dispatch(setChatNotification(res.data))
@@ -195,9 +233,9 @@ const Header = () => {
                         onClick={onNotificationClickHandler}
                      >
                         <RiIcon.RiNotification3Line />
-                        <span className={'badge'}>3</span>
+                        <span className={'badge'}>{ notification.length }</span>
                      </div>
-                     <NotificationBox extraClasses={notificationClasses} />
+                     <NotificationBox notification={notification} extraClasses={notificationClasses} />
                   </Nav.Link>
                   <div className={'nav_link'} onClick={onDropdownClickHandler}>
                      <div className={'nav_profile'}>
@@ -205,8 +243,9 @@ const Header = () => {
                         <RiIcon.RiArrowDropDownLine />
                         <img
                            width={50}
+                           height={50}
                            alt={'avatar'}
-                           src={currentUser?.avatar ? currentUser?.avatar : Avatar}
+                           src={getCurrentUser().image ? getCurrentUser().image.avatar : Avatar}
                            className={'ml-2'}
                         />
                      </div>

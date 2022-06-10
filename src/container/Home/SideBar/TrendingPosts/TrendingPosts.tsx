@@ -3,15 +3,20 @@ import Slider from 'react-slick';
 import TrendingPost from './TrendingPost/TrendingPost';
 import TrendingPostModal from './TrendingPostModal/TrendingPostModal';
 import './TrendingPosts.scss';
-import { getTrendingPosts, likePost } from "../../../../services/api/post";
+import { getFewTrendingPosts, likePost } from "../../../../services/api/post";
 import Loader from '../../../../component/Loader/Loader';
 import { errorNotify } from "../../../../utils/toast";
-import { IPost } from "../../../../services/slices/post";
+import { IPost } from "../../../../component/Post/Post";
+import { useAppSelector } from "../../../../services/hook";
 
-const TrendingPosts = () => {
+interface ITrendingPost {
+   posts: IPost[],
+   setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
+}
+
+const TrendingPosts: React.FC<ITrendingPost> = ({ posts, setPosts }) => {
+   const socket = useAppSelector((state) => state.notification.socket)
    const [show, setShow] = React.useState(false);
-   const [isLoading, setIsLoading] = React.useState(false);
-   const [trendingPost, setTrendingPost] = React.useState<IPost[]>([]);
    const settings = {
       dots: true,
       infinite: true,
@@ -20,17 +25,10 @@ const TrendingPosts = () => {
       slidesToScroll: 1,
    };
 
-   useEffect(() => {
-      setIsLoading(true);
-      getTrendingPosts().then((res) => {
-         setIsLoading(false);
-         setTrendingPost(res.data);
-      });
-   }, []);
 
    const onLikeHandler = async (postId: number) => {
       try {
-         const post = trendingPost.concat();
+         const post = posts.concat();
          const likedPost = post.findIndex((post) => post.id === postId);
          post[likedPost].liked = !post[likedPost].liked;
          if (post[likedPost].liked) {
@@ -38,8 +36,10 @@ const TrendingPosts = () => {
          } else {
             post[likedPost].like_count -= 1;
          }
-         setTrendingPost(post);
-         await likePost(postId);
+         setPosts(post);
+         const liked = await likePost(postId);
+         socket.emit("send notification", liked.data.notification)
+
       } catch (e) {
          errorNotify('Something went wrong');
       }
@@ -48,28 +48,28 @@ const TrendingPosts = () => {
    const onModalChange = () => setShow(!show);
    return (
       <div className={'most_liked_post'}>
-         <TrendingPostModal show={show} onModalChange={onModalChange} />
+         {
+            show ?
+              <TrendingPostModal show={show} onModalChange={onModalChange} />
+              : null
+         }
          <h4>Trending</h4>
-         {!isLoading ? (
-            trendingPost.length > 0 ?
+         {
+            posts.length > 0 ?
               (
                 <Slider {...settings} className={'mt-4'}>
-                  {
-                    trendingPost.map((post) => (
-                      <TrendingPost onLikeHandler={onLikeHandler} post={post} onModalChange={onModalChange} />
-                    ))
-                  }
+                   {
+                      posts.map((post) => (
+                        <TrendingPost onLikeHandler={onLikeHandler} post={post} onModalChange={onModalChange} />
+                      ))
+                   }
                 </Slider>
               ) : (
                 <div className="text-center">
-                  <p>No Post Found</p>
+                   <p>No Post Found</p>
                 </div>
               )
-         ) : (
-            <div className="text-center">
-               <Loader />
-            </div>
-         )}
+         }
       </div>
    );
 };

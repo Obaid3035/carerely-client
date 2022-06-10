@@ -4,6 +4,8 @@ import Conversation from './Conversation/Conversation';
 import ChatBox from './ChatBox/ChatBox';
 import { getAllConversations } from "../../services/api/conversation";
 import { useAppSelector } from "../../services/hook";
+import Search from "./Conversation/Search/Search";
+import { IUser } from "../../component/Header/Header";
 
 
 export interface IConversation {
@@ -13,25 +15,20 @@ export interface IConversation {
   latest_message: string,
   created_at: string;
   updated_at: string;
-  sender:{
-    id: number;
-    user_name: string;
-  };
-  receiver: {
-    id: number;
-    user_name: string;
-  },
+  sender:IUser;
+  receiver: IUser,
   unseen_count: number
 }
 
 const Chat = () => {
+  const [search, setSearch] = useState("");
   const [conversation, setConversation] = useState<IConversation[]>([])
   const [isConversationLoading, setIsConversationLoading] = useState(false)
   const selectedChat = useAppSelector((state) => state.notification.selectedChat);
 
   useEffect(() => {
     setIsConversationLoading(true)
-    getAllConversations()
+    getAllConversations(search)
       .then((res) => {
         setIsConversationLoading(false)
         setConversation(res.data)
@@ -39,14 +36,18 @@ const Chat = () => {
       .catch(() => {
         setIsConversationLoading(false)
       })
-  }, [])
+  }, [search])
 
 
 
    return (
      <Row className='px-3'>
        <Col md={4}>
-         <Conversation isLoading={isConversationLoading} conversations={conversation}/>
+         <div className='conversation-container'>
+           <Search search={search}
+                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}/>
+           <Conversation isLoading={isConversationLoading} conversations={conversation}/>
+         </div>
        </Col>
        <Col md={8}>
          {

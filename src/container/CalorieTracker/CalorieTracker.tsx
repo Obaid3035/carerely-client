@@ -3,7 +3,7 @@ import Calorie from '../../assets/img/calorie.png';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import './CalorieTracker.scss';
 import CalorieFormModal from './CalorieFormModal/CalorieFormModal';
-import { getCurrentUser } from '../../helper';
+import { getCurrentUser } from '../../utils/helper';
 import { useNavigate } from 'react-router-dom';
 
 const CalorieTracker = () => {

@@ -7,7 +7,7 @@ import './BlogDetail.scss';
 import BlogDetail2 from '../../../assets/img/blog_detail2.png';
 import { getBlogById } from "../../../services/api/blog";
 import Loader from "../../../component/Loader/Loader";
-import { timeAgo } from "../../../helper";
+import { timeAgo } from "../../../utils/helper";
 
 
 export interface IBlog {

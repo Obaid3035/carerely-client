@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
    BrowserRouter as Router,
    Routes,
@@ -11,11 +11,7 @@ import './App.scss';
 import Header from './component/Header/Header';
 import { mainRoutes, sideBarRoutes } from "./component/Header/routes";
 import PrivateRoute from "./component/PrivateRoute/PrivateRoute";
-import Blog from "./container/admin/pages/Blog/Blog";
 import SideBar from "./container/admin/SideBar/SideBar";
-import CreateBlog from "./container/admin/pages/CreateBlog/CreateBlog";
-import Chat from "./container/Chat/Chat";
-import { getCurrentUser } from "./helper";
 
 
 export enum USER_ROLE {

@@ -2,9 +2,7 @@ import React from 'react';
 import PostImg from '../../../../../assets/img/trending_post.png';
 import * as AiIcon from 'react-icons/ai';
 import * as MdIcon from 'react-icons/md';
-import { IPost } from "../../../../../services/slices/post";
-import { likePost } from "../../../../../services/api/post";
-import { errorNotify } from "../../../../../utils/toast";
+import { IPost } from "../../../../../component/Post/Post";
 
 interface ITrendingPost {
    onModalChange: () => void;
@@ -13,9 +11,6 @@ interface ITrendingPost {
 }
 
 const TrendingPost: React.FC<ITrendingPost> = ({ onModalChange, post, onLikeHandler }) => {
-console.log(post)
-
-
    return (
       <div className={'carousel_item px-3'}>
          <span className={'carousel_image_wrapper'}>

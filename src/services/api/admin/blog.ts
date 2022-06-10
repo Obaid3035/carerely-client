@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getTokenFormat } from "../../../helper";
+import { getTokenFormat } from "../../../utils/helper";
 
 export function createBlog(userInput: any) {
   return axios.post("/admin/blogs", userInput, getTokenFormat())

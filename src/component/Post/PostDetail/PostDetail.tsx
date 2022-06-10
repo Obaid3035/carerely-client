@@ -11,14 +11,16 @@ import {
    likePost
 } from "../../../services/api/post";
 import Loader from '../../Loader/Loader';
-import { IPost } from '../../../services/slices/post';
 import Comment from '../../Comment/Comment';
+import { IPost } from "../Post";
 import { errorNotify } from '../../../utils/toast';
-import { getCurrentUser } from "../../../helper";
+import { getCurrentUser } from "../../../utils/helper";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useAppSelector } from "../../../services/hook";
 
 const PostDetail = () => {
    const { id } = useParams();
+   const socket = useAppSelector((state) => state.notification.socket)
    const [isLoading, setIsLoading] = useState(false);
    const [post, setPost] = useState<IPost | null>(null);
    const [text, setText] = useState('');
@@ -45,7 +47,8 @@ const PostDetail = () => {
                postClone.like_count -= 1;
             }
             setPost(postClone);
-            await likePost(postId);
+            const liked = await likePost(postId);
+            socket.emit("send notification", liked.data.notification)
          } catch (e) {
             errorNotify('Something went wrong');
          }
@@ -61,11 +64,12 @@ const PostDetail = () => {
             };
             const comment = await createComment({ text }, postId);
 
-            postClone.comment.push(comment.data);
+            postClone.comment.push(comment.data.comment);
             postClone.comment_count+=1
 
             setPost(postClone);
             setText('');
+            socket.emit("send notification", comment.data.notification)
          } catch (e) {
             errorNotify('Something went wrong');
          }
@@ -97,7 +101,7 @@ const PostDetail = () => {
                         <img
                           alt={'avatar'}
                           width={50}
-                          src={post.user.avatar ? post.user.avatar : Avatar}
+                          src={post.user.image ? post.user.image.avatar : Avatar}
                         />
                         <div className={'activity_feed_user_info'}>
                            <h5>{post.user.user_name}</h5>
@@ -144,7 +148,7 @@ const PostDetail = () => {
                         <img
                            width={50}
                            alt={'avatar'}
-                           src={post.user.avatar ? post.user.avatar : Avatar}
+                           src={post.user.image ? post.user.image.avatar : Avatar}
                         />
                         <Form
                            className={'create_post_form'}

@@ -119,8 +119,8 @@ const QueriesModal: React.FC<IQueriesModal> = ({
                                  <Col md={1} className={'show_all_answers_img'}>
                                     <img
                                        src={
-                                          answer.user.avatar
-                                             ? answer.user.avatar
+                                          answer.user.image
+                                             ? answer.user.image.avatar
                                              : Avatar
                                        }
                                        alt={'i'}

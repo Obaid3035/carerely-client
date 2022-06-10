@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { errorNotify } from '../../utils/toast';
 import { Navigate, useNavigate } from 'react-router-dom';
 import jwt from 'jwt-decode';
-import { getCurrentUser, getToken, removeToken } from '../../helper';
+import { getCurrentUser, getToken, removeToken } from '../../utils/helper';
 import axios from 'axios';
 import { USER_ROLE } from '../../App';
 import { IMessage } from '../../container/Chat/ChatBox/ChatBox';
 import { useAppDispatch, useAppSelector } from '../../services/hook';
-import { setChatNotification } from '../../services/slices/notification';
+import { setChatNotification, setNotification } from '../../services/slices/notification';
+import { INotification } from "../Header/Header";
 
 interface IPrivateRouteProps {
     children: JSX.Element;
@@ -20,6 +21,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     const selectedChat = useAppSelector((state) => state.notification.selectedChat);
     const socket = useAppSelector((state) => state.notification.socket);
     const chatNotification = useAppSelector((state) => state.notification.chatNotification);
+    const notification = useAppSelector((state) => state.notification.notification)
     const [isChatOpen, setIsChatOpen] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -80,6 +82,22 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
                  }
                ))
            }
+        })
+    })
+
+    useEffect(() => {
+        socket.on("notification received", (sentNotification: INotification) => {
+            const notificationClone = [
+                {
+                    ...sentNotification
+                },
+              ...notification
+            ]
+            if (notificationClone.length > 3) {
+                notificationClone.pop()
+            }
+
+            dispatch(setNotification(notificationClone))
         })
     })
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getTokenFormat } from '../../helper';
+import { getTokenFormat } from '../../utils/helper';
 
 export function getFeedPost(page: number, size: number) {
    return axios.get(`/posts?page=${page}&size=${size}`, getTokenFormat());
@@ -43,8 +43,12 @@ export function otherProfilePost(userId: string, page: number, size: number) {
    return axios.get(`/posts/user/${userId}?page=${page}&size=${size}`, getTokenFormat());
 }
 
-export function getTrendingPosts() {
+export function getFewTrendingPosts() {
    return axios.get(`/posts/trending/few`, getTokenFormat())
+}
+
+export function getTrendingPosts(page: number, size: number) {
+   return axios.get(`/posts/trending?page=${page}&size=${size}`, getTokenFormat())
 }
 
 export function deletePost(postId:  number) {

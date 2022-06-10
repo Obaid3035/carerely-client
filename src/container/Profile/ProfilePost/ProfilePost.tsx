@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import Post from '../../../component/Post/Post';
-import { IPost } from '../../../services/slices/post';
+import { IPost } from "../../../component/Post/Post";
 
 export interface IProfilePost {
    posts: IPost[]

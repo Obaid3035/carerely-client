@@ -10,7 +10,7 @@ import './Queries.scss';
 import ReadMore from '../../component/ReadMore/ReadMore';
 import QueriesModal from './QueriesModal/QueriesModal';
 import { createQueries, getQueries, getTopic } from "../../services/api/queries";
-import { IUser } from "../../services/slices/post";
+import { IUser } from "../../component/Header/Header";
 import Loader from "../../component/Loader/Loader";
 
 export interface ITopic {
@@ -139,7 +139,7 @@ const onModalChangeHandler = (query: IQueries) => {
                                 <Row>
                                   <Col md={4}>
                                     <div className={'user_details'}>
-                                      <img src={query.user.avatar ? query.user.avatar : Avatar} alt='Avatar' />
+                                      <img src={query.user.image ? query.user.image.avatar : Avatar} alt='Avatar' />
                                       <p>
                                         Posted By:
                                         <NavLink to={'/other-profile/1'}> { query.user.user_name} </NavLink>

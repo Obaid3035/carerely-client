@@ -3,7 +3,7 @@ import { Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import ProfileImg from '../../../../assets/img/profile_img.png';
 import { AiFillHeart } from 'react-icons/ai';
 import { BsFillFileEarmarkMinusFill } from 'react-icons/bs';
-import Avatar from '../../../../assets/img/avatar.png';
+import Avatar from '../../../../assets/img/avatar.jpg';
 import './ProfileViewModal.scss';
 
 interface IProfileViewModal {

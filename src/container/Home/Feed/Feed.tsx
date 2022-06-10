@@ -8,6 +8,7 @@ import { createPost, getFeedPost } from "../../../services/api/post";
 import Avatar from "../../../assets/img/avatar.jpg"
 import { useForm } from "react-hook-form";
 import {FiUpload} from "react-icons/fi";
+import { getCurrentUser } from "../../../utils/helper";
 
 export interface IPostInput {
    text: string,
@@ -128,7 +129,7 @@ const Feed = () => {
    return (
       <Col md={7} className={'pl-5'}>
          <div className={'create_post rounded_white_box mb-5'}>
-            <img alt='avatar' width={50} src={Avatar} />
+            <img alt='avatar' height={50} width={50} src={getCurrentUser().image ? getCurrentUser().image.avatar : Avatar} />
             <Form className={'create_post_form'} onSubmit={onPostCreate}>
                <Form.Control
                   type="text"

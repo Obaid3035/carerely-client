@@ -79,7 +79,7 @@
   margin: 15px;
   border-radius: 7px;
   box-sizing: border-box;
-  
+
   .typing-inp{
     display: flex;
     justify-content: space-between;
@@ -91,6 +91,7 @@
       width: 95%;
       overflow-wrap: break-word;
       white-space: nowrap;
+      outline: none!important;
       &::placeholder{
         color: $primary;
       }
@@ -99,9 +100,12 @@
       }
     }
 
-    svg{
-      color: $primary;
-      font-size: x-large;
+    button {
+      border: none;
+      svg{
+        color: $primary;
+        font-size: x-large;
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IMessage } from "../../container/Chat/ChatBox/ChatBox";
 import { IConversation } from "../../container/Chat/Chat";
 import io from "socket.io-client";
+import { INotification } from "../../component/Header/Header";
 const ENDPOINT = 'https://careraly-server.herokuapp.com';
 
 export interface INotificationState {
@@ -10,7 +11,7 @@ export interface INotificationState {
     allUnseenMessages: number
   },
   socket: any;
-  notification: any,
+  notification: INotification[],
   selectedChat: IConversation | null
 }
 
@@ -34,10 +35,13 @@ const notificationSlice = createSlice({
     },
     setChatNotification: (state, { payload }) => {
       state.chatNotification = payload
+    },
+    setNotification: (state, { payload }) => {
+      state.notification = payload
     }
   }
 })
 
-export const { setChatNotification, setSelectedChat } = notificationSlice.actions;
+export const { setChatNotification, setSelectedChat, setNotification } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

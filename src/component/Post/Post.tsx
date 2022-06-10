@@ -7,14 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import Button from '../Button/Button';
 import './Post.scss';
-import post, { IPost, IUser } from '../../services/slices/post';
+import { IUser } from "../Header/Header";
 import Loader from '../Loader/Loader';
 import ReadMore from '../ReadMore/ReadMore';
 import Avatar from '../../assets/img/avatar.jpg';
 import { createComment, deleteComment, deletePost, likePost } from "../../services/api/post";
 import { errorNotify } from '../../utils/toast';
-import Comment from '../Comment/Comment';
-import { getCurrentUser } from '../../helper';
+import Comment, { IComment } from "../Comment/Comment";
+import { getCurrentUser } from '../../utils/helper';
+import { useAppSelector } from "../../services/hook";
 
 interface IPostPropsInterface {
    hasMore: boolean;
@@ -23,8 +24,25 @@ interface IPostPropsInterface {
    setPost: React.Dispatch<React.SetStateAction<IPost[]>>;
 }
 
+export interface IPost {
+   id: number
+   user: IUser,
+   image: {
+      avatar: string
+   },
+   text: string,
+   like_count: number,
+   comment_count: number,
+   liked: boolean,
+   comment: IComment[] | []
+}
+
+
+
+
 const Post = (props: IPostPropsInterface) => {
    const navigation = useNavigate();
+   const socket = useAppSelector((state) => state.notification.socket)
    const [text, setText] = useState('');
 
    const onPostClickHandler = (id: number, user_id: number) => {
@@ -47,14 +65,14 @@ const Post = (props: IPostPropsInterface) => {
             post[likedPost].like_count -= 1;
          }
          props.setPost(post);
-         await likePost(postId);
+         const liked = await likePost(postId);
+         socket.emit("send notification", liked.data.notification)
       } catch (e) {
          errorNotify('Something went wrong');
       }
    };
 
    const onCommentDeleteHandler = async (commentId: number, postId: number) => {
-      console.log(commentId)
       const post = props.mockData.concat();
       await deleteComment(commentId)
       const commentedPost = post.findIndex((post) => post.id === postId);
@@ -76,11 +94,13 @@ const Post = (props: IPostPropsInterface) => {
          if (post[commentedPost].comment.length >= 2) {
             post[commentedPost].comment.pop();
          }
-         post[commentedPost].comment.unshift(comment.data);
+         post[commentedPost].comment.unshift(comment.data.comment);
          post[commentedPost].comment_count += 1;
+
 
          props.setPost(post);
          setText('');
+         socket.emit("send notification", comment.data.notification)
       } catch (e) {
          errorNotify('Something went wrong');
       }
@@ -121,14 +141,11 @@ const Post = (props: IPostPropsInterface) => {
                      <img
                         alt={'avatar'}
                         width={50}
-                        src={data.user.avatar ? data.user.avatar : Avatar}
+                        height={50}
+                        src={data.user.image ? data.user.image.avatar : Avatar}
                      />
                      <div className={'activity_feed_user_info'}>
                         <h5>{data.user.user_name}</h5>
-                        {/*<p className={'text-muted d-flex align-items-center'}>*/}
-                        {/*    <MdIcon.MdLocationOn />*/}
-                        {/*    {data.user.city}*/}
-                        {/*</p>*/}
                      </div>
                   </div>
                   {
@@ -166,9 +183,10 @@ const Post = (props: IPostPropsInterface) => {
                   <div className={'comment_form'}>
                      <img
                         width={50}
+                        height={50}
                         alt={'avatar'}
                         className={'rounded_image'}
-                        src={data.user.avatar ? data.user.avatar : Avatar}
+                        src={data.user.image ? data.user.image.avatar : Avatar}
                      />
                      <Form
                         className={'create_post_form'}

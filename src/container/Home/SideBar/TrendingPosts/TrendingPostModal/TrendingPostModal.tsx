@@ -1,67 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SiteModal, { ISiteModal } from "../../../../../component/SiteModal/SiteModal";
 import Post from "../../../../../component/Post/Post";
-import { IPost } from "../../../../../services/slices/post";
+import { getTrendingPosts } from "../../../../../services/api/post";
+import Loader from "../../../../../component/Loader/Loader";
 
 const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
-  const [mockData, setMockData] = useState<IPost[]>([
-    {
-      id: 1,
-      user: {
-        id: 2,
-        user_name: "Ali Rashid",
-        avatar: "https://picsum.photos/id/1011/500/500"
-
-      },
-      liked: true,
-      image: {
-        avatar: "https://picsum.photos/id/1000/800/500"
-      },
-      text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet vestibulum ex," +
-        " eget ultrices ex. Vestibulum ac velit in metus laoreet volutpat at id risus. Curabitur mattis lobortis vehicula." +
-        " Nullam eu lobortis purus. In hac habitasse platea dictumst. Proin viverra aliquet nisl vitae auctor." +
-        " Donec tortor augue, pharetra a efficitur non, tincidunt vitae felis.",
-      comment: [],
-      like_count: 0,
-      comment_count: 0,
-    },
-    {
-      id: 2,
-      user: {
-        id: 3,
-        user_name: "Shayaan Sohail",
-        avatar: "https://picsum.photos/id/1009/500/500"
-      },
-      liked: true,
-      image: {
-        avatar: "https://picsum.photos/id/1012/800/500"
-      },
-      text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet vestibulum ex, eget ultrices ex." +
-        " Vestibulum ac velit in metus laoreet volutpat at id risus. Curabitur mattis lobortis vehicula. Nullam eu" +
-        " lobortis purus. In hac habitasse platea dictumst. Proin viverra aliquet nisl vitae auctor. Donec tortor augue," +
-        " pharetra a efficitur non, tincidunt vitae felis.",
-      like_count: 0,
-      comment_count: 0,
-      comment: []
-    }
-  ]);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(3);
+  const [posts, setPosts] = useState<any>([]);
+  const [postCount, setPostCount] = useState<number>(0);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTrendingPosts(page, size)
+      .then((res) => {
+        setIsLoading(false);
+        setPosts(res.data.posts);
+        setPostCount(res.data.count)
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const fetchMoreData = () => {
-    if (mockData.length >= 2) {
+    if (posts.length === postCount) {
       setHasMore(false);
       return;
     }
 
-    setTimeout(() => {
-      setMockData([...mockData, ...mockData]);
-    }, 1000);
+    getTrendingPosts(page + 1, size)
+      .then((res) => {
+        setPage(page + 1)
+        setIsLoading(false);
+        setPosts([...posts, ...res.data.posts]);
+        setPostCount(res.data.count)
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
+
+
+  let renderPost;
+  if (isLoading) {
+    renderPost = <Loader />;
+  }
+
+  if (!isLoading) {
+    if (posts && posts.length > 0) {
+      renderPost = (
+        <Post
+          setPost={setPosts}
+          hasMore={hasMore}
+          mockData={posts}
+          fetchMoreData={fetchMoreData}
+        />
+      );
+    } else {
+      renderPost = <h4 className={"text-center"}>No Post Found</h4>;
+    }
+  }
 
   return (
     <SiteModal size={"lg"} show={show} onModalChange={onModalChange}>
       <div className={"activity_feed"}>
-        <Post setPost={setMockData} hasMore={hasMore} mockData={mockData} fetchMoreData={fetchMoreData} />
+        { renderPost }
       </div>
     </SiteModal>
   );

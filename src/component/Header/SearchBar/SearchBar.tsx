@@ -5,8 +5,8 @@ import Avatar from '../../../assets/img/avatar.jpg';
 import './SearchBar.scss';
 import Button from '../../Button/Button';
 import Loader from '../../Loader/Loader';
-import { IUser } from '../../../services/slices/post';
 import axios from 'axios';
+import { IUser } from "../Header";
 
 const SearchBar = () => {
    const [query, setQuery] = React.useState('');

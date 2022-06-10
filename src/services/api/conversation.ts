@@ -1,8 +1,8 @@
 import axios from "axios";
-import { getTokenFormat } from "../../helper";
+import { getTokenFormat } from "../../utils/helper";
 
-export const getAllConversations = () => {
-  return axios.get(`/conversation`, getTokenFormat())
+export const getAllConversations = (search: string) => {
+  return axios.get(`/conversation?search=${search}`, getTokenFormat())
 }
 
 export const createConversation = (userId: string) => {

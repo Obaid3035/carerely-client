@@ -1,13 +1,24 @@
 import React from 'react';
 import TopBlog from './TopBlog/TopBlog';
+import { IBlog } from "../../../Blog/Blog";
 
-const TopBlogs = () => {
+const TopBlogs: React.FC<{
+  blogs: IBlog[]
+}> = ({ blogs }) => {
    return (
       <div className='top_blog'>
          <h4>Top Blogs</h4>
-         <TopBlog />
-         <TopBlog />
-         <TopBlog />
+        {
+          blogs.length > 0 ? (
+              blogs.map((blog) => (
+                <TopBlog key={blog.id} id={blog.id} title={blog.title} text={blog.text} />
+              ))
+          ) : (
+            <div className="text-center">
+              <p>No Blogs Found</p>
+            </div>
+          )
+        }
       </div>
    );
 };

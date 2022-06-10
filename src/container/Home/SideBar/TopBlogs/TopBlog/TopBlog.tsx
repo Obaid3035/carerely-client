@@ -2,13 +2,16 @@ import React from 'react';
 import './TopBlog.scss';
 import Button from '../../../../../component/Button/Button';
 
-const TopBlog = () => {
+interface ITopBlog {
+  id: number,
+  title: string,
+  text: string
+}
+const TopBlog: React.FC<ITopBlog> = ({ id, title, text}) => {
    return (
-      <div className={'mt-4'}>
-         <h5>Excepteur sint.</h5>
-         <p className={'text-muted'}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.</p>
-         <Button>Read More</Button>
+       <div className={"mt-4"}>
+         <h5>{title}</h5>
+       <Button onClick={() => window.location.href = `/blog/${id}`}>Read More</Button>
       </div>
    );
 };
