@@ -22,17 +22,8 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     const socket = useAppSelector((state) => state.notification.socket);
     const chatNotification = useAppSelector((state) => state.notification.chatNotification);
     const notification = useAppSelector((state) => state.notification.notification)
-    const [isChatOpen, setIsChatOpen] = useState(false);
     const dispatch = useAppDispatch();
 
-
-    useEffect(() => {
-        if (selectedChat) {
-            setIsChatOpen(true)
-        } else {
-            setIsChatOpen(false)
-        }
-    }, [])
 
     if (!token) {
         errorNotify("You are not authorize")
@@ -83,7 +74,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
                ))
            }
         })
-    })
+    }, [chatNotification])
 
     useEffect(() => {
         socket.on("notification received", (sentNotification: INotification) => {
@@ -102,14 +93,16 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     })
 
 
-    axios.get(`/auth/authorize/${token}`)
-      .catch((err) => {
-          if (err) {
-              removeToken();
-              errorNotify("You are not authorize")
-              navigate("/auth")
-          }
-      })
+   useEffect(() => {
+       axios.get(`/auth/authorize/${token}`)
+         .catch((err) => {
+             if (err) {
+                 removeToken();
+                 errorNotify("You are not authorize")
+                 navigate("/auth")
+             }
+         })
+   }, [])
     return children
 };
 

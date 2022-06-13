@@ -10,7 +10,8 @@ import animationData from "../../../animation/typing.json";
 import { useAppSelector, useAppDispatch } from "../../../services/hook";
 import { setChatNotification } from "../../../services/slices/notification";
 import Lottie from "react-lottie";
-
+import { Message } from "react-hook-form";
+const _ = require('lodash');
 
 export interface IChatBox {
    selectedChat: IConversation ;
@@ -43,7 +44,6 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    const chatNotification = useAppSelector((state) => state.notification.chatNotification)
    const [messages, setMessages] = useState<IMessage[]>([]);
    const [user, setUser] = useState<IUser | null>(null)
-   const [chatLoader, setChatLoader] = useState(false);
    const [typingMsg, setTypingMsg] = useState('');
    const [typing, setTyping] = useState(false);
    const [isTyping, setIsTyping] = useState(false);
@@ -59,56 +59,58 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
       },
    };
 
+   const messagesEndRef = useRef(document.createElement('div'));
+
+   const scrollToBottom = () => {
+      messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+   };
+
    useEffect(() => {
       socket.on("typing", () => setIsTyping(true));
       socket.on("stop typing", () => setIsTyping(false));
    }, []);
 
-
-
-   useEffect(() => {
-      socket.on("message received", (newMessageReceived: IMessage) => {
-         if (selectedChat){
-            dispatch(setChatNotification(
-              {
-                 conversation: chatNotification.conversation.map((conversation) => {
-                    if (conversation.id == newMessageReceived.conversation_id) {
-                       return {
-                          ...conversation,
-                          updated_at: newMessageReceived.conversation.updated_at,
-                          latest_message: newMessageReceived.content,
-                          unseen_count: (conversation.unseen_count - 1) < 0 ? 0 : conversation.unseen_count - 1
-                       }
-                    }
-                    return conversation
-                 }),
-                 allUnseenMessages: (chatNotification.allUnseenMessages - 1) < 0 ? 0 : chatNotification.allUnseenMessages - 1
-              }
-            ))
-            setMessages([...messages, newMessageReceived])
-            updateMessage(newMessageReceived.id)
-              .then((res) => {
-
-              })
-         }
-      })
-   })
+   const allMessagesArray: any[]  = []
 
    useEffect(() => {
-      setChatLoader(true);
       getAllMessagesByConversationId(selectedChat.id)
         .then((res: { data: IMessageData} ) => {
+           socket.on("message received", (newMessageReceived: IMessage) => {
+              if (selectedChat){
+                 dispatch(setChatNotification(
+                   {
+                      conversation: chatNotification.conversation.map((conversation) => {
+                         if (conversation.id == newMessageReceived.conversation_id) {
+                            return {
+                               ...conversation,
+                               updated_at: newMessageReceived.conversation.updated_at,
+                               latest_message: newMessageReceived.content,
+                               unseen_count: (conversation.unseen_count - 1) < 0 ? 0 : conversation.unseen_count - 1
+                            }
+                         }
+                         return conversation
+                      }),
+                      allUnseenMessages: (chatNotification.allUnseenMessages - 1) < 0 ? 0 : chatNotification.allUnseenMessages - 1
+                   }
+                 ))
+                 allMessagesArray.push(newMessageReceived)
+                 setMessages([...res.data.message, ...allMessagesArray])
+                 updateMessage(newMessageReceived.id)
+                   .then(() => {
+
+                   })
+              }
+           })
            setMessages(res.data.message);
            setUser(res.data.user);
-           setChatLoader(false)
            dispatch(setChatNotification({
               conversation: chatNotification.conversation.map((conversation) => {
-                if (conversation.id == selectedChat.id) {
-                   return {
-                      ...conversation,
-                      unseen_count: 0
-                   }
-                }
+                 if (conversation.id == selectedChat.id) {
+                    return {
+                       ...conversation,
+                       unseen_count: 0
+                    }
+                 }
                  return conversation
               }),
               //@ts-ignore
@@ -120,21 +122,15 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
            }))
            socket.emit("join chat", selectedChat.id);
         })
-        .catch(() => {
-           setChatLoader(false);
-        });
-   }, [selectedChat]);
+
+   }, [])
+
+
+
 
    useEffect(() => {
       scrollToBottom();
    }, [messages]);
-
-
-   const messagesEndRef = useRef(document.createElement('div'));
-
-   const scrollToBottom = () => {
-      messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
-   };
 
    const sendMessage = async (event: any) => {
       event.preventDefault();
@@ -151,12 +147,10 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
          content: typingMsg,
       });
       socket.emit("new message", data)
-   };
-
+   }
 
    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       setTypingMsg(e.target.value)
-
       if (!typing) {
          setTyping(true);
          socket.emit("typing", selectedChat.id);

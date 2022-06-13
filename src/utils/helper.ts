@@ -2,6 +2,7 @@ import jwt from "jwt-decode"
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import moment from 'moment'
+TimeAgo.addDefaultLocale(en)
 
 export function setToken(token: string) {
    localStorage.setItem('token', token);
@@ -29,7 +30,6 @@ export function removeToken() {
 }
 
 export function timeAgo(time: string) {
-   TimeAgo.addDefaultLocale(en)
    const timeAgo = new TimeAgo('en-US')
    const milliseconds = moment(time).valueOf();
    return timeAgo.format(milliseconds)

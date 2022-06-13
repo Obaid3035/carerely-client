@@ -3,14 +3,17 @@ import * as FiIcon from 'react-icons/fi';
 import * as CgIcon from 'react-icons/cg';
 import { useNavigate } from 'react-router-dom';
 import './NavProfileBox.scss';
-import { removeToken } from "../../../utils/helper";
+import { getCurrentUser, removeToken } from "../../../utils/helper";
 import { AiOutlineHistory } from "react-icons/ai"
+import { useAppSelector } from "../../../services/hook";
 
 
 const NavProfileBox = (props: { extraClasses: string }) => {
    const navigation = useNavigate();
+   const socket = useAppSelector((state) => state.notification.socket)
 
    const onLogOutHandler = () => {
+      socket.emit("delete", getCurrentUser())
       removeToken();
       navigation("/auth")
    }

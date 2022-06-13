@@ -12,6 +12,7 @@ import QueriesModal from './QueriesModal/QueriesModal';
 import { createQueries, getQueries, getTopic } from "../../services/api/queries";
 import { IUser } from "../../component/Header/Header";
 import Loader from "../../component/Loader/Loader";
+import { errorNotify } from "../../utils/toast";
 
 export interface ITopic {
    id: number,
@@ -69,6 +70,10 @@ const onModalChangeHandler = (query: IQueries) => {
          setIsLoading(false)
          setQueryInput("")
        })
+       .catch((err: any) => {
+         setIsLoading(false)
+         errorNotify(err.response.data.message)
+       })
    }
 
 
@@ -106,6 +111,7 @@ const onModalChangeHandler = (query: IQueries) => {
                   <Form.Group className='ask_question'>
                      <Form.Control
                        value={queryInput}
+                       required
                        onChange={(e) => setQueryInput(e.target.value)}
                         className='question_input'
                         type='text'
