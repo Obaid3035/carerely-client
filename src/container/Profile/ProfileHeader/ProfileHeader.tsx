@@ -4,6 +4,7 @@ import './ProfileHeader.scss';
 import ProfileViewModal from './ProfileViewModal/ProfileViewModal';
 import { IUser } from '../../../component/Header/Header';
 import FollowerModal from '../FollowerModal/FollowerModal';
+import Verified from "../../../assets/img/verified.png";
 
 interface IProfileHeader {
    userStats: {
@@ -57,7 +58,13 @@ const ProfileHeader: React.FC<IProfileHeader> = ({
             width={140}
             src={userStats.user.image ? userStats.user.image.avatar : Avatar}
          />
-         <h5 className={'my-4'}>{userStats.user.user_name}</h5>
+         <h5 className={'my-4'}>{userStats.user.user_name}
+            {
+               userStats.user.is_verified ?
+                 <img alt={"verified"} src={Verified} width={30} height={25} />
+                 : null
+            }
+         </h5>
          <div
             className={
                'd-flex justify-content-center align-items-center follower_stats'

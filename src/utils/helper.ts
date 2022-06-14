@@ -4,6 +4,9 @@ import en from 'javascript-time-ago/locale/en.json'
 import moment from 'moment'
 TimeAgo.addDefaultLocale(en)
 
+export const PAGINATION_LIMIT = 12
+
+
 export function setToken(token: string) {
    localStorage.setItem('token', token);
 }

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import * as FiIcons from "react-icons/fi";
+import { AiOutlineUser } from "react-icons/ai"
 import { BsFillBookmarkFill } from "react-icons/bs"
 import Logo from "../../../assets/img/logo.png"
 import './SideBar.scss'
@@ -42,6 +43,16 @@ const SideBar = () => {
             </Link>
           </div>
         </li>
+
+        <li className={`${classes("/admin/users")}`}>
+          <div>
+            <Link to={"/admin/users"}>
+              <AiOutlineUser />
+              <span>Users</span>
+            </Link>
+          </div>
+        </li>
+
         <li className="logout_btn" onClick={onLogOutHandler}>
           <Link to={'#'}>
             <FiIcons.FiLogOut />

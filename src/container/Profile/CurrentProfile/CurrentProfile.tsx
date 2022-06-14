@@ -5,9 +5,7 @@ import Button from '../../../component/Button/Button';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import { createPost, currentUserPost, currentUserStats } from "../../../services/api/post";
 import Loader from '../../../component/Loader/Loader';
-import { useForm } from "react-hook-form";
 import { IPostInput } from "../../Home/Feed/Feed";
-import FollowerModal from "../FollowerModal/FollowerModal";
 import { FiUpload } from "react-icons/fi";
 
 const CurrentProfile = () => {

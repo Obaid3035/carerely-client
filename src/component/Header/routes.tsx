@@ -13,6 +13,7 @@ import CreateBlog from "../../container/admin/pages/CreateBlog/CreateBlog";
 import FoodStats from "../../container/FoodStats/FoodStats";
 import HistoryLog from "../../container/HistoryLog/HistoryLog";
 import Chat from "../../container/Chat/Chat";
+import User from "../../container/admin/pages/User/User";
 
 export interface RoutesLink {
    component: JSX.Element;
@@ -20,6 +21,10 @@ export interface RoutesLink {
 }
 
 export const sideBarRoutes = [
+   {
+     path: "/admin/users",
+     component: <User/>
+   },
    {
       path: "/admin/blogs",
       component: <AdminBlog/>

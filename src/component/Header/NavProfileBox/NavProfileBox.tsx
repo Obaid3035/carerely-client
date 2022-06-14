@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useState } from "react";
 import * as FiIcon from 'react-icons/fi';
 import * as CgIcon from 'react-icons/cg';
 import { useNavigate } from 'react-router-dom';
 import './NavProfileBox.scss';
 import { getCurrentUser, removeToken } from "../../../utils/helper";
 import { AiOutlineHistory } from "react-icons/ai"
+import { GoReport } from "react-icons/go"
 import { useAppSelector } from "../../../services/hook";
 
 
-const NavProfileBox = (props: { extraClasses: string }) => {
+const NavProfileBox = (props: { extraClasses: string, setShow: any, show: boolean }) => {
    const navigation = useNavigate();
    const socket = useAppSelector((state) => state.notification.socket)
-
    const onLogOutHandler = () => {
       socket.emit("delete", getCurrentUser())
       removeToken();
       navigation("/auth")
    }
+
+
 
    return (
       <div className={`profile_dropdown ${props.extraClasses}`}>
@@ -32,6 +34,10 @@ const NavProfileBox = (props: { extraClasses: string }) => {
             <div className={'profile_dropdown_item'} onClick={() => navigation('/history')}>
                <AiOutlineHistory />
                <p>History Log</p>
+            </div>
+            <div className={'profile_dropdown_item'} onClick={() => props.setShow(!props.show)}>
+               <GoReport />
+               <p>Report</p>
             </div>
             <div className={'profile_dropdown_item'} onClick={onLogOutHandler}>
                <FiIcon.FiLogOut />

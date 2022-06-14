@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Form, Nav, Navbar } from "react-bootstrap";
 import * as MdIcon from 'react-icons/md';
 import * as AiIcon from 'react-icons/ai';
 import * as BsIcon from 'react-icons/bs';
@@ -18,6 +18,8 @@ import { useAppSelector, useAppDispatch } from "../../services/hook";
 import { setChatNotification, setNotification } from "../../services/slices/notification";
 import { getAllUnseenConversations } from "../../services/api/conversation";
 import { getNotification } from "../../services/api/notification";
+import SiteModal from "../SiteModal/SiteModal";
+import Button from "../Button/Button";
 
 interface INavItem {
    path: string;
@@ -32,6 +34,7 @@ export interface IUser {
       avatar: string;
       cloudinary_id: string;
    }
+   is_verified: boolean
 }
 
 
@@ -71,6 +74,7 @@ const Header = () => {
    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
    const dispatch = useAppDispatch();
    const notification = useAppSelector((state) => state.notification.notification)
+   const [show, setShow] = useState(false);
 
    useEffect(() => {
       setCurrentUser(getCurrentUser())
@@ -186,8 +190,20 @@ const Header = () => {
       };
    }, [ref]);
 
+   const modal = (
+     <SiteModal show={show} onModalChange={() => setShow(!show)} >
+        <Form>
+           <Form.Group>
+              <Form.Control as="textarea" placeholder={"Lorem Ipsum"} />
+              <Button className={'mt-3'}>Send</Button>
+           </Form.Group>
+        </Form>
+     </SiteModal>
+   )
+
    return (
       <Navbar bg='light' expand='md' className={"mb-5"}>
+         { modal }
          <Navbar.Brand href='#home'>
             <NavLink to={'/home'}>
                <img className={'img-fluid'} width={55} alt='brand' src={BrandLogo} />
@@ -249,7 +265,7 @@ const Header = () => {
                            className={'ml-2'}
                         />
                      </div>
-                     <NavProfileBox extraClasses={profileDropdownClasses} />
+                     <NavProfileBox show={show} setShow={setShow} extraClasses={profileDropdownClasses} />
                   </div>
                </Container>
             </Nav>

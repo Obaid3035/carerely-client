@@ -16,6 +16,7 @@ import { errorNotify } from '../../utils/toast';
 import Comment, { IComment } from "../Comment/Comment";
 import { getCurrentUser } from '../../utils/helper';
 import { useAppSelector } from "../../services/hook";
+import Verified from "../../assets/img/verified.png"
 
 interface IPostPropsInterface {
    hasMore: boolean;
@@ -145,7 +146,13 @@ const Post = (props: IPostPropsInterface) => {
                         src={data.user.image ? data.user.image.avatar : Avatar}
                      />
                      <div className={'activity_feed_user_info'}>
-                        <h5>{data.user.user_name}</h5>
+                        <h5>{data.user.user_name}
+                           {
+                              data.user.is_verified ?
+                                <img alt={"verified"} src={Verified} width={30} height={25} />
+                                : null
+                           }
+                        </h5>
                      </div>
                   </div>
                   {
@@ -194,7 +201,7 @@ const Post = (props: IPostPropsInterface) => {
                      >
                         <Form.Control
                            type="text"
-                           name={`"text${data.id}`}
+                           name={`text${data.id}`}
                            value={text}
                            onChange={(e) => {
                               setText(e.target.value);
