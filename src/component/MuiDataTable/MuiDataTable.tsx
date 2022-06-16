@@ -1,6 +1,6 @@
 import React from 'react';
 import MUIDataTable, { FilterType } from 'mui-datatables';
-import { PAGINATION_LIMIT } from '../../utils/helper';
+import { PAGINATION_LIMIT_TABLE } from '../../utils/helper';
 import { Spinner } from 'react-bootstrap';
 
 const _ = require('lodash');
@@ -34,7 +34,7 @@ const MuiDataTable: React.FC<any> = ({
       filter: false,
       search,
       rowsPerPageOptions: [],
-      rowsPerPage: PAGINATION_LIMIT,
+      rowsPerPage: PAGINATION_LIMIT_TABLE,
       count,
       serverSide: true,
       jumpToPage: false,

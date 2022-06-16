@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { getTokenFormat } from '../../utils/helper';
+import { getTokenFormat, PAGINATION_LIMIT_POST } from "../../utils/helper";
 
-export function getFeedPost(page: number, size: number) {
-   return axios.get(`/posts?page=${page}&size=${size}`, getTokenFormat());
+export function getFeedPost(page: number) {
+   return axios.get(`/posts?page=${page}&size=${PAGINATION_LIMIT_POST}`, getTokenFormat());
 }
 
 
@@ -47,8 +47,8 @@ export function getFewTrendingPosts() {
    return axios.get(`/posts/trending/few`, getTokenFormat())
 }
 
-export function getTrendingPosts(page: number, size: number) {
-   return axios.get(`/posts/trending?page=${page}&size=${size}`, getTokenFormat())
+export function getTrendingPosts(page: number) {
+   return axios.get(`/posts/trending?page=${page}&size=${PAGINATION_LIMIT_POST}`, getTokenFormat())
 }
 
 export function deletePost(postId:  number) {

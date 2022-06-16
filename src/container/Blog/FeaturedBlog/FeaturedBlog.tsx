@@ -1,10 +1,8 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
-import BlogImg from '../../../assets/img/blog_img.png';
 import { IBlog } from "../Blog";
 import { timeAgo } from "../../../utils/helper";
-import { Col, Row } from "react-bootstrap";
 
 export interface BlogItem {
    blog: IBlog[]

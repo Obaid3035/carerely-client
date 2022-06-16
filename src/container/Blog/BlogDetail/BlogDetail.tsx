@@ -4,7 +4,6 @@ import { AiFillClockCircle } from 'react-icons/ai';
 import { BsArrowRightShort } from 'react-icons/bs';
 import { useParams } from "react-router-dom";
 import './BlogDetail.scss';
-import BlogDetail2 from '../../../assets/img/blog_detail2.png';
 import { getBlogById } from "../../../services/api/blog";
 import Loader from "../../../component/Loader/Loader";
 import { timeAgo } from "../../../utils/helper";

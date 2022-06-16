@@ -4,9 +4,7 @@ import FeaturedBlog from './FeaturedBlog/FeaturedBlog';
 import PopularBlog from './PopularBlog/PopularBlog';
 import { Col, Row } from 'react-bootstrap';
 import { getAllBlogs } from "../../services/api/blog";
-import { timeAgo } from "../../utils/helper";
 import Loader from "../../component/Loader/Loader";
-import blog from "../admin/pages/Blog/Blog";
 
 export interface IBlog {
   id: number,

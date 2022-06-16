@@ -8,13 +8,12 @@ const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(3);
   const [posts, setPosts] = useState<any>([]);
   const [postCount, setPostCount] = useState<number>(0);
 
   useEffect(() => {
     setIsLoading(true);
-    getTrendingPosts(page, size)
+    getTrendingPosts(page)
       .then((res) => {
         setIsLoading(false);
         setPosts(res.data.posts);
@@ -31,7 +30,7 @@ const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
       return;
     }
 
-    getTrendingPosts(page + 1, size)
+    getTrendingPosts(page + 1)
       .then((res) => {
         setPage(page + 1)
         setIsLoading(false);

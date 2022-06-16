@@ -4,8 +4,8 @@ import en from 'javascript-time-ago/locale/en.json'
 import moment from 'moment'
 TimeAgo.addDefaultLocale(en)
 
-export const PAGINATION_LIMIT = 12
-
+export const PAGINATION_LIMIT_TABLE = 12
+export const PAGINATION_LIMIT_POST = 3
 
 export function setToken(token: string) {
    localStorage.setItem('token', token);
@@ -37,3 +37,4 @@ export function timeAgo(time: string) {
    const milliseconds = moment(time).valueOf();
    return timeAgo.format(milliseconds)
 }
+

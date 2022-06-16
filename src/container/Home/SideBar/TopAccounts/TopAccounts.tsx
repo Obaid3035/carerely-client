@@ -3,9 +3,6 @@ import TopAccount from './TopAccount/TopAccount';
 import { IUser } from "../../../../component/Header/Header";
 
 const TopAccounts: React.FC<{ topAccounts: IUser[]  }> = ({ topAccounts}) => {
-
-
-
    return (
       <div className={'top_account'}>
          <h4>Top Accounts</h4>

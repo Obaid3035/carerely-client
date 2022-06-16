@@ -106,11 +106,9 @@ const Auth = () => {
    const authToggleHandler = () => {
       if (authToggle === AUTH_TOGGLE.LOGIN) {
          loginReset();
-
          setAuthToggle(AUTH_TOGGLE.REGISTER);
       } else if (authToggle === AUTH_TOGGLE.REGISTER) {
          signUpReset();
-
          setAuthToggle(AUTH_TOGGLE.LOGIN);
       }
    };
@@ -213,11 +211,8 @@ const Auth = () => {
    );
 
    const authForm = () => {
-      if (authToggle === AUTH_TOGGLE.REGISTER) {
-         return registerForm;
-      } else if (authToggle === AUTH_TOGGLE.LOGIN) {
-         return loginForm;
-      }
+      if (authToggle === AUTH_TOGGLE.REGISTER) return registerForm
+      else if (authToggle === AUTH_TOGGLE.LOGIN) return loginForm
    };
 
 

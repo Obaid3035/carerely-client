@@ -6,7 +6,6 @@ import Loader from "../../../component/Loader/Loader";
 import "./Feed.scss";
 import { createPost, getFeedPost } from "../../../services/api/post";
 import Avatar from "../../../assets/img/avatar.jpg"
-import { useForm } from "react-hook-form";
 import {FiUpload} from "react-icons/fi";
 import { getCurrentUser } from "../../../utils/helper";
 
@@ -18,7 +17,6 @@ export interface IPostInput {
 
 const Feed = () => {
    const [page, setPage] = useState(0);
-   const [size, setSize] = useState(3);
    const [isLoading, setIsLoading] = useState(false);
    const [hasMore, setHasMore] = useState(true);
    const [posts, setPosts] = useState<any>([]);
@@ -40,7 +38,7 @@ const Feed = () => {
 
    useEffect(() => {
       setIsLoading(true);
-      getFeedPost(page, size)
+      getFeedPost(page)
          .then((res) => {
             setIsLoading(false);
             setPosts(res.data.posts);
@@ -57,7 +55,7 @@ const Feed = () => {
          return;
       }
 
-      getFeedPost(page + 1, size)
+      getFeedPost(page + 1)
          .then((res) => {
             setPage(page + 1)
             setIsLoading(false);

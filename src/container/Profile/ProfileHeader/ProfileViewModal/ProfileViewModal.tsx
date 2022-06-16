@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Col, Container, Form, Modal, Row } from 'react-bootstrap';
-import ProfileImg from '../../../../assets/img/profile_img.png';
 import { AiFillHeart } from 'react-icons/ai';
 import { BsFillFileEarmarkMinusFill } from 'react-icons/bs';
 import Avatar from '../../../../assets/img/avatar.jpg';
@@ -19,7 +18,7 @@ const ProfileViewModal: React.FC<IProfileViewModal> = ({ show, onClose }) => {
             <Container fluid>
                <Row>
                   <Col md={5} className={'profile_col_left'}>
-                     <img src={ProfileImg} alt='profile-img' />
+                     <img src={Avatar} alt='profile-img' />
                   </Col>
                   <Col md={7} className={'profile_col_right'}>
                      <p onClick={onClose} title='Close'>X</p>

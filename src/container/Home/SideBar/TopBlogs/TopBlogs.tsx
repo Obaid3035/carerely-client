@@ -2,6 +2,8 @@ import React from 'react';
 import TopBlog from './TopBlog/TopBlog';
 import { IBlog } from "../../../Blog/Blog";
 
+
+
 const TopBlogs: React.FC<{
   blogs: IBlog[]
 }> = ({ blogs }) => {
