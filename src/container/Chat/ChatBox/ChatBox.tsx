@@ -1,30 +1,33 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import Avatar from '../../../assets/img/avatar.jpg';
-import { IoMdSend } from "react-icons/io";
-import './ChatBox.scss'
+import { IoMdSend } from 'react-icons/io';
+import './ChatBox.scss';
 import { getCurrentUser } from '../../../utils/helper';
-import { IConversation } from "../Chat";
-import { createMessage, getAllMessagesByConversationId, updateMessage } from "../../../services/api/conversation";
-import { IUser } from "../../../component/Header/Header";
-import animationData from "../../../animation/typing.json";
-import { useAppSelector, useAppDispatch } from "../../../services/hook";
-import { setChatNotification } from "../../../services/slices/notification";
-import Lottie from "react-lottie";
-import { Message } from "react-hook-form";
+import { IConversation } from '../Chat';
+import {
+   createMessage,
+   getAllMessagesByConversationId, updateMessage
+} from "../../../services/api/conversation";
+import { IUser } from '../../../component/Header/Header';
+import animationData from '../../../animation/typing.json';
+import { useAppDispatch, useAppSelector } from '../../../services/hook';
+import { setChatNotification } from '../../../services/slices/notification';
+import Lottie from 'react-lottie';
+
 const _ = require('lodash');
 
 export interface IChatBox {
-   selectedChat: IConversation ;
+   selectedChat: IConversation;
 }
 
 export interface IMessage {
    id: number;
    content: string;
-   conversation: IConversation,
-   sender: IUser,
+   conversation: IConversation;
+   sender: IUser;
    sender_id: number;
    created_at: string;
-   conversation_id: number
+   conversation_id: number;
 }
 
 interface IMessageData {
@@ -40,22 +43,23 @@ const SendMsg: React.FC<any> = ({ msg }) => {
 };
 
 const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
-   const socket = useAppSelector((state) => state.notification.socket)
-   const chatNotification = useAppSelector((state) => state.notification.chatNotification)
+   const socket = useAppSelector((state) => state.notification.socket);
+   const chatNotification = useAppSelector(
+      (state) => state.notification.chatNotification
+   );
    const [messages, setMessages] = useState<IMessage[]>([]);
-   const [user, setUser] = useState<IUser | null>(null)
+   const [user, setUser] = useState<IUser | null>(null);
    const [typingMsg, setTypingMsg] = useState('');
    const [typing, setTyping] = useState(false);
    const [isTyping, setIsTyping] = useState(false);
    const dispatch = useAppDispatch();
-
 
    const defaultOptions = {
       loop: true,
       autoplay: true,
       animationData: animationData,
       rendererSettings: {
-         preserveAspectRatio: "xMidYMid slice",
+         preserveAspectRatio: 'xMidYMid slice',
       },
    };
 
@@ -66,67 +70,76 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    };
 
    useEffect(() => {
-      socket.on("typing", () => setIsTyping(true));
-      socket.on("stop typing", () => setIsTyping(false));
+      socket.on('typing', () => setIsTyping(true));
+      socket.on('stop typing', () => setIsTyping(false));
    }, []);
 
-   const allMessagesArray: any[]  = []
+   useEffect(() => {
+      getAllMessagesByConversationId(selectedChat.id).then(
+         (res: { data: IMessageData }) => {
+            setMessages([...res.data.message]);
+            setUser(res.data.user);
+            dispatch(
+               setChatNotification({
+                  conversation: chatNotification.conversation.map(
+                     (conversation) => {
+                        if (conversation.id == selectedChat.id) {
+                           return {
+                              ...conversation,
+                              unseen_count: 0,
+                           };
+                        }
+                        return conversation;
+                     }
+                  ),
+                  //@ts-ignore
+                  allUnseenMessages:
+                     chatNotification.allUnseenMessages -
+                     chatNotification.conversation.reduce(
+                        (acc: any, curVal: any) => {
+                           return {
+                              unseen_count:
+                                 +curVal.unseen_count + +acc.unseen_count,
+                           };
+                        },
+                        { unseen_count: 0 }
+                     ).unseen_count,
+               })
+            );
+            socket.emit('join chat', selectedChat.id);
+         }
+      );
+   }, []);
 
    useEffect(() => {
-      getAllMessagesByConversationId(selectedChat.id)
-        .then((res: { data: IMessageData} ) => {
-           socket.on("message received", (newMessageReceived: IMessage) => {
-              if (selectedChat){
-                 dispatch(setChatNotification(
-                   {
-                      conversation: chatNotification.conversation.map((conversation) => {
-                         if (conversation.id == newMessageReceived.conversation_id) {
-                            return {
-                               ...conversation,
-                               updated_at: newMessageReceived.conversation.updated_at,
-                               latest_message: newMessageReceived.content,
-                               unseen_count: (conversation.unseen_count - 1) < 0 ? 0 : conversation.unseen_count - 1
-                            }
-                         }
-                         return conversation
-                      }),
-                      allUnseenMessages: (chatNotification.allUnseenMessages - 1) < 0 ? 0 : chatNotification.allUnseenMessages - 1
-                   }
-                 ))
-                 allMessagesArray.push(newMessageReceived)
-                 setMessages([...res.data.message, ...allMessagesArray])
-                 updateMessage(newMessageReceived.id)
-                   .then(() => {
-
-                   })
-              }
-           })
-           setMessages(res.data.message);
-           setUser(res.data.user);
-           dispatch(setChatNotification({
+      console.log('RENDER');
+      const handler = (chatMessage: IMessage) => {
+         setMessages((messages) => [...messages, chatMessage]);
+         dispatch(setChatNotification(
+           {
               conversation: chatNotification.conversation.map((conversation) => {
-                 if (conversation.id == selectedChat.id) {
+                 if (conversation.id == chatMessage.conversation_id) {
                     return {
                        ...conversation,
-                       unseen_count: 0
+                       updated_at: chatMessage.conversation.updated_at,
+                       latest_message: chatMessage.content,
+                       unseen_count: (conversation.unseen_count - 1) < 0 ? 0 : conversation.unseen_count - 1
                     }
                  }
                  return conversation
               }),
-              //@ts-ignore
-              allUnseenMessages: chatNotification.allUnseenMessages - chatNotification.conversation.reduce((acc: any, curVal: any) => {
-                 return {
-                    unseen_count: +curVal.unseen_count + +acc.unseen_count
-                 }
-              }, { unseen_count: 0}).unseen_count
-           }))
-           socket.emit("join chat", selectedChat.id);
-        })
+              allUnseenMessages: (chatNotification.allUnseenMessages - 1) < 0 ? 0 : chatNotification.allUnseenMessages - 1
+           }
+         ))
+         updateMessage(chatMessage.id)
+           .then(() => {
 
-   }, [])
+           })
+      };
 
+      socket.on('message received', handler);
 
-
+   }, []);
 
    useEffect(() => {
       scrollToBottom();
@@ -134,26 +147,26 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
 
    const sendMessage = async (event: any) => {
       event.preventDefault();
-      socket.emit("stop typing", selectedChat.id);
       const msg: any = {
          sender_id: getCurrentUser().id,
          created_at: Date.now().toString(),
          conversation_id: selectedChat.id,
          content: typingMsg,
       };
+      socket.emit('stop typing', selectedChat.id);
       setMessages([...messages, msg]);
       setTypingMsg('');
       const { data } = await createMessage(selectedChat?.id!, {
          content: typingMsg,
       });
-      socket.emit("new message", data)
-   }
+      socket.emit('new message', data);
+   };
 
    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setTypingMsg(e.target.value)
+      setTypingMsg(e.target.value);
       if (!typing) {
          setTyping(true);
-         socket.emit("typing", selectedChat.id);
+         socket.emit('typing', selectedChat.id);
       }
       const lastTypingTime = new Date().getTime();
       const timerLength = 3000;
@@ -161,58 +174,59 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
          const timeNow = new Date().getTime();
          const timeDiff = timeNow - lastTypingTime;
          if (timeDiff >= timerLength && typing) {
-            socket.emit("stop typing", selectedChat.id);
+            socket.emit('stop typing', selectedChat.id);
             setTyping(false);
          }
       }, timerLength);
-   }
-
+   };
 
    return (
-     <div className={"chat"}>
-        <div className="chat-header">
-           <img className="chat-header-dp" src={user && user.image ? user.image.avatar : Avatar} alt="avatar" />
-           <div className="header-info">
-              <h5 className="header-info-title">
-                 {user && user.user_name}
-              </h5>
-           </div>
-        </div>
+      <div className={'chat'}>
+         <div className="chat-header">
+            <img
+               className="chat-header-dp"
+               src={user && user.image ? user.image.avatar : Avatar}
+               alt="avatar"
+            />
+            <div className="header-info">
+               <h5 className="header-info-title">{user && user.user_name}</h5>
+            </div>
+         </div>
 
-        <div className="chat-msg">
-           {messages.map((msg, index) => {
-              return msg.sender_id === getCurrentUser().id ? (
-                <SendMsg key={index} msg={msg.content} />
-              ) : (
-                <ReceiveMsg key={index} msg={msg.content} />
-              );
-           })}
-           <div ref={messagesEndRef} />
-        </div>
-        {isTyping ? (
-          <Lottie
-            options={defaultOptions}
-            height={23}
-            width={53}
-            style={{ marginTop: 15, marginLeft: 12 }}
-          />
-        ) : (
-          <></>
-        )}
-        <form className="typing-box" onSubmit={sendMessage}>
-           <div className="typing-inp">
-              <input
-                placeholder="Type your message here..."
-                value={typingMsg}
-                onChange={(e) => onChangeHandler(e)}
-              />
-              <button>
-                 <IoMdSend type="submit" />
-              </button>
-           </div>
-        </form>
-     </div>
-   )
+         <div className="chat-msg">
+            {messages.map((msg, index) => {
+               return msg.sender_id === getCurrentUser().id ? (
+                  <SendMsg key={index} msg={msg.content} />
+               ) : (
+                  <ReceiveMsg key={index} msg={msg.content} />
+               );
+            })}
+            <div ref={messagesEndRef} />
+         </div>
+         {isTyping ? (
+            <Lottie
+               options={defaultOptions}
+               height={23}
+               width={53}
+               style={{ marginTop: 15, marginLeft: 12 }}
+            />
+         ) : (
+            <></>
+         )}
+         <form className="typing-box" onSubmit={sendMessage}>
+            <div className="typing-inp">
+               <input
+                  placeholder="Type your message here..."
+                  value={typingMsg}
+                  onChange={(e) => onChangeHandler(e)}
+               />
+               <button>
+                  <IoMdSend type="submit" />
+               </button>
+            </div>
+         </form>
+      </div>
+   );
 };
 
 export default ChatBox;
