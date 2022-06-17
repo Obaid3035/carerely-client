@@ -1,6 +1,15 @@
 import axios from "axios";
 import { getTokenFormat } from "../../utils/helper";
 
+
+export function getWeeklyRecord(nutrient: string) {
+  return axios.get(`/calorie/weekly?nutrient=${nutrient}`, getTokenFormat())
+}
+
+export function getMonthlyRecord(nutrient: string) {
+  return axios.get(`/calorie/monthly?nutrient=${nutrient}`, getTokenFormat())
+}
+
 export function getFoodProduct(query: string, pageNumber: number) {
   return axios.get(`/calorie?query=${query}&pageNumber=${pageNumber}`)
 }

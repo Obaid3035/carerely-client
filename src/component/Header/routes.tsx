@@ -14,6 +14,7 @@ import FoodStats from "../../container/FoodStats/FoodStats";
 import HistoryLog from "../../container/HistoryLog/HistoryLog";
 import Chat from "../../container/Chat/Chat";
 import User from "../../container/admin/pages/User/User";
+import Graph from "../../container/Graph/Graph";
 
 export interface RoutesLink {
    component: JSX.Element;
@@ -48,6 +49,10 @@ export const mainRoutes: RoutesLink[] = [
      path: '/chat',
      component: <Chat/>
    },
+  {
+    path: '/graph',
+    component: <Graph/>
+  },
    {
       path: '/post-detail/:id',
       component: <PostDetail />,

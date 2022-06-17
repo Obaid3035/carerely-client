@@ -80,7 +80,7 @@ const HistoryLog = () => {
           </div>
         )
       }
-      <p className={"want_to_check"}>Want to check your report? <span>Click Here</span></p>
+      <p className={"want_to_check"} onClick={() => navigation("/graph")}>Want to check your report? <span>Click Here</span></p>
     </div>
   );
 };
