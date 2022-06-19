@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 axios.defaults.baseURL = 'https://careraly-server.herokuapp.com/'
 
 
+
 const app = (
    <Provider store={store}>
       <App />
