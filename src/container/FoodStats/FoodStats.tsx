@@ -8,10 +8,11 @@ import ProgressProvider from "../../component/ProgressProvider/ProgressProvider"
 import { Col, Container, Row } from "react-bootstrap";
 import "./FoodStats.scss";
 import { getFoodProductStats } from "../../services/api/calorie";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../component/Loader/Loader";
 
 const FoodStats = () => {
+  const navigation = useNavigate();
   const { id, type } = useParams()
   const [isLoading, setIsLoading] = useState(false);
   const [foodStats, setFoodStats] = useState<any>(null)
@@ -95,6 +96,9 @@ const FoodStats = () => {
                    </ProgressProvider>
                  }
                </Col>
+             </Row>
+             <Row className={"justify-content-center mt-4"}>
+               <p className={"want_to_check"} onClick={() => navigation("/graph")}>Want to check your report? <span>Click Here</span></p>
              </Row>
            </React.Fragment>
          ) : (

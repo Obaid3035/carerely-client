@@ -31,8 +31,8 @@ ChartJS.defaults.font.family = "montserrat"
 const Graph = () => {
    const nutrientOptions = [
       {
-         label: 'Protein',
-         value: 'protein',
+         label: 'Calorie',
+         value: 'calorie',
       },
       {
          label: 'Fat',
