@@ -74,6 +74,7 @@ const Header = () => {
    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
    const dispatch = useAppDispatch();
    const notification = useAppSelector((state) => state.notification.notification)
+   const notificationCount = useAppSelector((state) => state.notification.notificationCount)
    const [show, setShow] = useState(false);
 
    useEffect(() => {
@@ -249,7 +250,7 @@ const Header = () => {
                         onClick={onNotificationClickHandler}
                      >
                         <RiIcon.RiNotification3Line />
-                        <span className={'badge'}>{ notification.length }</span>
+                        <span className={'badge'}>{ notificationCount }</span>
                      </div>
                      <NotificationBox notification={notification} extraClasses={notificationClasses} />
                   </Nav.Link>

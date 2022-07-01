@@ -13,6 +13,7 @@ export interface INotificationState {
   },
   socket: any;
   notification: INotification[],
+  notificationCount: number,
   selectedChat: IConversation | null
 }
 
@@ -23,6 +24,7 @@ const initialState: INotificationState = {
   },
   socket: io(ENDPOINT),
   notification: [],
+  notificationCount: 0,
   selectedChat: null
 };
 
@@ -38,7 +40,8 @@ const notificationSlice = createSlice({
       state.chatNotification = payload
     },
     setNotification: (state, { payload }) => {
-      state.notification = payload
+      state.notification = payload.notification
+      state.notificationCount = payload.notificationCount
     }
   }
 })

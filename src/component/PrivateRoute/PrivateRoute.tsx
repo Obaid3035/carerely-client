@@ -23,8 +23,8 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     const socket = useAppSelector((state) => state.notification.socket);
     const chatNotification = useAppSelector((state) => state.notification.chatNotification);
     const notification = useAppSelector((state) => state.notification.notification)
+    const notificationCount = useAppSelector((state) => state.notification.notificationCount)
     const dispatch = useAppDispatch();
-
 
     if (!token) {
         errorNotify("You are not authorize")
@@ -82,19 +82,27 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
         console.log("RENDER")
         const handler = (sentNotification: INotification) => {
             const notificationClone = [
+                ...notification,
                 {
-                    ...sentNotification
+
                 },
-                ...notification
             ]
             if (notificationClone.length > 3) {
                 notificationClone.pop()
             }
 
-            dispatch(setNotification(notificationClone))
+            dispatch(setNotification({
+                notification: [
+                  ...notification,
+                    {
+                        ...sentNotification
+                    },
+                ],
+                notificationCount: notificationCount + 1
+            }))
         }
         socket.on("notification received", handler)
-    }, [])
+    }, [notificationCount > 0])
 
 
    useEffect(() => {
