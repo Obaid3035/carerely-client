@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { errorNotify } from '../../utils/toast';
 import { Navigate, useNavigate } from 'react-router-dom';
 import jwt from 'jwt-decode';
@@ -8,6 +8,7 @@ import { USER_ROLE } from '../../App';
 import { IMessage } from '../../container/Chat/ChatBox/ChatBox';
 import { useAppDispatch, useAppSelector } from '../../services/hook';
 import { setChatNotification, setNotification } from '../../services/slices/notification';
+
 import { INotification } from "../Header/Header";
 
 interface IPrivateRouteProps {
@@ -51,6 +52,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     useEffect(() => {
         socket.emit('setup', getCurrentUser());
         socket.on('connected', () => console.log("Socket connected"));
+
     }, []);
 
     useEffect(() => {
@@ -77,20 +79,22 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     }, [chatNotification])
 
     useEffect(() => {
-        socket.on("notification received", (sentNotification: INotification) => {
+        console.log("RENDER")
+        const handler = (sentNotification: INotification) => {
             const notificationClone = [
                 {
                     ...sentNotification
                 },
-              ...notification
+                ...notification
             ]
             if (notificationClone.length > 3) {
                 notificationClone.pop()
             }
 
             dispatch(setNotification(notificationClone))
-        })
-    })
+        }
+        socket.on("notification received", handler)
+    }, [])
 
 
    useEffect(() => {

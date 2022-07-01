@@ -5,10 +5,10 @@ import '../Setting.scss';
 import { SETTING_OPTIONS } from '../Setting';
 import { uploadProfilePicture } from '../../../services/api/auth';
 import Loader from '../../../component/Loader/Loader';
-import { getCurrentUser, removeToken, setToken } from "../../../utils/helper";
+import { getCurrentUser, removeToken, setToken } from '../../../utils/helper';
 import Button from '../../../component/Button/Button';
 import * as FaIcon from 'react-icons/fa';
-import { errorNotify, successNotify } from "../../../utils/toast";
+import { errorNotify, successNotify } from '../../../utils/toast';
 
 interface ISettingTabProps {
    onClick: (value: string) => void;
@@ -27,16 +27,21 @@ const SettingTab: React.FC<ISettingTabProps> = ({ onClick, selectedTab }) => {
 
    const onImageUpload = async () => {
       setIsLoading(true);
-      try {
-         const formData = new FormData();
-         formData.append('image', fileInput!);
-         const res = await uploadProfilePicture(formData);
-         successNotify(res.data.message)
-         removeToken()
-         setToken(res.data.token)
-         setIsLoading(false);
-      } catch (e: any) {
-         errorNotify(e.response.data.message);
+      if (fileInput) {
+         try {
+            const formData = new FormData();
+            formData.append('image', fileInput!);
+            const res = await uploadProfilePicture(formData);
+            successNotify(res.data.message);
+            removeToken();
+            setToken(res.data.token);
+            setIsLoading(false);
+         } catch (e: any) {
+            errorNotify(e.response.data.message);
+            setIsLoading(false);
+         }
+      } else {
+         errorNotify('Please upload a picture first');
          setIsLoading(false);
       }
    };
