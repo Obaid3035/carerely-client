@@ -12,7 +12,7 @@ import { IUser } from '../../../component/Header/Header';
 import animationData from '../../../animation/typing.json';
 import { useAppDispatch, useAppSelector } from '../../../services/hook';
 import { setChatNotification } from '../../../services/slices/notification';
-import Lottie from 'react-lottie';
+import Lottie from "lottie-react";
 
 const _ = require('lodash');
 
@@ -54,14 +54,14 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    const [isTyping, setIsTyping] = useState(false);
    const dispatch = useAppDispatch();
 
-   const defaultOptions = {
-      loop: true,
-      autoplay: true,
-      animationData: animationData,
-      rendererSettings: {
-         preserveAspectRatio: 'xMidYMid slice',
-      },
-   };
+   // const defaultOptions = {
+   //    loop: true,
+   //    autoplay: true,
+   //    animationData: animationData,
+   //    rendererSettings: {
+   //       preserveAspectRatio: 'xMidYMid slice',
+   //    },
+   // };
 
    const messagesEndRef = useRef(document.createElement('div'));
 
@@ -179,7 +179,6 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
          }
       }, timerLength);
    };
-
    return (
       <div className={'chat'}>
          <div className="chat-header">
@@ -204,12 +203,13 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
             <div ref={messagesEndRef} />
          </div>
          {isTyping ? (
+
             <Lottie
-               options={defaultOptions}
+              autoplay={true}
                height={23}
                width={53}
                style={{ marginTop: 15, marginLeft: 12 }}
-            />
+             animationData={animationData}/>
          ) : (
             <></>
          )}
