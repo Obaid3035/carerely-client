@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IMessage } from "../../container/Chat/ChatBox/ChatBox";
 import { IConversation } from "../../container/Chat/Chat";
 import io from "socket.io-client";
 import { INotification } from "../../component/Header/Header";
-const ENDPOINT = 'https://careraly-server.herokuapp.com';
+// const ENDPOINT = 'https://careraly-server.herokuapp.com';
 // const ENDPOINT = 'http://localhost:4000';
+const ENDPOINT = 'http://server.carerely.com'
 
 export interface INotificationState {
   chatNotification: {
