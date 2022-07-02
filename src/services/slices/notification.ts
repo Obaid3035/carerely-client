@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import { INotification } from "../../component/Header/Header";
 // const ENDPOINT = 'https://careraly-server.herokuapp.com';
 // const ENDPOINT = 'http://localhost:4000';
-const ENDPOINT = 'http://server.carerely.com'
+const ENDPOINT = 'https://server.carerely.com'
 
 export interface INotificationState {
   chatNotification: {
