@@ -12,7 +12,7 @@ import {
 } from "../../../services/api/post";
 import Loader from '../../Loader/Loader';
 import Comment from '../../Comment/Comment';
-import { IPost } from "../Post";
+import { IPost } from "../Posts";
 import { errorNotify } from '../../../utils/toast';
 import { getCurrentUser } from "../../../utils/helper";
 import { RiDeleteBin6Line } from "react-icons/ri";

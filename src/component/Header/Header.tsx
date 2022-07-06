@@ -20,6 +20,11 @@ import { getAllUnseenConversations } from "../../services/api/conversation";
 import { getNotification } from "../../services/api/notification";
 import SiteModal from "../SiteModal/SiteModal";
 import Button from "../Button/Button";
+import Loader from "../Loader/Loader";
+import { sendReport } from "../../services/api/auth";
+import { errorNotify, successNotify } from "../../utils/toast";
+import Verified from "../../assets/img/verified.png";
+import VerifiedBadge from "../VerifiedBadge/VerifiedBadge";
 
 interface INavItem {
    path: string;
@@ -76,6 +81,9 @@ const Header = () => {
    const notification = useAppSelector((state) => state.notification.notification)
    const notificationCount = useAppSelector((state) => state.notification.notificationCount)
    const [show, setShow] = useState(false);
+   const [report, setReport] = useState('');
+   const [isLoading, setIsLoading] = useState(false)
+
 
    useEffect(() => {
       setCurrentUser(getCurrentUser())
@@ -191,12 +199,33 @@ const Header = () => {
       };
    }, [ref]);
 
+
+   const onFormSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsLoading(true)
+      sendReport(report)
+        .then((res) => {
+           setIsLoading(false);
+           setShow(!show)
+           successNotify(res.data.message)
+        })
+        .catch(() => {
+           setIsLoading(false);
+           errorNotify('Something went wrong')
+        })
+   }
+
+
+
    const modal = (
      <SiteModal show={show} onModalChange={() => setShow(!show)} >
-        <Form>
+        <Form onSubmit={onFormSubmit}>
            <Form.Group>
-              <Form.Control as="textarea" placeholder={"Lorem Ipsum"} />
-              <Button className={'mt-3'}>Send</Button>
+              <Form.Control as="textarea" placeholder={"Lorem Ipsum"} value={report} onChange={(e) => setReport(e.target.value)}/>
+              {
+                 !isLoading ?  <Button className={'mt-3'}>Send</Button>
+                   : <Loader/>
+              }
            </Form.Group>
         </Form>
      </SiteModal>
@@ -257,6 +286,13 @@ const Header = () => {
                   <div className={'nav_link'} onClick={onDropdownClickHandler}>
                      <div className={'nav_profile'}>
                         <p>{ currentUser?.user_name }</p>
+                        {
+                           currentUser?.is_verified ?
+                             (
+                               <VerifiedBadge/>
+                             )
+                             : null
+                        }
                         <RiIcon.RiArrowDropDownLine />
                         <img
                            width={50}

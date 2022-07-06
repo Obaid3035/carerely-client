@@ -1,7 +1,7 @@
 import { IAuthInput } from '../../container/Auth/Auth';
 import axios from 'axios';
-import { getTokenFormat } from "../../utils/helper";
-import { IProfileInput } from "../../container/CalorieTracker/CalorieFormModal/CalorieFormModal";
+import { getTokenFormat } from '../../utils/helper';
+import { IProfileInput } from '../../container/CalorieTracker/CalorieFormModal/CalorieFormModal';
 
 export function register(userInput: IAuthInput) {
    return axios.post('/auth/register', userInput);
@@ -16,7 +16,7 @@ export function getProfile() {
 }
 
 export function createProfile(userInput: IProfileInput) {
-   return axios.post('/profiles', userInput, getTokenFormat())
+   return axios.post('/profiles', userInput, getTokenFormat());
 }
 
 export function updateProfile(userInput: {
@@ -35,4 +35,28 @@ export function mostFollowedUser() {
 
 export function uploadProfilePicture(userInput: any) {
    return axios.put(`/auth/upload`, userInput, getTokenFormat());
+}
+
+export function authorizeUser(token: string) {
+   return axios.get(`/auth/authorize/${token}`, getTokenFormat());
+}
+
+export function verifyEmail(email: string) {
+   return axios.put(`/auth/verify-email`, { email }, getTokenFormat());
+}
+
+export function changeEmail(email: string, token: string) {
+   return axios.put(
+      `/auth/change-email`,
+      { email },
+      { headers: { Authorization: `Bearer ${token}` } }
+   );
+}
+
+export function changePassword(oldPassword: string, newPassword: string) {
+   return axios.put(`/auth/change-password`, { oldPassword, newPassword }, getTokenFormat());
+}
+
+export function sendReport(report: string) {
+   return axios.put(`/auth/report`, { report }, getTokenFormat());
 }

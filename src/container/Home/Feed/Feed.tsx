@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Form } from "react-bootstrap";
-import Post from "../../../component/Post/Post";
+import Posts from "../../../component/Posts/Posts";
 import Button from "../../../component/Button/Button";
 import Loader from "../../../component/Loader/Loader";
 import "./Feed.scss";
@@ -75,7 +75,7 @@ const Feed = () => {
    if (!isLoading) {
       if (posts && posts.length > 0) {
          renderPost = (
-            <Post
+            <Posts
               setPost={setPosts}
                hasMore={hasMore}
                mockData={posts}

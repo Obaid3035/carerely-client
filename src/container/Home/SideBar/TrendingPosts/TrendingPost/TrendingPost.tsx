@@ -2,7 +2,7 @@ import React from 'react';
 import PostImg from '../../../../../assets/img/trending_post.png';
 import * as AiIcon from 'react-icons/ai';
 import * as MdIcon from 'react-icons/md';
-import { IPost } from "../../../../../component/Post/Post";
+import { IPost } from "../../../../../component/Posts/Posts";
 
 interface ITrendingPost {
    onModalChange: () => void;

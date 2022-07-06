@@ -1,6 +1,6 @@
 import React  from 'react';
-import Post from '../../../component/Post/Post';
-import { IPost } from "../../../component/Post/Post";
+import Posts from '../../../component/Posts/Posts';
+import { IPost } from "../../../component/Posts/Posts";
 
 export interface IProfilePost {
    posts: IPost[]
@@ -16,7 +16,7 @@ const ProfilePost: React.FC<IProfilePost> = ({ fetchMoreData, posts, setPost, ha
          <h4 className={'mb-4'}>Activity Feed</h4>
         {
           posts.length > 0 ? (
-            <Post
+            <Posts
               setPost={setPost}
               hasMore={hasMore}
               mockData={posts}

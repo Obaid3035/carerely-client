@@ -4,7 +4,7 @@ import './SideBar.scss';
 import TrendingPosts from './TrendingPosts/TrendingPosts';
 import TopBlogs from './TopBlogs/TopBlogs';
 import TopAccounts from './TopAccounts/TopAccounts';
-import { IPost } from '../../../component/Post/Post';
+import { IPost } from '../../../component/Posts/Posts';
 import { getFewTrendingPosts } from '../../../services/api/post';
 import { getFewBlogs } from '../../../services/api/blog';
 import { IBlog } from '../../Blog/Blog';

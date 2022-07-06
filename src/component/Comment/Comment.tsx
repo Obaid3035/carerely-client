@@ -4,6 +4,7 @@ import { getCurrentUser, timeAgo } from "../../utils/helper";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IUser } from "../Header/Header";
 import Verified from "../../assets/img/verified.png";
+import VerifiedBadge from "../VerifiedBadge/VerifiedBadge";
 
 
 export interface IComment {
@@ -31,7 +32,7 @@ const Comment: React.FC<ICommentProps> = (comment) => {
               {comment.user.user_name}
               {
                 comment.user.is_verified ?
-                  <img alt={"verified"} className={"verified"} src={Verified} width={30} height={25} />
+                  <VerifiedBadge/>
                   : null
               }
               <span> { timeAgo(comment.created_at) }</span>

@@ -6,7 +6,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import Button from '../Button/Button';
-import './Post.scss';
+import './Posts.scss';
 import { IUser } from "../Header/Header";
 import Loader from '../Loader/Loader';
 import ReadMore from '../ReadMore/ReadMore';
@@ -17,6 +17,7 @@ import Comment, { IComment } from "../Comment/Comment";
 import { getCurrentUser } from '../../utils/helper';
 import { useAppSelector } from "../../services/hook";
 import Verified from "../../assets/img/verified.png"
+import VerifiedBadge from "../VerifiedBadge/VerifiedBadge";
 
 interface IPostPropsInterface {
    hasMore: boolean;
@@ -41,7 +42,7 @@ export interface IPost {
 
 
 
-const Post = (props: IPostPropsInterface) => {
+const Posts = (props: IPostPropsInterface) => {
    const navigation = useNavigate();
    const socket = useAppSelector((state) => state.notification.socket)
    const [text, setText] = useState('');
@@ -149,7 +150,9 @@ const Post = (props: IPostPropsInterface) => {
                         <h5>{data.user.user_name}
                            {
                               data.user.is_verified ?
-                                <img alt={"verified"} src={Verified} width={30} height={25} />
+                                (
+                                  <VerifiedBadge/>
+                                )
                                 : null
                            }
                         </h5>
@@ -239,4 +242,4 @@ const Post = (props: IPostPropsInterface) => {
       </InfiniteScroll>
    );
 };
-export default Post;
+export default Posts;

@@ -206,9 +206,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
 
             <Lottie
               autoplay={true}
-               height={23}
-               width={53}
-               style={{ marginTop: 15, marginLeft: 12 }}
+               style={{ marginTop: 15, marginLeft: 12, height: 23, width: 53 }}
              animationData={animationData}/>
          ) : (
             <></>

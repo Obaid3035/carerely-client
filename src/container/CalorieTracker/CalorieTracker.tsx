@@ -36,13 +36,11 @@ const CalorieTracker = () => {
             <Col md={6} className="calorie_tracker_heading">
                <h1>Calorie tracker</h1>
                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                  sit amet vestibulum ex, eget ultrices ex. Vestibulum ac velit
-                  in metus laoreet volutpat at id risus. Curabitur mattis
-                  lobortis vehicula. Nullam eu lobortis purus. In hac habitasse
-                  platea dictumst. Proin viverra aliquet nisl vitae auctor.
-                  Donec tortor augue, pharetra a efficitur non, tincidunt vitae
-                  felis.
+                  Track progress toward your nutrition, water, fitness, and weight loss goals.
+                  This all-in-one calorie tracker. When you enter your last meal,
+                  you’ll be able to see your total calories, fats, carbs & sugars for the day.
+                  We also have a graph called “My Graph” where you’ll be able to see your calories,
+                  carbs, fats, & sugars, dating back to weeks, months & eventually by year.
                </p>
             </Col>
             <Col md={6}>
@@ -57,6 +55,8 @@ const CalorieTracker = () => {
             <Button onClick={() => onModalChangeHandler("lunch")}>Lunch</Button>
             <Button onClick={() => onModalChangeHandler("dinner")}> Dinner</Button>
          </div>
+         <p className={"want_to_check mt-4"} onClick={() => navigation("/graph")}>Want to check your report? <span>Click Here</span></p>
+
       </Container>
    );
 };

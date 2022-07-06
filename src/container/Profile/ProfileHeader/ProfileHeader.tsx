@@ -5,6 +5,7 @@ import ProfileViewModal from './ProfileViewModal/ProfileViewModal';
 import { IUser } from '../../../component/Header/Header';
 import FollowerModal from '../FollowerModal/FollowerModal';
 import Verified from "../../../assets/img/verified.png";
+import VerifiedBadge from "../../../component/VerifiedBadge/VerifiedBadge";
 
 interface IProfileHeader {
    userStats: {
@@ -61,7 +62,7 @@ const ProfileHeader: React.FC<IProfileHeader> = ({
          <h5 className={'my-4'}>{userStats.user.user_name}
             {
                userStats.user.is_verified ?
-                 <img alt={"verified"} src={Verified} width={30} height={25} />
+                 <VerifiedBadge/>
                  : null
             }
          </h5>

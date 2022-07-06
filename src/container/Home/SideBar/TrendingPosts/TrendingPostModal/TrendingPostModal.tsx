@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SiteModal, { ISiteModal } from "../../../../../component/SiteModal/SiteModal";
-import Post from "../../../../../component/Post/Post";
+import Posts from "../../../../../component/Posts/Posts";
 import { getTrendingPosts } from "../../../../../services/api/post";
 import Loader from "../../../../../component/Loader/Loader";
 
@@ -51,7 +51,7 @@ const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
   if (!isLoading) {
     if (posts && posts.length > 0) {
       renderPost = (
-        <Post
+        <Posts
           setPost={setPosts}
           hasMore={hasMore}
           mockData={posts}

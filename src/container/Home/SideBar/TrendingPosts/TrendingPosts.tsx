@@ -5,7 +5,7 @@ import TrendingPostModal from './TrendingPostModal/TrendingPostModal';
 import './TrendingPosts.scss';
 import { likePost } from '../../../../services/api/post';
 import { errorNotify } from '../../../../utils/toast';
-import { IPost } from '../../../../component/Post/Post';
+import { IPost } from '../../../../component/Posts/Posts';
 import { useAppSelector } from '../../../../services/hook';
 
 interface ITrendingPost {

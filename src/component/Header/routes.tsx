@@ -1,4 +1,4 @@
-import PostDetail from '../Post/PostDetail/PostDetail';
+import PostDetail from '../Posts/PostDetail/PostDetail';
 import Blog from '../../container/Blog/Blog';
 import BlogDetail from '../../container/Blog/BlogDetail/BlogDetail';
 import CalorieTracker from '../../container/CalorieTracker/CalorieTracker';
@@ -15,6 +15,7 @@ import HistoryLog from "../../container/HistoryLog/HistoryLog";
 import Chat from "../../container/Chat/Chat";
 import User from "../../container/admin/pages/User/User";
 import Graph from "../../container/Graph/Graph";
+import EmailConfirmation from "../../container/Setting/SettingForm/ResetEmail/EmailConfirmation";
 
 export interface RoutesLink {
    component: JSX.Element;
@@ -45,6 +46,10 @@ export const mainRoutes: RoutesLink[] = [
       path: '/home',
       component: <Home />,
    },
+  {
+    path: '/mail-confirmation/:id',
+    component: <EmailConfirmation />,
+  },
    {
      path: '/chat',
      component: <Chat/>
