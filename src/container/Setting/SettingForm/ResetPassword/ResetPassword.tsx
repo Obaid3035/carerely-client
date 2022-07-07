@@ -28,7 +28,7 @@ const ResetPassword = () => {
                successNotify('Password changed successfully')
                socket.emit('delete', getCurrentUser());
                removeToken();
-               navigation('/auth');
+               navigation('/');
                setIsLoading(false);
             })
             .catch((err) => {

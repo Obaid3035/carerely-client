@@ -111,7 +111,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
              if (err) {
                  removeToken();
                  errorNotify("You are not authorize")
-                 navigate("/auth")
+                 navigate("/")
              }
          })
    }, [])

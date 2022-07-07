@@ -38,7 +38,7 @@ const EmailConfirmation = () => {
                successNotify('An Email changed successfully');
                socket.emit('delete', getCurrentUser());
                removeToken();
-               navigation('/auth');
+               navigation('/');
                setIsLoading(false);
             })
             .catch(() => {

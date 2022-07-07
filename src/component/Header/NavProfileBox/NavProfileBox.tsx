@@ -15,7 +15,7 @@ const NavProfileBox = (props: { extraClasses: string, setShow: any, show: boolea
    const onLogOutHandler = () => {
       socket.emit("delete", getCurrentUser())
       removeToken();
-      navigation("/auth")
+      navigation("/")
    }
 
 
