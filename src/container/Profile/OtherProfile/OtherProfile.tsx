@@ -16,6 +16,8 @@ import { getCurrentUser } from "../../../utils/helper";
 import { createConversation } from "../../../services/api/conversation";
 import { errorNotify, successNotify } from "../../../utils/toast";
 import { useAppSelector } from "../../../services/hook";
+import Loader from "../../../component/Loader/Loader";
+import { getHelmet } from "../../../utils/helmet";
 
 enum FriendShipStatus {
    view = 'VIEW',
@@ -146,6 +148,7 @@ const OtherProfile = () => {
 
    return (
       <Container>
+         { getHelmet('Other Profile') }
          {!isLoading && userStats.user ? (
             <Row
                className={
@@ -158,7 +161,7 @@ const OtherProfile = () => {
                </Col>
                {data}
             </Row>
-         ) : null}
+         ) : <Loader/>}
       </Container>
    );
 };

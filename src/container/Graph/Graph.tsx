@@ -15,6 +15,7 @@ import { getMonthlyRecord, getWeeklyRecord } from '../../services/api/calorie';
 import { Container } from 'react-bootstrap';
 import './Graph.scss';
 import Select from 'react-select';
+import { getHelmet } from "../../utils/helmet";
 
 ChartJS.register(
    CategoryScale,
@@ -170,6 +171,7 @@ const Graph = () => {
 
    return (
       <div className={'bar'}>
+         { getHelmet('Graph') }
          <Container>
             <div className={'d-flex justify-content-end my-3'}>
                <Select

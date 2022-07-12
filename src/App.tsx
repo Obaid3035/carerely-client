@@ -1,9 +1,9 @@
 import React from "react";
 import {
-   BrowserRouter as Router,
-   Routes,
-   Route,
-} from 'react-router-dom';
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 import {Slide, ToastContainer} from "react-toastify";
 
 import Auth from './container/Auth/Auth';
@@ -20,6 +20,7 @@ export enum USER_ROLE {
 }
 
 function App() {
+
    const userLayout = (
      mainRoutes.map((item, index) => (
        <Route key={index} path={item.path} element={

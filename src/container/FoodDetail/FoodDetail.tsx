@@ -9,6 +9,7 @@ import Button from "../../component/Button/Button";
 import { useParams, useNavigate } from "react-router-dom";
 import { AiFillDelete } from "react-icons/ai"
 import { successNotify } from "../../utils/toast";
+import { getHelmet } from "../../utils/helmet";
 const _ = require('lodash');
 
 interface IFood {
@@ -146,6 +147,7 @@ const FoodDetail = () => {
 
    return (
       <Container fluid>
+         { getHelmet('Food Details') }
          <Row className={'justify-content-center'}>
             <Col md={8} className="breakfast_details">
                <h5>Breakfast Details</h5>

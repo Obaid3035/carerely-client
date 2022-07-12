@@ -5,6 +5,8 @@ import PopularBlog from './PopularBlog/PopularBlog';
 import { Col, Row } from 'react-bootstrap';
 import { getAllBlogs } from "../../services/api/blog";
 import Loader from "../../component/Loader/Loader";
+import { Helmet } from "react-helmet";
+import { getHelmet } from "../../utils/helmet";
 
 export interface IBlog {
   id: number,
@@ -36,6 +38,7 @@ const Blog = () => {
 
    return (
       <Row className={' justify-content-center'}>
+        { getHelmet('Blogs') }
          <Col md={10}>
            {
              !isLoading ?

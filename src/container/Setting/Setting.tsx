@@ -5,6 +5,7 @@ import SettingForm from './SettingForm/SettingForm';
 import EditProfile from './SettingForm/EditProfile/EditProfile';
 import ResetPassword from './SettingForm/ResetPassword/ResetPassword';
 import ResetEmail from './SettingForm/ResetEmail/ResetEmail';
+import { getHelmet } from "../../utils/helmet";
 
 export enum SETTING_OPTIONS {
    EDIT_PROFILE = 'edit-profile',
@@ -34,6 +35,7 @@ const Setting = () => {
 
    return (
       <Container fluid>
+        { getHelmet('Setting') }
          <Row className={'setting justify-content-center'}>
             <SettingTab onClick={onTabClickHandler} selectedTab={selectedTab} />
             <SettingForm form={currentTab} />

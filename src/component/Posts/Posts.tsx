@@ -205,6 +205,7 @@ const Posts = (props: IPostPropsInterface) => {
                         <Form.Control
                            type="text"
                            name={`text${data.id}`}
+                           required
                            value={text}
                            onChange={(e) => {
                               setText(e.target.value);

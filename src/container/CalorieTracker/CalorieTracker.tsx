@@ -5,6 +5,8 @@ import './CalorieTracker.scss';
 import CalorieFormModal from './CalorieFormModal/CalorieFormModal';
 import { getCurrentUser } from '../../utils/helper';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from "react-helmet";
+import { getHelmet } from "../../utils/helmet";
 
 const CalorieTracker = () => {
    const navigation = useNavigate();
@@ -25,6 +27,7 @@ const CalorieTracker = () => {
 
    return (
       <Container>
+         { getHelmet('Calorie Tracker') }
          {show ? (
             <CalorieFormModal
                show={show}

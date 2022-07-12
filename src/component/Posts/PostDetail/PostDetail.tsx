@@ -19,6 +19,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { useAppSelector } from "../../../services/hook";
 
 const PostDetail = () => {
+
    const { id } = useParams();
    const socket = useAppSelector((state) => state.notification.socket)
    const [isLoading, setIsLoading] = useState(false);
@@ -105,10 +106,6 @@ const PostDetail = () => {
                         />
                         <div className={'activity_feed_user_info'}>
                            <h5>{post.user.user_name}</h5>
-                           {/*<p className={'text-muted'}>*/}
-                           {/*   <MdIcon.MdLocationOn />*/}
-                           {/*   New York*/}
-                           {/*</p>*/}
                         </div>
                      </div>
                      {
@@ -157,6 +154,7 @@ const PostDetail = () => {
                            <Form.Control
                               type="text"
                               value={text}
+                              required
                               onChange={(e) => setText(e.target.value)}
                               placeholder={'Write your comment……'}
                            />

@@ -14,8 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../../services/hook';
 import { setChatNotification } from '../../../services/slices/notification';
 import Lottie from "lottie-react";
 
-const _ = require('lodash');
-
 export interface IChatBox {
    selectedChat: IConversation;
 }
@@ -54,20 +52,12 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
    const [isTyping, setIsTyping] = useState(false);
    const dispatch = useAppDispatch();
 
-   // const defaultOptions = {
-   //    loop: true,
-   //    autoplay: true,
-   //    animationData: animationData,
-   //    rendererSettings: {
-   //       preserveAspectRatio: 'xMidYMid slice',
-   //    },
-   // };
-
    const messagesEndRef = useRef(document.createElement('div'));
 
    const scrollToBottom = () => {
       messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
    };
+
 
    useEffect(() => {
       socket.on('typing', () => setIsTyping(true));
@@ -109,10 +99,9 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
             socket.emit('join chat', selectedChat.id);
          }
       );
-   }, []);
+   }, [selectedChat]);
 
    useEffect(() => {
-      console.log('RENDER');
       const handler = (chatMessage: IMessage) => {
          setMessages((messages) => [...messages, chatMessage]);
          dispatch(setChatNotification(

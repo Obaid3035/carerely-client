@@ -6,6 +6,8 @@ import { getAllConversations } from "../../services/api/conversation";
 import { useAppSelector } from "../../services/hook";
 import Search from "./Conversation/Search/Search";
 import { IUser } from "../../component/Header/Header";
+import { Helmet } from "react-helmet";
+import { getHelmet } from "../../utils/helmet";
 
 
 export interface IConversation {
@@ -25,7 +27,6 @@ const Chat = () => {
   const [conversation, setConversation] = useState<IConversation[]>([])
   const [isConversationLoading, setIsConversationLoading] = useState(false)
   const selectedChat = useAppSelector((state) => state.notification.selectedChat);
-
   useEffect(() => {
     setIsConversationLoading(true)
     getAllConversations(search)
@@ -42,6 +43,7 @@ const Chat = () => {
 
    return (
      <Row className='px-3'>
+       { getHelmet('Chat') }
        <Col md={4}>
          <div className='conversation-container'>
            <Search search={search}

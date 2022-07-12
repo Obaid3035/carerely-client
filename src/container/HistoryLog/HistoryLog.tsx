@@ -4,6 +4,7 @@ import Pagination from '../../component/Pagination/Pagination';
 import { getHistoryLog } from "../../services/api/calorie";
 import Loader from "../../component/Loader/Loader";
 import { useNavigate } from "react-router-dom";
+import { getHelmet } from "../../utils/helmet";
 
 const HistoryLog = () => {
   const navigation = useNavigate();
@@ -26,6 +27,7 @@ const HistoryLog = () => {
   return (
 
     <div className={'main_history'}>
+      { getHelmet('History Log') }
       <h5>HISTORY LOG</h5>
       {
         !isLoading ? (

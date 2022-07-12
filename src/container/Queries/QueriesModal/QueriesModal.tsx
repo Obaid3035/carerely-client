@@ -82,15 +82,12 @@ const QueriesModal: React.FC<IQueriesModal> = ({
                   Posted By: <span> {query.user.user_name} </span>
                </p>
             </div>
-            <div className={'modal_question'}>
+            <div className={'modal_question mt-3'}>
                <p>{query.text}</p>
                <div className={'answer_count'}>
                   <BsFillFileEarmarkMinusFill />
                   <p>{query.answerCount}</p>
                </div>
-            </div>
-            <div className={'modal_question_answer'}>
-               <p>{query.text}</p>
             </div>
             {!isLoading ? (
                <React.Fragment>

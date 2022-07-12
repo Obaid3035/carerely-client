@@ -3,35 +3,43 @@ import Avatar from '../../../assets/img/avatar.jpg';
 import './NotificationBox.scss';
 import { INotification, NotificationStatus } from '../Header';
 import { timeAgo } from '../../../utils/helper';
+import { updateNotification } from '../../../services/api/notification';
+import { useNavigate } from 'react-router-dom';
+
+export const getNotificationText = (status: string) => {
+   switch (status) {
+      case NotificationStatus.Like:
+         return 'liked your post';
+      case NotificationStatus.Comment:
+         return 'comment on your post';
+      case NotificationStatus.Follow:
+         return 'has followed you';
+   }
+};
+
+export const onNavigateNotification = (
+  status: string,
+  senderId: number,
+  navigationId: number,
+  notificationId: number
+) => {
+   updateNotification(notificationId).then(() => {
+      if (
+        status == NotificationStatus.Like ||
+        status == NotificationStatus.Comment
+      ) {
+         window.location.href = `/post-detail/${navigationId}`;
+      } else {
+         window.location.href = `/other-profile/${senderId}`;
+      }
+   });
+};
 
 const NotificationBox = (props: {
    notification: INotification[];
    extraClasses: string;
 }) => {
-   const getNotificationText = (status: string) => {
-      switch (status) {
-         case NotificationStatus.Like:
-            return 'liked your post';
-         case NotificationStatus.Comment:
-            return 'comment on your post';
-         case NotificationStatus.Follow:
-            return 'has followed you';
-      }
-   };
-
-   const onNavigateNotification = (
-      status: string,
-      senderId: number,
-      navigationId: number
-   ) => {
-      if (
-         status == NotificationStatus.Like ||
-         status == NotificationStatus.Comment
-      ) {
-         return `/post-detail/${navigationId}`;
-      }
-      return `/other-profile/${senderId}`;
-   };
+   const navigation = useNavigate();
 
    return (
       <div className={`notification_box ${props.extraClasses}`}>
@@ -43,11 +51,12 @@ const NotificationBox = (props: {
                      className={'notification_box_item'}
                      key={notification.id}
                      onClick={() =>
-                        (window.location.href = onNavigateNotification(
+                        onNavigateNotification(
                            notification.status,
                            notification.sender.id,
-                           notification.post_id
-                        ))
+                           notification.post_id,
+                           notification.id
+                        )
                      }
                   >
                      <img
@@ -73,11 +82,16 @@ const NotificationBox = (props: {
                      </div>
                   </div>
                ))}
-               <p className={'text-center mt-3 view_all'}>View All</p>
+               <p
+                  onClick={() => navigation('/notification')}
+                  className={'text-center mt-3 view_all'}
+               >
+                  View All
+               </p>
             </React.Fragment>
          ) : (
             <div className="text-center">
-               <p>No Notification Found</p>
+               <p className={'m-0 no_notification'}>No Notification Found</p>
             </div>
          )}
       </div>

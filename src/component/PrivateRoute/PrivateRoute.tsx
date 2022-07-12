@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
 
     if (!token) {
         errorNotify("You are not authorize")
-        return <Navigate to={'/auth'} />
+        return <Navigate to={'/'} />
     }
 
     const decode: { user: any } = jwt(token);
@@ -36,7 +36,7 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({ children, role }) => {
     if (!decode.user) {
         removeToken();
         errorNotify("You are not authorize")
-        return <Navigate to={'/auth'} />
+        return <Navigate to={'/'} />
     }
 
     if (decode.user && decode.user.role !== role) {

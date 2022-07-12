@@ -26,6 +26,7 @@ const ProfileHeader: React.FC<IProfileHeader> = ({
    userStats,
    otherProfileId,
 }) => {
+   console.log(userStats)
    const [show, setShow] = useState(false);
    const [showFollowModal, setShowFollowModal] = useState(false);
    const [endPoint, setEndPoint] = useState('followings');

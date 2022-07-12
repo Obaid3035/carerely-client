@@ -7,6 +7,8 @@ import { createPost, currentUserPost, currentUserStats } from "../../../services
 import Loader from '../../../component/Loader/Loader';
 import { IPostInput } from "../../Home/Feed/Feed";
 import { FiUpload } from "react-icons/fi";
+import { Helmet } from "react-helmet";
+import { getHelmet } from "../../../utils/helmet";
 
 const CurrentProfile = () => {
    const [page, setPage] = useState(0);
@@ -99,6 +101,7 @@ const CurrentProfile = () => {
    }
    return (
       <Container>
+         { getHelmet('Profile') }
          {!isLoading && userStats.user ? (
             <Row
                className={'mx-4 my-3 justify-content-center align-items-center'}
@@ -160,11 +163,7 @@ const CurrentProfile = () => {
                   }
                </React.Fragment>
             </Row>
-         ) : (
-            <div className="text-center">
-               <Loader />
-            </div>
-         )}
+         ) : <Loader />}
       </Container>
    );
 };

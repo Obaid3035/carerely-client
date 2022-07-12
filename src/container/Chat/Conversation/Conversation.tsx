@@ -6,10 +6,8 @@ import Loader from "../../../component/Loader/Loader";
 
 export interface IConversationProps {
    conversations: IConversation[]
-   isLoading: boolean
+   isLoading: boolean,
 }
-
-
 
 const Conversation: React.FC<IConversationProps> = ({ conversations, isLoading }) => {
 

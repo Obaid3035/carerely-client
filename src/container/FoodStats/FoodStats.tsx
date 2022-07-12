@@ -10,6 +10,7 @@ import "./FoodStats.scss";
 import { getFoodProductStats } from "../../services/api/calorie";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../component/Loader/Loader";
+import { getHelmet } from "../../utils/helmet";
 
 const FoodStats = () => {
   const navigation = useNavigate();
@@ -27,6 +28,7 @@ const FoodStats = () => {
 
   return   (
    <Container className={"food_stats"}>
+     { getHelmet('Stats') }
        {
          !isLoading && foodStats ? (
            <React.Fragment>

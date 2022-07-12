@@ -132,6 +132,7 @@ const Feed = () => {
                <Form.Control
                   type="text"
                   value={formInput.text}
+                  required
                   onChange={onChangeHandler}
                   placeholder={'Write something in your mind……'}
                />

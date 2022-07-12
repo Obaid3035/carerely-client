@@ -13,6 +13,8 @@ import { createQueries, getQueries, getTopic } from "../../services/api/queries"
 import { IUser } from "../../component/Header/Header";
 import Loader from "../../component/Loader/Loader";
 import { errorNotify } from "../../utils/toast";
+import { Helmet } from "react-helmet";
+import { getHelmet } from "../../utils/helmet";
 
 export interface ITopic {
    id: number,
@@ -79,6 +81,7 @@ const onModalChangeHandler = (query: IQueries) => {
 
    return (
       <Container fluid>
+        { getHelmet('Q&A') }
          {
             query && show ?
               <QueriesModal
