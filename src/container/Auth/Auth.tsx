@@ -14,6 +14,7 @@ import Loader from '../../component/Loader/Loader';
 import { login, register } from "../../services/api/auth";
 import { getToken, setToken } from "../../utils/helper";
 import { USER_ROLE } from "../../App";
+import { getHelmet } from "../../utils/helmet";
 
 
 export interface IAuthInput {
@@ -218,6 +219,7 @@ const Auth = () => {
 
    return (
       <div className={'bg_img'}>
+         { getHelmet('Auth')}
          <div className={'card_view'}>
             <Row className={'h-100'}>
                <Col md={6} className={'left_section'}>
