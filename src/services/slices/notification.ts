@@ -6,6 +6,7 @@ import { INotification } from "../../component/Header/Header";
 // const ENDPOINT = 'http://localhost:4000';
 const ENDPOINT = 'https://server.carerely.com'
 
+
 export interface INotificationState {
   chatNotification: {
     conversation: IConversation[],
