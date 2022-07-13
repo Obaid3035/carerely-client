@@ -4,7 +4,6 @@ import './ProfileHeader.scss';
 import ProfileViewModal from './ProfileViewModal/ProfileViewModal';
 import { IUser } from '../../../component/Header/Header';
 import FollowerModal from '../FollowerModal/FollowerModal';
-import Verified from "../../../assets/img/verified.png";
 import VerifiedBadge from "../../../component/VerifiedBadge/VerifiedBadge";
 
 interface IProfileHeader {
@@ -26,7 +25,6 @@ const ProfileHeader: React.FC<IProfileHeader> = ({
    userStats,
    otherProfileId,
 }) => {
-   console.log(userStats)
    const [show, setShow] = useState(false);
    const [showFollowModal, setShowFollowModal] = useState(false);
    const [endPoint, setEndPoint] = useState('followings');
@@ -53,7 +51,6 @@ const ProfileHeader: React.FC<IProfileHeader> = ({
          ) : null}
          <ProfileViewModal show={show} onClose={() => setShow(!show)} />
          <img
-            onClick={() => setShow(!show)}
             className={'profile_img'}
             alt={'avatar'}
             height={140}
