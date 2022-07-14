@@ -236,7 +236,7 @@ const Header = () => {
          { modal }
          <Navbar.Brand href='#home' className={'p-0 m-0 ml-3'}>
             <NavLink to={'/home'}>
-               <img className={'img-fluid'} width={50} alt='brand' src={BrandLogo} />
+               <img className={'img-fluid'} width={40} alt='brand' src={BrandLogo} />
             </NavLink>
          </Navbar.Brand>
          <Navbar.Toggle aria-controls='basic-navbar-nav' />

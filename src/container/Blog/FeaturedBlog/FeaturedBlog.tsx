@@ -11,12 +11,20 @@ export interface BlogItem {
 const FeaturedBlog: React.FC<BlogItem> = ({blog}) => {
    const navigation = useNavigate();
 
+
+   function checkBlogLength() {
+     if (blog.length === 1) return 1
+     if (blog.length === 2) return 2
+     if (blog.length === 3) return 3
+     return  4
+   }
+
    const settings = {
       dots: false,
       arrows: true,
       infinite: true,
       speed: 500,
-      slidesToShow: blog.length,
+      slidesToShow: checkBlogLength(),
       slidesToScroll: 1,
      responsive: [
        {

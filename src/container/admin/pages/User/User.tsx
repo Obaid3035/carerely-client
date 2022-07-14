@@ -72,7 +72,12 @@ const User = () => {
   }
 
   const columns = [
-    "ID",
+    {
+      name: "ID",
+      options: {
+        display: false,
+      },
+    },
     "Name",
     "Email",
     {
@@ -140,7 +145,7 @@ const User = () => {
                   columns={columns}
                   isLoading={isLoading}
                   page={verifiedUserPage}
-                  setPage={setVerifiedUser}
+                  setPage={setVerifiedUserPage}
                   search={false}
                 />
               ) : (

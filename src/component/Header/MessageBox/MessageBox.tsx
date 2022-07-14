@@ -42,15 +42,14 @@ const MessageBox = (props: {
                      {conversation.sender_id == getCurrentUser().id ? (
                         <React.Fragment>
                            <img
-                              width={60}
-                              height={60}
+                              width={50}
+                              height={50}
                               alt={'avatar'}
                               src={
                                  conversation.receiver.image
                                     ? conversation.receiver.image.avatar
                                     : Avatar
                               }
-                              className={'img-fluid'}
                            />
                            <div className={'message_box_message'}>
                               <h5>{conversation.receiver.user_name}</h5>
@@ -62,8 +61,8 @@ const MessageBox = (props: {
                      ) : (
                         <React.Fragment>
                            <img
-                              width={60}
-                              height={60}
+                              width={50}
+                              height={50}
                               alt={'avatar'}
                               src={
                                  conversation.sender.image
@@ -78,17 +77,16 @@ const MessageBox = (props: {
                            </div>
                         </React.Fragment>
                      )}
-
+                    {/*<p className="badge" id={'unseen_badge'}>*/}
+                    {/*  {conversation.unseen_count}*/}
+                    {/*</p>*/}
                      <p>{timeAgo(conversation.updated_at)}</p>
-                     <p className="badge" id={'unseen_badge'}>
-                        {conversation.unseen_count}
-                     </p>
                   </div>
                ))}
             </React.Fragment>
          ) : (
-            <div className="text-center">
-               <p>No Conversation Found</p>
+            <div className="text-center no_message">
+               <p className={'m-0'}>No Conversation Found</p>
             </div>
          )}
          <p

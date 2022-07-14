@@ -14,7 +14,7 @@ const Blog = () => {
 
 
   const [page, setPage] = useState(0)
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>([]);
   const [count, setCount] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,11 +22,12 @@ const Blog = () => {
     setIsLoading(true)
     getAllBlog(page, size)
       .then((res) => {
-        setIsLoading(false)
         setData(res.data.blog)
         setCount(res.data.count)
+        setIsLoading(false)
       })
-  }, [])
+  }, [page])
+
 
   const columns = [
     "ID",
@@ -47,7 +48,8 @@ const Blog = () => {
   const options: any = {
     filter: false,
     count: count,
-    rowsPerPage: 10,
+    rowsPerPage: 3,
+    serverSide: true,
     rowsPerPageOptions: [],
     jumpToPage: false,
     responsive: 'standard',
@@ -86,7 +88,7 @@ const Blog = () => {
         </NavLink>
       </div>
       {
-        !isLoading  && data?
+        !isLoading  ?
           (
             <MUIDataTable
               title={`Blog List`}

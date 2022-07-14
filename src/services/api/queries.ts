@@ -22,4 +22,8 @@ export function createAnswers(queryId: number, text: string) {
   return axios.post(`/queries/answer/${queryId}`, { text }, getTokenFormat())
 }
 
+export function deleteQueries(queryId: number) {
+  return axios.delete(`/queries/${queryId}`, getTokenFormat())
+}
+
 

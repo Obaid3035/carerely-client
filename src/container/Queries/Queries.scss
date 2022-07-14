@@ -68,7 +68,11 @@
 
     .question_details{
       display: flex;
-      justify-content: left;
+      justify-content: space-between;
+
+      .delete {
+        cursor: pointer;
+      }
 
 
       .answer_counter{

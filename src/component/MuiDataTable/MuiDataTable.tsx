@@ -8,6 +8,7 @@ const _ = require('lodash');
 const MuiDataTable: React.FC<any> = ({
    data: { count, data },
    columns,
+                                        title,
    setPage,
    page,
    search,
@@ -74,7 +75,7 @@ const MuiDataTable: React.FC<any> = ({
    return (
       <div className="mt-4 table">
          <MUIDataTable
-            title={''}
+            title={title}
             data={data}
             columns={columns}
             options={options}

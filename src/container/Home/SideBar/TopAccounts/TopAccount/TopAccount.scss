@@ -12,6 +12,7 @@
 
   .top_account_profiles {
     display: flex;
+    flex-flow: wrap;
     img {
       border-radius: 100px;
       cursor: pointer;

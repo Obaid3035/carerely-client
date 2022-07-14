@@ -97,6 +97,7 @@ const QueriesModal: React.FC<IQueriesModal> = ({
                            <Form.Control
                               className="give_answer"
                               value={answerInput}
+                              required
                               onChange={(e) => setAnswerInput(e.target.value)}
                               type="text"
                               placeholder="Write your Comment"
