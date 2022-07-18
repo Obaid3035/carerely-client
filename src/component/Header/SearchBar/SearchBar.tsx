@@ -54,7 +54,13 @@ const SearchBar = () => {
       if (user.length > 0) {
          data = user.map((filteredUsers) => (
             <div className={'search_users'} key={filteredUsers.id} onClick={() => window.location.href = `/other-profile/${filteredUsers.id}`}>
-               <img width={60} alt={'avatar'} src={Avatar} />
+               <img
+                 width={50}
+                 height={50}
+                 alt={'avatar'}
+                 src={filteredUsers.image ? filteredUsers.image.avatar : Avatar}
+                 className={'ml-2'}
+               />
                <p>{filteredUsers.user_name} </p>
             </div>
          ));

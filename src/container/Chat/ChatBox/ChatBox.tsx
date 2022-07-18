@@ -205,6 +205,7 @@ const ChatBox: React.FC<IChatBox> = ({ selectedChat }) => {
                <input
                   placeholder="Type your message here..."
                   value={typingMsg}
+                  required
                   onChange={(e) => onChangeHandler(e)}
                />
                <button>

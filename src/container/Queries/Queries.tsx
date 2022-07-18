@@ -20,6 +20,7 @@ import Loader from '../../component/Loader/Loader';
 import { errorNotify } from '../../utils/toast';
 import { getHelmet } from '../../utils/helmet';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { getCurrentUser } from '../../utils/helper';
 
 export interface ITopic {
    id: number;
@@ -39,7 +40,7 @@ const Queries = () => {
    const onClose = () => setShow(!show);
    const [topic, setTopic] = useState<ITopic[]>([]);
    const [queries, setQueries] = useState<IQueries[]>([]);
-   const [radioToggle, setRadioToggle] = React.useState(1);
+   const [radioToggle, setRadioToggle] = React.useState("All");
    const [queryInput, setQueryInput] = React.useState('');
    const [isLoading, setIsLoading] = useState(false);
    const [isFetching, setIsFetching] = useState(false);
@@ -53,10 +54,10 @@ const Queries = () => {
 
    const onDeleteQueryHandler = async (queryId: number) => {
       setIsLoading(true);
-      setIsFetching(false)
+      setIsFetching(false);
       await deleteQueries(queryId);
       setIsLoading(false);
-      setIsFetching(true)
+      setIsFetching(true);
    };
 
    const onModalChangeHandler = (query: IQueries) => {
@@ -65,9 +66,10 @@ const Queries = () => {
    };
 
    useEffect(() => {
+      setIsLoading(true);
       getQueries(radioToggle).then((res) => {
          setIsLoading(false);
-         setQueries(res.data);
+         setQueries(res.data.sort((a: any, b: any) => a.answerCount > b.answerCount ? -1 : 1));
       });
    }, [radioToggle, !isFetching]);
 
@@ -75,19 +77,23 @@ const Queries = () => {
 
    const onFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-      setIsLoading(true);
-      createQueries(radioToggle, queryInput)
-         .then((res) => {
-            const queriesClone = queries.concat();
-            queriesClone.push(res.data);
-            setQueries(queriesClone);
-            setIsLoading(false);
-            setQueryInput('');
-         })
-         .catch((err: any) => {
-            setIsLoading(false);
-            errorNotify(err.response.data.message);
-         });
+      if (radioToggle === "All") {
+         errorNotify('Please select other topics')
+      } else {
+         setIsLoading(true);
+         createQueries(radioToggle, queryInput)
+           .then((res) => {
+              const queriesClone = queries.concat();
+              queriesClone.push(res.data);
+              setQueries(queriesClone);
+              setIsLoading(false);
+              setQueryInput('');
+           })
+           .catch((err: any) => {
+              setIsLoading(false);
+              errorNotify(err.response.data.message);
+           });
+      }
    };
 
    return (
@@ -106,13 +112,23 @@ const Queries = () => {
          <Row className={'queries_main'}>
             <Col md={3} className={'queries_left'}>
                <ul className={'options'}>
+                  <li>
+                     {radioToggle === "All" ? (
+                       <BiRadioCircleMarked />
+                     ) : (
+                       <BiRadioCircle
+                         onClick={() => setRadioToggle("All")}
+                       />
+                     )}
+                     All
+                  </li>
                   {topic.map((topic, index) => (
                      <li key={index}>
-                        {radioToggle === topic.id ? (
+                        {radioToggle === topic.text ? (
                            <BiRadioCircleMarked />
                         ) : (
                            <BiRadioCircle
-                              onClick={() => setRadioToggle(topic.id)}
+                              onClick={() => setRadioToggle(topic.text)}
                            />
                         )}
                         {topic.text}
@@ -150,9 +166,14 @@ const Queries = () => {
                                  </div>
                               </div>
                               <div>
-                                 <RiDeleteBin6Line className={'delete'}
-                                                   onClick={() => onDeleteQueryHandler(query.id)}
-                                 />
+                                 {getCurrentUser().id === query.user.id ? (
+                                    <RiDeleteBin6Line
+                                       className={'delete'}
+                                       onClick={() =>
+                                          onDeleteQueryHandler(query.id)
+                                       }
+                                    />
+                                 ) : null}
                               </div>
                            </div>
                            <div>
@@ -172,7 +193,6 @@ const Queries = () => {
                                           <p>
                                              Posted By:
                                              <NavLink to={'/other-profile/1'}>
-                                                {' '}
                                                 {query.user.user_name}{' '}
                                              </NavLink>
                                           </p>

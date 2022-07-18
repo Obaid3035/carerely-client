@@ -1,63 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import './Blog.scss';
+import PopularBlog from "./PopularBlog/PopularBlog";
 import FeaturedBlog from './FeaturedBlog/FeaturedBlog';
-import PopularBlog from './PopularBlog/PopularBlog';
 import { Col, Row } from 'react-bootstrap';
-import { getAllBlogs } from "../../services/api/blog";
-import Loader from "../../component/Loader/Loader";
-import { Helmet } from "react-helmet";
-import { getHelmet } from "../../utils/helmet";
+import { getAllBlogs } from '../../services/api/blog';
+import Loader from '../../component/Loader/Loader';
+import { getHelmet } from '../../utils/helmet';
 
 export interface IBlog {
-  id: number,
-  title: string,
-  text: string,
-  feature_image: {
-    avatar: string
-  },
-  created_at: string
+   id: number;
+   title: string;
+   text: string;
+   feature_image: {
+      avatar: string;
+   };
+   created_at: string;
 }
 
 const Blog = () => {
+   const [featuredBlog, setFeaturedBlog] = useState([]);
 
-  const [featuredBlog, setFeaturedBlog] = useState([]);
+   const [nonFeaturedBlog, setNonFeaturedBlog] = useState([]);
 
-  const [nonFeaturedBlog, setNonFeaturedBlog] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
 
    useEffect(() => {
-     setIsLoading(true)
-      getAllBlogs()
-        .then((res) => {
-          setFeaturedBlog(res.data.featuredBlog)
-          setNonFeaturedBlog(res.data.nonFeaturedBlog)
-          setIsLoading(false)
-        })
-   }, [])
+      setIsLoading(true);
+      getAllBlogs().then((res) => {
+         setFeaturedBlog(res.data.featuredBlog);
+         setNonFeaturedBlog(res.data.nonFeaturedBlog);
+         setIsLoading(false);
+      });
+   }, []);
 
    return (
       <Row className={' justify-content-center'}>
-        { getHelmet('Blogs') }
+         {getHelmet('Blogs')}
          <Col md={10}>
-           {
-             !isLoading ?
-               (
-                 <React.Fragment>
-                   <div className={'blogs'}>
-                     <FeaturedBlog blog={featuredBlog} />
-                   </div>
+            {!isLoading ? (
+               <React.Fragment>
+                  <div className={'blogs'}>
+                     <PopularBlog blog={featuredBlog} />
+                  </div>
 
-                   <div className={'popular_blogs'}>
-                     <PopularBlog blog={nonFeaturedBlog} />
-                   </div>
-                 </React.Fragment>
-               ) : (
-                 <div className={"text-center"}>
-                   <Loader/>
-                 </div>
-               )
-           }
+                  <div className={'popular_blogs'}>
+                     <FeaturedBlog blog={nonFeaturedBlog} />
+                  </div>
+               </React.Fragment>
+            ) : (
+               <div className={'text-center'}>
+                  <Loader />
+               </div>
+            )}
          </Col>
       </Row>
    );

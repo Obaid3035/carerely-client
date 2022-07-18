@@ -7,6 +7,8 @@ import { createAnswers, getAnswers } from '../../../services/api/queries';
 import { IQueries } from '../Queries';
 import Loader from '../../../component/Loader/Loader';
 import { AiFillPlusSquare } from 'react-icons/ai';
+import VerifiedBadge from "../../../component/VerifiedBadge/VerifiedBadge";
+import { getCurrentUser } from "../../../utils/helper";
 
 interface IQueriesModal {
    show: boolean;
@@ -77,7 +79,13 @@ const QueriesModal: React.FC<IQueriesModal> = ({
             <hr />
 
             <div className={'answer_modal'}>
-               <img src={Avatar} alt="Avatar" />
+               <img
+                 width={50}
+                 height={50}
+                 alt={'avatar'}
+                 src={query.user.image ? query.user.image.avatar : Avatar}
+                 className={'ml-2'}
+               />
                <p>
                   Posted By: <span> {query.user.user_name} </span>
                </p>
@@ -129,7 +137,14 @@ const QueriesModal: React.FC<IQueriesModal> = ({
                                     className={'show_all_answers_text'}
                                  >
                                     <h5>
-                                       {answer.user.user_name}{' '}
+                                       {answer.user.user_name}
+                                       {
+                                          answer.user?.is_verified ?
+                                            (
+                                              <VerifiedBadge/>
+                                            )
+                                            : null
+                                       }
                                        <span> 5 Days ago</span>
                                     </h5>
                                     <p>{answer.text}</p>
