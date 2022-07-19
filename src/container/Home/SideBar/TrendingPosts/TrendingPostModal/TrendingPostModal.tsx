@@ -3,6 +3,7 @@ import SiteModal, { ISiteModal } from "../../../../../component/SiteModal/SiteMo
 import Posts from "../../../../../component/Posts/Posts";
 import { getTrendingPosts } from "../../../../../services/api/post";
 import Loader from "../../../../../component/Loader/Loader";
+import "./TrendingPostModal.scss"
 
 const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
   const [hasMore, setHasMore] = useState(true);
@@ -25,6 +26,7 @@ const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
   }, []);
 
   const fetchMoreData = () => {
+    console.log("HAS MORE")
     if (posts.length === postCount) {
       setHasMore(false);
       return;
@@ -64,11 +66,13 @@ const TrendingPostModal: React.FC<ISiteModal> = ({ show, onModalChange }) => {
   }
 
   return (
-    <SiteModal size={"lg"} show={show} onModalChange={onModalChange}>
-      <div className={"activity_feed"}>
-        { renderPost }
-      </div>
-    </SiteModal>
+    <div>
+      <SiteModal size={"lg"} show={show} onModalChange={onModalChange}>
+        <div className={"activity_feed trending_modal"} id={'scrollableDiv'}>
+          { renderPost }
+        </div>
+      </SiteModal>
+    </div>
   );
 };
 

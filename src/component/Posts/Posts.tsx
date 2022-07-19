@@ -129,6 +129,7 @@ const Posts = (props: IPostPropsInterface) => {
             </div>
          }
          dataLength={props.mockData.length}
+         scrollableTarget="scrollableDiv"
       >
          {props.mockData.map((data: IPost, index: any) => (
             <div
