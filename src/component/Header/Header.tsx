@@ -226,6 +226,7 @@ const Header = () => {
             <Form.Group>
                <Form.Control
                   as="textarea"
+                  required
                   placeholder={'Have feedback? We’d love to hear it.'}
                   value={report}
                   onChange={(e) => setReport(e.target.value)}

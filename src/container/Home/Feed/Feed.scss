@@ -3,7 +3,6 @@
 .create_post {
   justify-content: space-around;
   display: flex;
-  align-items: center;
 
   .image_preview {
     display: flex;
@@ -16,6 +15,7 @@
     }
   }
   img {
+    object-fit: cover;
     border-radius: 50%;
   }
 
@@ -74,7 +74,8 @@
   .activity_feed_post {
     .post_img {
       img {
-        border-radius: 17px;
+        object-fit: cover;
+        border-radius: 50%;
       }
     }
     .activity_feed_user {
@@ -82,6 +83,7 @@
       align-items: center;
       justify-content: space-between;
       img {
+        object-fit: cover;
         cursor: pointer;
         border-radius: 50%;
       }

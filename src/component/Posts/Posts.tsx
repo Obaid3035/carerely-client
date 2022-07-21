@@ -12,12 +12,12 @@ import Loader from '../Loader/Loader';
 import ReadMore from '../ReadMore/ReadMore';
 import Avatar from '../../assets/img/avatar.jpg';
 import { createComment, deleteComment, deletePost, likePost } from "../../services/api/post";
-import { errorNotify } from '../../utils/toast';
+import { errorNotify, successNotify } from "../../utils/toast";
 import Comment, { IComment } from "../Comment/Comment";
 import { getCurrentUser } from '../../utils/helper';
 import { useAppSelector } from "../../services/hook";
-import Verified from "../../assets/img/verified.png"
 import VerifiedBadge from "../VerifiedBadge/VerifiedBadge";
+import DeletePopUp from "../DeletePopUp/DeletePopUp";
 
 interface IPostPropsInterface {
    hasMore: boolean;
@@ -46,6 +46,8 @@ const Posts = (props: IPostPropsInterface) => {
    const navigation = useNavigate();
    const socket = useAppSelector((state) => state.notification.socket)
    const [text, setText] = useState('');
+   const [show, setShow] = useState(false)
+   const [postId, setPostId] = useState<number | null>(null);
 
    const onPostClickHandler = (id: number, user_id: number) => {
       const currUser: IUser = getCurrentUser();
@@ -108,13 +110,21 @@ const Posts = (props: IPostPropsInterface) => {
       }
    };
 
-   const onPostDeleteHandler = async (postId: number) => {
+   const onPostDeleteHandler = async () => {
       const post: any = props.mockData.concat();
-      await deletePost(postId);
+      await deletePost(postId!);
       const foundIndex = post.findIndex((post: any) => post.id === postId);
       post.splice(foundIndex, 1);
       props.setPost(post);
+      setShow(!show)
+      successNotify('Post deleted successfully!')
    };
+
+   const onDeleteModalOpen = (postId: number) => {
+      setPostId(postId);
+      setShow(!show)
+   }
+
 
    return (
       <InfiniteScroll
@@ -131,6 +141,7 @@ const Posts = (props: IPostPropsInterface) => {
          dataLength={props.mockData.length}
          scrollableTarget="scrollableDiv"
       >
+         <DeletePopUp show={show} onClose={() => setShow(!show)} onDelete={onPostDeleteHandler}/>
          {props.mockData.map((data: IPost, index: any) => (
             <div
                className={'activity_feed_post rounded_white_box mb-4'}
@@ -162,7 +173,7 @@ const Posts = (props: IPostPropsInterface) => {
                   {
                      getCurrentUser().id == data.user.id ? (
                        <RiDeleteBin6Line
-                         onClick={() => onPostDeleteHandler(data.id)}
+                         onClick={() => onDeleteModalOpen(data.id)}
                          className={'delete'}
                        />
                      ) : null

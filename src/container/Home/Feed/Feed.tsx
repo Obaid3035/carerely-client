@@ -160,7 +160,7 @@ const Feed = () => {
                   formInput.imageUrl ?
                     (
                       <ul className={"image_preview"}>
-                         <li><img alt="post__img" src={formInput.imageUrl}/></li>
+                         <li><img alt="post__img" width={50} height={50} src={formInput.imageUrl}/></li>
                       </ul>
                     ) : null
                }

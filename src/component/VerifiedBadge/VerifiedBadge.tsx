@@ -16,7 +16,11 @@ const VerifiedBadge = () => {
       placement="bottom"
       delay={{ show: 150, hide: 150 }}
       overlay={renderTooltip}>
-      <img alt={"verified"} src={Verified} width={30} height={25} />
+      <img alt={"verified"}
+           id={'verified_badge'}
+           src={Verified}
+           width={20}
+           height={20} />
     </OverlayTrigger>
   );
 };

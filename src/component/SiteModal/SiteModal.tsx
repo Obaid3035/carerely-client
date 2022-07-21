@@ -11,7 +11,7 @@ export interface ISiteModal {
 
 const SiteModal: React.FC<ISiteModal> = ({ show, onModalChange, children, size }) => {
    return (
-      <Modal show={show} size={size} backdrop="static" keyboard={false} className={"site_modal"}>
+      <Modal show={show} size={size} backdrop="static" keyboard={false} className={"site_modal"} centered={true}>
          <Modal.Header className={'modal_header'}>
             <RiIcon.RiCloseCircleLine onClick={onModalChange} />
          </Modal.Header>

@@ -8,7 +8,7 @@ const ReadMore: React.FC<{ children: string }> = ({ children }) => {
     setIsReadMore(!isReadMore);
   };
   return (
-    <p className="text">
+    <p className="text m-0">
       {children.length >= 150 && isReadMore ? text.slice(0, 150) : text}
       <span onClick={toggleReadMore} className="read_or_hide">
         {children.length >= 150 ?

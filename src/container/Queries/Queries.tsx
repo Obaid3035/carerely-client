@@ -20,7 +20,8 @@ import Loader from '../../component/Loader/Loader';
 import { errorNotify } from '../../utils/toast';
 import { getHelmet } from '../../utils/helmet';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { getCurrentUser } from '../../utils/helper';
+import { getCurrentUser, timeAgo } from "../../utils/helper";
+import DeletePopUp from "../../component/DeletePopUp/DeletePopUp";
 
 export interface ITopic {
    id: number;
@@ -33,6 +34,7 @@ export interface IQueries {
    text: string;
    user: IUser;
    answerCount: number;
+   created_at: string
 }
 
 const Queries = () => {
@@ -44,6 +46,8 @@ const Queries = () => {
    const [queryInput, setQueryInput] = React.useState('');
    const [isLoading, setIsLoading] = useState(false);
    const [isFetching, setIsFetching] = useState(false);
+   const [deleteShow, setDeleteShow] = useState(false)
+   const [queryId, setQueryId] = useState<number | null>(null)
 
    useEffect(() => {
       setIsLoading(true);
@@ -52,13 +56,21 @@ const Queries = () => {
       });
    }, []);
 
-   const onDeleteQueryHandler = async (queryId: number) => {
+   const onDeleteQueryHandler = async () => {
       setIsLoading(true);
       setIsFetching(false);
-      await deleteQueries(queryId);
+      await deleteQueries(queryId!);
+      setDeleteShow(!deleteShow)
       setIsLoading(false);
       setIsFetching(true);
    };
+
+   const onOpenDeleteModalHandler = (queryId: number) => {
+      setQueryId(queryId)
+      setDeleteShow(!deleteShow)
+   }
+
+
 
    const onModalChangeHandler = (query: IQueries) => {
       setQuery(query);
@@ -98,6 +110,9 @@ const Queries = () => {
 
    return (
       <Container fluid>
+         <DeletePopUp show={deleteShow}
+                      onClose={() => setDeleteShow(!deleteShow)}
+                      onDelete={onDeleteQueryHandler}/>
          {getHelmet('Q&A')}
          {query && show ? (
             <QueriesModal
@@ -170,7 +185,7 @@ const Queries = () => {
                                     <RiDeleteBin6Line
                                        className={'delete'}
                                        onClick={() =>
-                                          onDeleteQueryHandler(query.id)
+                                         onOpenDeleteModalHandler(query.id)
                                        }
                                     />
                                  ) : null}
@@ -192,15 +207,15 @@ const Queries = () => {
                                           />
                                           <p>
                                              Posted By:
-                                             <NavLink to={'/other-profile/1'}>
-                                                {query.user.user_name}{' '}
+                                             <NavLink to={`/other-profile/${query.user.id}`} className={'ml-1'}>
+                                                {query.user.user_name}
                                              </NavLink>
                                           </p>
                                        </div>
                                     </Col>
                                     <Col md={2} className={'user_details'}>
                                        <FiClock />
-                                       <p> 10 mins ago</p>
+                                       <p>  { timeAgo(query.created_at) }</p>
                                     </Col>
                                     <Col md={2} />
 

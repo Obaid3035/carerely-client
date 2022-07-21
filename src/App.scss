@@ -70,6 +70,7 @@ body {
 
 .rounded_image {
   border-radius: 50%;
+  object-fit: cover;
 }
 .lazyload-wrapper  {
   margin: 0!important;

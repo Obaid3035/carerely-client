@@ -14,7 +14,8 @@
     display: flex;
     flex-flow: wrap;
     img {
-      border-radius: 100px;
+      border-radius: 50%;
+      object-fit: cover;
       cursor: pointer;
     }
     p {

@@ -6,5 +6,9 @@
     margin: 0;
     color: $primary
   }
+}
 
+#verified_badge {
+  object-fit: cover;
+  margin-left: 4px;
 }
