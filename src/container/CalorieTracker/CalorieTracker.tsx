@@ -57,8 +57,9 @@ const CalorieTracker = () => {
             <Button onClick={() => onModalChangeHandler("lunch")}>Lunch</Button>
             <Button onClick={() => onModalChangeHandler("dinner")}> Dinner</Button>
          </div>
-         <p className={"want_to_check mt-4"} onClick={() => navigation("/graph")}>Want to check your report? <span>Click Here</span></p>
-
+         <div className={'d-flex justify-content-center'}>
+            <Button className={'my_graph_btn mt-4'} onClick={() => navigation("/graph")}>My Graph</Button>
+         </div>
       </Container>
    );
 };
