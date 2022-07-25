@@ -48,6 +48,11 @@ const OtherProfile = () => {
    const [postCount, setPostCount] = useState(0);
    const [isLoading, setIsLoading] = useState(false);
    const [friendShip, setFriendShip] = useState(false);
+
+   useEffect(() => {
+      if (getCurrentUser().user_name == id) window.location.href = '/profile'
+   }, [])
+
    useEffect(() => {
       setIsLoading(true);
       otherProfile(id!).then((res) => {

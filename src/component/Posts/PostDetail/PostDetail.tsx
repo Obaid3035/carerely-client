@@ -102,6 +102,7 @@ const PostDetail = () => {
                         <img
                           alt={'avatar'}
                           width={50}
+                          height={50}
                           src={post.user.image ? post.user.image.avatar : Avatar}
                         />
                         <div className={'activity_feed_user_info'}>
@@ -142,11 +143,6 @@ const PostDetail = () => {
                   </div>
                   <div className={'post_comment'}>
                      <div className={'comment_form'}>
-                        <img
-                           width={50}
-                           alt={'avatar'}
-                           src={post.user.image ? post.user.image.avatar : Avatar}
-                        />
                         <Form
                            className={'create_post_form'}
                            onSubmit={(e) => onCommentCreate(e, post?.id)}

@@ -2,7 +2,6 @@
 
 .blogs {
   padding: 40px;
-  margin-top: 40px;
   .blogs_heading{
 
     h5{
@@ -82,6 +81,12 @@
     border-radius: 8px;
     background: #fff;
     box-shadow: 0 0 99px rgba(47, 98, 129, 0.09);
+
+    img {
+      border-radius: 20px;
+      object-fit: cover;
+      width: 400px;
+    }
 
     .popular_blogs_text{
       h5{

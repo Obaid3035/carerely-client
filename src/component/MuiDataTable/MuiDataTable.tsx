@@ -8,7 +8,7 @@ const _ = require('lodash');
 const MuiDataTable: React.FC<any> = ({
    data: { count, data },
    columns,
-                                        title,
+   title,
    setPage,
    page,
    search,

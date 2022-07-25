@@ -85,10 +85,10 @@ const FollowerModal: React.FC<IFollowerModal> = ({
 
                               {
                                  endPoint === ENDPOINT.FOLLOWING ?
-                                   <p onClick={() => window.location.href =`/other-profile/${friendship.receiver_id}` }>
+                                   <p onClick={() => window.location.href =`/${friendship.receiver.user_name}` }>
                                       { friendship.receiver.user_name}
                                    </p>
-                                   : <p onClick={() =>  window.location.href =`/other-profile/${friendship.sender_id}`} >
+                                   : <p onClick={() =>  window.location.href =`/${friendship.sender.user_name}`} >
                                       { friendship.sender.user_name }
                                    </p>
                               }

@@ -81,7 +81,7 @@ const QueriesModal: React.FC<IQueriesModal> = ({
                  className={'ml-2'}
                />
                <p>
-                  Posted By:    <NavLink to={`/other-profile/${query.user.id}`} className={'ml-1'}>
+                  Posted By:    <NavLink to={`/${query.user.user_name}`} className={'ml-1'}>
                   {query.user.user_name}
                </NavLink>
                </p>

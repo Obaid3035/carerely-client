@@ -207,7 +207,7 @@ const Queries = () => {
                                           />
                                           <p>
                                              Posted By:
-                                             <NavLink to={`/other-profile/${query.user.id}`} className={'ml-1'}>
+                                             <NavLink to={`/${query.user.user_name}`} className={'ml-1'}>
                                                 {query.user.user_name}
                                              </NavLink>
                                           </p>

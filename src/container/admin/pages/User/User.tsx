@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../../../../component/Loader/Loader";
 import { AiOutlineIssuesClose } from "react-icons/ai"
-import { useNavigate } from "react-router-dom";
 import { getAllUsers, getNotVerifiedUser, getVerifiedUser, toVerified } from "../../../../services/api/admin/user";
 import { GoVerified } from "react-icons/go"
 import { ImCross } from "react-icons/im"
 import "../Blog/Blog.scss"
-import { Modal, Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import MuiDataTable from "../../../../component/MuiDataTable/MuiDataTable";
 import { successNotify } from "../../../../utils/toast";
 
@@ -22,7 +21,7 @@ interface IData {
 }
 
 const User = () => {
-  const navigation = useNavigate();
+  const [searchText, setSearchText] = useState('')
   const [size, setSize] = useState(3);
   const [currentTab, setCurrentTab] = useState<string>(TABS.ALL)
   const [user, setUser] = useState<IData | null>(null);
@@ -36,12 +35,12 @@ const User = () => {
 
   useEffect(() => {
     setIsLoading(true)
-    getAllUsers(userPage, size)
+    getAllUsers(userPage, size, searchText)
       .then((res) => {
         setIsLoading(false)
         setUser(res.data)
       })
-  }, [userPage, !isFetching])
+  }, [userPage, !isFetching, searchText])
 
   useEffect(() => {
     setIsLoading(true)
@@ -117,16 +116,17 @@ const User = () => {
       >
         <Tab title={"All Users"} eventKey={TABS.ALL} className={"w-100"}>
           {
-            !isLoading  && user ?
+            user ?
               (
                 <MuiDataTable
                   title={`User List`}
                   data={user}
                   columns={columns}
                   isLoading={isLoading}
+                  setSearchText={setSearchText}
                   page={userPage}
                   setPage={setUserPage}
-                  search={false}
+                  search={true}
                 />
               ) : (
                 <div className="text-center">

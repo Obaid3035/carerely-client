@@ -13,3 +13,5 @@ export const getNotification = () => {
 export const updateNotification = (id: number) => {
   return axios.put(`/notification/${id}`, {},getTokenFormat())
 }
+
+

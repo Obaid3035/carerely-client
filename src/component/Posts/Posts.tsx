@@ -49,12 +49,12 @@ const Posts = (props: IPostPropsInterface) => {
    const [show, setShow] = useState(false)
    const [postId, setPostId] = useState<number | null>(null);
 
-   const onPostClickHandler = (id: number, user_id: number) => {
+   const onPostClickHandler = (user_id: number, user_name: string) => {
       const currUser: IUser = getCurrentUser();
       if (currUser.id === user_id) {
          navigation(`/profile`);
       } else {
-         navigation(`/other-profile/${user_id}`);
+         navigation(`/${user_name}`);
       }
    };
 
@@ -150,7 +150,7 @@ const Posts = (props: IPostPropsInterface) => {
                <div className={'activity_feed_user'}>
                   <div
                      className={'d-flex align-items-center'}
-                     onClick={() => onPostClickHandler(data.id, data.user.id)}
+                     onClick={() => onPostClickHandler(data.user.id, data.user.user_name)}
                   >
                      <img
                         alt={'avatar'}

@@ -150,7 +150,7 @@ const FoodDetail = () => {
          { getHelmet('Food Details') }
          <Row className={'justify-content-center'}>
             <Col md={8} className="breakfast_details">
-               <h5>Breakfast Details</h5>
+               <h5>{ id } Details</h5>
                <Form onSubmit={onFormSubmit}>
                   <Form.Group className={"form-row"}>
                      <Form.Control

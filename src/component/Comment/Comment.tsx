@@ -28,7 +28,7 @@ const Comment: React.FC<ICommentProps> = (comment) => {
         <div className={"d-flex"}>
           <img className={"avatar"} src={comment.user.image ? comment.user.image.avatar : Avatar} alt={'comment_avatar'} />
           <div className={'comment_detail'}>
-            <h5 onClick={() => window.location.href = `/other-profile/${comment.user.id}`}>
+            <h5 onClick={() => window.location.href = `/${comment.user.user_name}`}>
               {comment.user.user_name}
               {
                 comment.user.is_verified ?

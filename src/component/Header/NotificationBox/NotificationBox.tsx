@@ -19,7 +19,7 @@ export const getNotificationText = (status: string) => {
 
 export const onNavigateNotification = (
   status: string,
-  senderId: number,
+  senderUserName: string,
   navigationId: number,
   notificationId: number
 ) => {
@@ -30,7 +30,7 @@ export const onNavigateNotification = (
       ) {
          window.location.href = `/post-detail/${navigationId}`;
       } else {
-         window.location.href = `/other-profile/${senderId}`;
+         window.location.href = `/${senderUserName}`;
       }
    });
 };
@@ -53,21 +53,21 @@ const NotificationBox = (props: {
                      onClick={() =>
                         onNavigateNotification(
                            notification.status,
-                           notification.sender.id,
+                           notification.sender.user_name,
                            notification.post_id,
                            notification.id
                         )
                      }
                   >
                      <img
-                        width={60}
+                        width={50}
+                        height={50}
                         alt={'avatar'}
                         src={
                            notification.sender.image
                               ? notification.sender.image.avatar
                               : Avatar
                         }
-                        className={'img-fluid'}
                      />
                      <div className={'notification_box_message'}>
                         <span>
@@ -83,7 +83,7 @@ const NotificationBox = (props: {
                   </div>
                ))}
                <p
-                  onClick={() => navigation('/notification')}
+                  onClick={() => window.location.href = '/notification'}
                   className={'text-center mt-3 view_all'}
                >
                   View All
@@ -92,6 +92,12 @@ const NotificationBox = (props: {
          ) : (
             <div className="text-center">
                <p className={'m-0 no_notification'}>No Notification Found</p>
+               <p
+                 onClick={() => window.location.href = '/notification'}
+                 className={'text-center mt-3 view_all'}
+               >
+                  View All
+               </p>
             </div>
          )}
       </div>

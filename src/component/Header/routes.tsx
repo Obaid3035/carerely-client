@@ -96,7 +96,7 @@ export const mainRoutes: RoutesLink[] = [
       component: <Queries />,
    },
    {
-      path: '/other-profile/:id',
+      path: '/:id',
       component: <OtherProfile />,
    },
    {

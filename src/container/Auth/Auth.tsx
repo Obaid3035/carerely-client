@@ -228,7 +228,7 @@ const Auth = () => {
                      <img alt={'Logo'} src={Logo} />
                      <p>
                         Carerely is an all in one social media platform that provides
-                        you with everything you’ll need to get fit & active.
+                        you with everything you’ll need to get health & fitness.
                      </p>
                   </div>
                </Col>

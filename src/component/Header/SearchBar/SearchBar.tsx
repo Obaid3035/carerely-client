@@ -53,7 +53,7 @@ const SearchBar = () => {
    if (!isLoading) {
       if (user.length > 0) {
          data = user.map((filteredUsers) => (
-            <div className={'search_users'} key={filteredUsers.id} onClick={() => window.location.href = `/other-profile/${filteredUsers.id}`}>
+            <div className={'search_users'} key={filteredUsers.id} onClick={() => window.location.href = `/${filteredUsers.user_name}`}>
                <img
                  width={50}
                  height={50}

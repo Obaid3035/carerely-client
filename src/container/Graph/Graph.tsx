@@ -177,11 +177,13 @@ const Graph = () => {
                <Select
                   className={'mx-3'}
                   options={nutrientOptions}
+                  isSearchable={false}
                   onChange={(value) => setSelectedNutrient(value!)}
                   value={selectedNutrient}
                />
                <Select
                   options={periodOptions}
+                  isSearchable={false}
                   value={selectedPeriod}
                   onChange={(value) => setSelectedPeriod(value!)}
                />
