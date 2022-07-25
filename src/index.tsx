@@ -11,9 +11,9 @@ import 'react-quill/dist/quill.snow.css';
 import '../node_modules/react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-axios.defaults.baseURL = 'http://localhost:4000/';
+// axios.defaults.baseURL = 'http://localhost:4000/';
 // axios.defaults.baseURL = 'https://careraly-server.herokuapp.com/'
-// axios.defaults.baseURL = 'https://server.carerely.com/'
+axios.defaults.baseURL = 'https://server.carerely.com/'
 
 const app = (
    <Provider store={store}>

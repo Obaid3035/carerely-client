@@ -3,8 +3,8 @@ import { IConversation } from "../../container/Chat/Chat";
 import io from "socket.io-client";
 import { INotification } from "../../component/Header/Header";
 // const ENDPOINT = 'https://careraly-server.herokuapp.com';
-const ENDPOINT = 'http://localhost:4000';
-// const ENDPOINT = 'https://server.carerely.com'
+// const ENDPOINT = 'http://localhost:4000';
+const ENDPOINT = 'https://server.carerely.com'
 
 
 export interface INotificationState {
